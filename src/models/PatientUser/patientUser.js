@@ -70,7 +70,7 @@ PatientUser.init(
   {
     sequelize,
     modelName: "PatientUser",
-    timestamps: false, // Set to true if you want Sequelize to automatically manage createdAt and updatedAt fields
+    timestamps: false,
   }
 );
 

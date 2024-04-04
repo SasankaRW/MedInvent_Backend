@@ -23,7 +23,7 @@ const router = require("./router");
 const { Config } = require("../config");
 
 const { DEFINITION, APIS } = Config.SWAGGER;
- 
+
 const { JSON_PARSER, URLENCODED } = Config.BODYPARSER;
 
 app.use(bodyParser.json(JSON_PARSER));
@@ -51,4 +51,3 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 module.exports = app;
- 
