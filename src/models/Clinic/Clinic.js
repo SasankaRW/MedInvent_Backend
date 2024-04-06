@@ -1,13 +1,14 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
-const PharmacyAddress = require("./PharmacyAddress");
-const PharmacyLocation = require("./PharmacyLocation");
+const ClinicAddress = require("./ClinicAddress");
+const ClinicLocation = require("./ClinicLocation");
+const Session = require("../Session/Session");
 
-class Pharmacy extends Model {}
+class Clinic extends Model {}
 
-Pharmacy.init(
+Clinic.init(
   {
-    pharmacy_id: {
+    clinic_id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
@@ -54,23 +55,32 @@ Pharmacy.init(
         isEmail: true,
       },
     },
+    clinicFees: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: null,
+    },
   },
   {
     sequelize,
-    modelName: "Pharmacy",
+    modelName: "Clinic",
     timestamps: true,
-    tableName: "pharmacy",
+    tableName: "clinic",
   }
 );
 
-Pharmacy.hasOne(PharmacyAddress, {
-  foreignKey: "pharmacy_id",
+Clinic.hasOne(ClinicAddress, {
+  foreignKey: "clinic_id",
   onDelete: "CASCADE",
 });
 
-Pharmacy.hasOne(PharmacyLocation, {
-  foreignKey: "pharmacy_id",
+Clinic.hasOne(ClinicLocation, {
+  foreignKey: "clinic_id",
   onDelete: "CASCADE",
 });
 
-module.exports = Pharmacy;
+Clinic.hasMany(Session, {
+  foreignKey: "clinic_id",
+  onDelete: "RESTRICT",
+});
+
+module.exports = Clinic;

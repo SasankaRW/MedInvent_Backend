@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 
-class PharmacyLocation extends Model {}
+class ClinicLocation extends Model {}
 
-PharmacyLocation.init(
+ClinicLocation.init(
   {
     lat: {
       type: DataTypes.DECIMAL,
@@ -16,10 +16,10 @@ PharmacyLocation.init(
   },
   {
     sequelize,
-    modelName: "PharmacyLocation",
+    modelName: "ClinicLocation",
     timestamps: false,
-    tableName: "pharmacyLocation",
+    tableName: "clinicLocation",
   }
 );
 
-module.exports = PharmacyLocation;
+module.exports = ClinicLocation;

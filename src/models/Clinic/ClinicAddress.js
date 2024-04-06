@@ -1,9 +1,9 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 
-class PharmacyAddress extends Model {}
+class ClinicAddress extends Model {}
 
-PharmacyAddress.init(
+ClinicAddress.init(
   {
     lineOne: {
       type: DataTypes.STRING,
@@ -24,10 +24,10 @@ PharmacyAddress.init(
   },
   {
     sequelize,
-    modelName: "PharmacyAddress",
+    modelName: "ClinicAddress",
     timestamps: false,
-    tableName: "pharmacyAddress",
+    tableName: "clinicAddress",
   }
 );
 
-module.exports = PharmacyAddress;
+module.exports = ClinicAddress;

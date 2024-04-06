@@ -1,8 +1,16 @@
 const sequelize = require("../../config/database");
-const { PatientUser } = require("../models/PatientUser/patientUser");
-const { Pharmacy } = require("../models/Pharmacy/Pharmacy");
+const Appointment = require("../models/Appointment/Appointment");
+const Clinic = require("../models/Clinic/Clinic");
+const ClinicAddress = require("../models/Clinic/ClinicAddress");
+const ClinicLocation = require("../models/Clinic/ClinicLocation");
+const Doctor = require("../models/Doctor/Doctor");
+const Visting = require("../models/Doctor/Visting");
+const PatientUser = require("../models/PatientUser/patientUser");
+const Pharmacy = require("../models/Pharmacy/Pharmacy");
 const PharmacyAddress = require("../models/Pharmacy/PharmacyAddress");
 const PharmacyLocation = require("../models/Pharmacy/PharmacyLocation");
+const Session = require("../models/Session/Session");
+const SessionDates = require("../models/Session/SessionDates");
 
 module.exports = {
   generateTables: async () => {
