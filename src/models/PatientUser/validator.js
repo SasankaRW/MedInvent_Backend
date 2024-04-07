@@ -22,7 +22,7 @@ const createSchema = Joi.object({
   createTime: Joi.date().default(Date.now())
 });
 
-// const updateSchema = Joi.object({
+// const updateSchemas = Joi.object({
 //   restaurantName: Joi.string().optional(),
 //   contactNumber: Joi.string().optional(),
 //   registrationDate: Joi.date().optional().allow(null),
@@ -34,6 +34,25 @@ const createSchema = Joi.object({
 //   active: Joi.bool().optional(),
 // });
 
+const updateSchema = Joi.object({
+ // userID: Joi.string().guid({ version: 'uuidv4' }).optional(),
+  mobileNo: Joi.number().integer().optional(),
+  lineOne: Joi.string().optional().allow(null, ""),
+  lineTwo: Joi.string().optional().allow(null, ""),
+  city: Joi.string().optional().allow(null, ""),
+  postalCode: Joi.string().optional().allow(null, ""),
+  district: Joi.string().optional().allow(null, ""),
+  Fname: Joi.string().optional(),
+  Lname: Joi.string().optional(),
+  gender: Joi.string().valid('male', 'female', 'other').optional(),
+  email: Joi.string().email().optional(),
+  nic: Joi.string().optional(),
+  dob: Joi.date().optional(),
+  picPath: Joi.string().optional(),
+  createdAt: Joi.date().timestamp('unix').default('now'),
+  updatedAt: Joi.date().timestamp('unix').default('now'),
+});
+
 const create = async (req, res, next) => {
   try {
     await createSchema.validateAsync(req.body);
@@ -43,16 +62,16 @@ const create = async (req, res, next) => {
   }
 };
 
-// const update = async (req, res, next) => {
-//   try {
-//     await updateSchema.validateAsync(req.body);
-//     next();
-//   } catch (error) {
-//     VALIDATION_ERROR(res, error);
-//   }
-// };
+const update = async (req, res, next) => {
+  try {
+    await updateSchema.validateAsync(req.body);
+    next();
+  } catch (error) {
+    VALIDATION_ERROR(res, error);
+  }
+};
 
 module.exports = {
   create,
-  //update,
+  update,
 };

@@ -34,7 +34,7 @@ app.use(cookieParser());
 
 app.use(accessHeader);
 
-app.use("/", router);
+app.use("/api", router);
 
 generateTables();
 

@@ -4,29 +4,29 @@ const { SUCCESS, ERROR } = require("../../helper");
 
 const { SUC_CODES } = require("./constants").Codes;
 
-// const getRestaurantsData = async (req, res) => {
-//   try {
-//     const result = await Service.getRestaurantsData(req.query);
+const getAllPatientUsersDetails = async (req, res) => {
+  try {
+    const result = await Service.getAllPatientUsersDetails(req.query);
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-//     ERROR(res, error, res.span);
-//   }
-// };
+    ERROR(res, error, res.span);
+  }
+};
 
-// const getRestaurantData = async (req, res) => {
-//   try {
-//     const result = await Service.getRestaurant(req.params);
+const getPatientUserDetailsByID = async (req, res) => {
+  try {
+    const result = await Service.getPatientUserDetailsByID(req.params);
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-//     ERROR(res, error, res.span);
-//   }
-// }; 
+    ERROR(res, error, res.span);
+  }
+}; 
 
 const createPatientUserData = async (req, res) => {
   try {
@@ -40,38 +40,38 @@ const createPatientUserData = async (req, res) => {
   }
 };
 
-// const updateRestaurantData = async (req, res) => {
-//   try {
-//     const result = await Service.updateRestaurantData(req.params, req.body);
+const updatePatientUserDetailsByID = async (req, res) => {
+  try {
+    const result = await Service.updatePatientUserDetailsByID(req.params, req.body);
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-//     ERROR(res, error, res.span);
-//   }
-// };
+    ERROR(res, error, res.span);
+  }
+};
 
-// const deleteRestaurantData = async (req, res) => {
-//   try {
-//     const result = await Service.deleteRestaurantData(req.params);
+const deletePatientUserDetailsByID = async (req, res) => {
+  try {
+    const result = await Service.deletePatientUserDetailsByID(req.params);
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-//     ERROR(res, error, res.span);
-//   }
-// };
+    ERROR(res, error, res.span);
+  }
+};
 
 module.exports = {
-  //getRestaurantData,
+  getPatientUserDetailsByID,
 
-  //getRestaurantsData,
+  getAllPatientUsersDetails,
 
   createPatientUserData,
 
-  //updateRestaurantData,
+  updatePatientUserDetailsByID,
 
-  //deleteRestaurantData,
+  deletePatientUserDetailsByID,
 };

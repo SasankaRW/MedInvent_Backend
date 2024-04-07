@@ -4,33 +4,33 @@ const createSingleRecode = async (singleRecode) => {
   return await PatientUser.create(singleRecode);
 };
 
-// const deleteSingleRecode = async (data) => {
-//   const result = await Restaurant.destroy({ where: { id: data.id } });
-//   return result;
-// };
+const deleteSingleRecode = async (data) => {
+  const result = await PatientUser.destroy({ where: { userID: data.userID } });
+  return result;
+};
 
-// const updateMultipleRecodes = async (query, updates) =>
-//   await Restaurant.update(updates, query);
+const updateMultipleRecodes = async (query, updates) =>
+  await PatientUser.update(updates, query);
 
-// const updateRecode = async (condition, dataNeedToUpdate) =>
-//   await Restaurant.update(dataNeedToUpdate, condition);
+const updateRecode = async (condition, dataNeedToUpdate) =>
+  await PatientUser.update(dataNeedToUpdate, condition);
 
-//const findOneByQuery = async (query) => await Restaurant.findOne(query);
+const findOneByQuery = async (query) => await PatientUser.findOne(query);
 
-//const findByQuery = async (query) => await Restaurant.findAll(query);
+const findByQuery = async (query) => await PatientUser.findAll(query);
 
 module.exports = {
   Schema: PatientUser,
 
- // updateRecode: updateRecode,
+  updateRecode: updateRecode,
 
-  //findOneByQuery,
+  findOneByQuery,
 
-  //findByQuery,
+  findByQuery,
 
-  //updateMultipleRecodes: updateMultipleRecodes,
+  updateMultipleRecodes: updateMultipleRecodes,
 
   createSingleRecode,
 
-  //deleteSingleRecode,
+  deleteSingleRecode,
 };

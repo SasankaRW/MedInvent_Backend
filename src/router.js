@@ -6,6 +6,6 @@ const { PatientUserRoutes } = require("./models/PatientUser");
 
 const router = express.Router();
 
-router.use("/new-user-details", PatientUserRoutes);
+router.use("/PatientUser", PatientUserRoutes);
 
 module.exports = router; 
