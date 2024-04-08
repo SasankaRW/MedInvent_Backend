@@ -6,7 +6,7 @@ const Service = require("./service");
 
 const Routes = require("./router");
 
-const Restaurant = require("./patientUser");
+const PatientUser = require("./patientUser");
 
 module.exports = {
   PatientUserConstants: Constants,
@@ -17,5 +17,5 @@ module.exports = {
 
   PatientUserRoutes: Routes,
 
-  Restaurant: Restaurant,
+  PatientUser: PatientUser,
 };

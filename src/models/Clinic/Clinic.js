@@ -71,11 +71,13 @@ Clinic.init(
 Clinic.hasOne(ClinicAddress, {
   foreignKey: "clinic_id",
   onDelete: "CASCADE",
+  as: "clinicAddress",
 });
 
 Clinic.hasOne(ClinicLocation, {
   foreignKey: "clinic_id",
   onDelete: "CASCADE",
+  as: "clinicLocation",
 });
 
 Clinic.hasMany(Session, {

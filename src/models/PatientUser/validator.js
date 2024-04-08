@@ -1,25 +1,24 @@
 const Joi = require("joi");
 const { VALIDATION_ERROR } = require("../../helper");
 //const Constants = require("../metadata/constants");
-//const locations = Constants.locations; 
-
+//const locations = Constants.locations;
 
 const createSchema = Joi.object({
   userID: Joi.string().uuid().required(),
   mobileNo: Joi.number().integer().required(),
-  lineOne: Joi.string().max(50).allow(null, ''),
-  lineTwo: Joi.string().max(50).allow(null, ''),
-  city: Joi.string().max(25).allow(null, ''),
-  postalCode: Joi.string().max(10).allow(null, ''),
-  district: Joi.string().max(30).allow(null, ''),
+  lineOne: Joi.string().max(50).allow(null, ""),
+  lineTwo: Joi.string().max(50).allow(null, ""),
+  city: Joi.string().max(25).allow(null, ""),
+  postalCode: Joi.string().max(10).allow(null, ""),
+  district: Joi.string().max(30).allow(null, ""),
   Fname: Joi.string().max(50).required(),
   Lname: Joi.string().max(50).required(),
-  gender: Joi.string().valid('Male', 'Female', 'Other').required(),
+  gender: Joi.string().valid("Male", "Female", "Other").required(),
   email: Joi.string().email().required(),
   nic: Joi.string().max(40).required(),
   dob: Joi.date().required(),
   picPath: Joi.string().max(255).required(),
-  createTime: Joi.date().default(Date.now())
+  createTime: Joi.date().default(Date.now()),
 });
 
 // const updateSchemas = Joi.object({
@@ -35,7 +34,7 @@ const createSchema = Joi.object({
 // });
 
 const updateSchema = Joi.object({
- // userID: Joi.string().guid({ version: 'uuidv4' }).optional(),
+  // userID: Joi.string().guid({ version: 'uuidv4' }).optional(),
   mobileNo: Joi.number().integer().optional(),
   lineOne: Joi.string().optional().allow(null, ""),
   lineTwo: Joi.string().optional().allow(null, ""),
@@ -44,13 +43,13 @@ const updateSchema = Joi.object({
   district: Joi.string().optional().allow(null, ""),
   Fname: Joi.string().optional(),
   Lname: Joi.string().optional(),
-  gender: Joi.string().valid('male', 'female', 'other').optional(),
+  gender: Joi.string().valid("male", "female", "other").optional(),
   email: Joi.string().email().optional(),
   nic: Joi.string().optional(),
   dob: Joi.date().optional(),
   picPath: Joi.string().optional(),
-  createdAt: Joi.date().timestamp('unix').default('now'),
-  updatedAt: Joi.date().timestamp('unix').default('now'),
+  createdAt: Joi.date().timestamp("unix").default("now"),
+  updatedAt: Joi.date().timestamp("unix").default("now"),
 });
 
 const create = async (req, res, next) => {

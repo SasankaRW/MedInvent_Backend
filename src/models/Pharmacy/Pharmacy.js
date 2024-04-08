@@ -65,11 +65,13 @@ Pharmacy.init(
 
 Pharmacy.hasOne(PharmacyAddress, {
   foreignKey: "pharmacy_id",
+  as: "pharmacyAddress",
   onDelete: "CASCADE",
 });
 
 Pharmacy.hasOne(PharmacyLocation, {
   foreignKey: "pharmacy_id",
+  as: "pharmacyLocation",
   onDelete: "CASCADE",
 });
 

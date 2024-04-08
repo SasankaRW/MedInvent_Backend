@@ -26,7 +26,7 @@ const getPatientUserDetailsByID = async (req, res) => {
 
     ERROR(res, error, res.span);
   }
-}; 
+};
 
 const createPatientUserData = async (req, res) => {
   try {
@@ -42,7 +42,10 @@ const createPatientUserData = async (req, res) => {
 
 const updatePatientUserDetailsByID = async (req, res) => {
   try {
-    const result = await Service.updatePatientUserDetailsByID(req.params, req.body);
+    const result = await Service.updatePatientUserDetailsByID(
+      req.params,
+      req.body
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
