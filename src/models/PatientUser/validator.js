@@ -4,7 +4,6 @@ const { VALIDATION_ERROR } = require("../../helper");
 //const locations = Constants.locations;
 
 const createSchema = Joi.object({
-  userID: Joi.string().uuid().required(),
   mobileNo: Joi.number().integer().required(),
   lineOne: Joi.string().max(50).allow(null, ""),
   lineTwo: Joi.string().max(50).allow(null, ""),
@@ -17,7 +16,7 @@ const createSchema = Joi.object({
   email: Joi.string().email().required(),
   nic: Joi.string().max(40).required(),
   dob: Joi.date().required(),
-  picPath: Joi.string().max(255).required(),
+  picPath: Joi.string().allow(null),
 });
 
 // const updateSchemas = Joi.object({
@@ -33,7 +32,6 @@ const createSchema = Joi.object({
 // });
 
 const updateSchema = Joi.object({
-  // userID: Joi.string().guid({ version: 'uuidv4' }).optional(),
   mobileNo: Joi.number().integer().optional(),
   lineOne: Joi.string().optional().allow(null, ""),
   lineTwo: Joi.string().optional().allow(null, ""),
@@ -46,7 +44,7 @@ const updateSchema = Joi.object({
   email: Joi.string().email().optional(),
   nic: Joi.string().optional(),
   dob: Joi.date().optional(),
-  picPath: Joi.string().optional(),
+  picPath: Joi.string().allow(null),
 });
 
 const create = async (req, res, next) => {

@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require("sequelize");
+const { DataTypes, Model, UUIDV4 } = require("sequelize");
 const sequelize = require("../../../config/database");
 
 class PatientUser extends Model {}
@@ -8,7 +8,7 @@ PatientUser.init(
     userID: {
       type: DataTypes.UUID,
       primaryKey: true,
-      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
     },
     Fname: {
       type: DataTypes.STRING(50),
@@ -61,7 +61,7 @@ PatientUser.init(
     },
     picPath: {
       type: DataTypes.STRING(255),
-      allowNull: false,
+      allowNull: true,
     },
   },
   {
