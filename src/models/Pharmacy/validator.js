@@ -7,7 +7,7 @@ const createSchema = Joi.object({
   openHoursFrom: Joi.string().required(),
   openHoursTo: Joi.string().required(),
   openDays: Joi.array().items(Joi.string()).required(),
-  email: Joi.string().email().required(),
+  email: Joi.string().email(),
   pharmacyAddress: Joi.object({
     lineOne: Joi.string().required(),
     lineTwo: Joi.string().required(),

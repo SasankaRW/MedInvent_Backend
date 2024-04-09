@@ -1,7 +1,7 @@
 const Joi = require("joi");
 const { VALIDATION_ERROR } = require("../../helper");
 
-const createSchema = Joi.object({
+const dataSchema = Joi.object({
   name: Joi.string().required(),
   contactNo: Joi.string().required(),
   openHoursFrom: Joi.string().required(),
@@ -20,9 +20,21 @@ const createSchema = Joi.object({
   }).required(),
 });
 
+const credentialsSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+}).required();
+
+const clinicDataSchema = Joi.object({
+  data: dataSchema,
+  credentials: credentialsSchema,
+}).required();
+
 const create = async (req, res, next) => {
   try {
-    await createSchema.validateAsync(req.body);
+    await clinicDataSchema.validateAsync(req.body);
+    await credentialsSchema.validateAsync(req.body.credentials);
+    await dataSchema.validateAsync(req.body.data);
     next();
   } catch (error) {
     VALIDATION_ERROR(res, error);

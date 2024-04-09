@@ -21,9 +21,6 @@ Doctor.init(
     mname: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        notEmpty: false,
-      },
     },
     lname: {
       type: DataTypes.STRING,

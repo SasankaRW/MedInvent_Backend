@@ -1,21 +1,21 @@
-// const Controller = require("./controller");
+const Controller = require("./controller");
 
-// const Constants = require("./constants");
+const Constants = require("./constants");
 
-// const Service = require("./service");
+const Service = require("./service");
 
-// const Routes = require("./router");
+const Routes = require("./router");
 
-// const Clinic = require("./Clinic");
+const Doctor = require("./Doctor");
 
-// module.exports = {
-//   ClinicConstants: Constants,
+module.exports = {
+  DoctorConstants: Constants,
 
-//   ClinicService: Service,
+  DoctorService: Service,
 
-//   ClinicController: Controller,
+  DoctorController: Controller,
 
-//   ClinicRoutes: Routes,
+  DoctorRoutes: Routes,
 
-//   Clinic: Clinic,
-// };
+  Doctor: Doctor,
+};
