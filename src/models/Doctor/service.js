@@ -50,7 +50,7 @@ const updateDoctor = async (id, updateData) => {
 
   if (!result) TE("Result not found");
 
-  const clinic = await DataBase.findOneByQuery({ where: filter });
+  const clinic = await DataBase.findOneByQuery(id);
 
   return clinic;
 };

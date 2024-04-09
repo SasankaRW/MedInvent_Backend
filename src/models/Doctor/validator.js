@@ -26,7 +26,7 @@ const updateDataSchema = Joi.object({
   dob: Joi.date(),
   medical_license_no: Joi.string(),
   specialization: Joi.string(),
-  note: Joi.string(),
+  note: Joi.string().allow(null),
 });
 
 const credentialsSchema = Joi.object({
