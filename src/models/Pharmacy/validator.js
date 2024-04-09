@@ -7,7 +7,7 @@ const createSchema = Joi.object({
   openHoursFrom: Joi.string().required(),
   openHoursTo: Joi.string().required(),
   openDays: Joi.array().items(Joi.string()).required(),
-  email: Joi.string().email(),
+  email: Joi.string().email().allow(null),
   pharmacyAddress: Joi.object({
     lineOne: Joi.string().required(),
     lineTwo: Joi.string().required(),
@@ -26,7 +26,7 @@ const updateDataSchema = Joi.object({
   openHoursFrom: Joi.string(),
   openHoursTo: Joi.string(),
   openDays: Joi.array().items(Joi.string()),
-  email: Joi.string().email(),
+  email: Joi.string().email().allow(null),
 });
 
 const create = async (req, res, next) => {
@@ -34,6 +34,7 @@ const create = async (req, res, next) => {
     await createSchema.validateAsync(req.body);
     next();
   } catch (error) {
+    console.log(error);
     VALIDATION_ERROR(res, error);
   }
 };
