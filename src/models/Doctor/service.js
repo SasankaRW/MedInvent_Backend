@@ -38,8 +38,11 @@ const createDoctor = async (data) => {
   return result;
 };
 
-const updateDoctor = async (filter, updateData) => {
-  const updateRecord = DataBase.updateRecord({ where: filter }, updateData);
+const updateDoctor = async (id, updateData) => {
+  const updateRecord = DataBase.updateRecord(
+    { where: { doctor_id: id } },
+    updateData
+  );
 
   const [err, result] = await to(updateRecord);
 

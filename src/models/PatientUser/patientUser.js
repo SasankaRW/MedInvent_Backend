@@ -10,8 +10,33 @@ PatientUser.init(
       primaryKey: true,
       allowNull: false,
     },
+    Fname: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
+    Lname: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
     mobileNo: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING(40),
+      allowNull: false,
+    },
+    nic: {
+      type: DataTypes.STRING(40),
+      allowNull: false,
+    },
+    gender: {
+      type: DataTypes.STRING(10),
+      allowNull: false,
+    },
+
+    dob: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
     lineOne: {
@@ -34,41 +59,9 @@ PatientUser.init(
       type: DataTypes.STRING(30),
       defaultValue: null,
     },
-    Fname: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    Lname: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
-    gender: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING(40),
-      allowNull: false,
-    },
-    nic: {
-      type: DataTypes.STRING(40),
-      allowNull: false,
-    },
-    dob: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
     picPath: {
       type: DataTypes.STRING(255),
       allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

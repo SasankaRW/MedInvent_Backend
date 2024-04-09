@@ -38,6 +38,18 @@ const getClinicById = async (req, res) => {
   }
 };
 
+const updateClinic = async (req, res) => {
+  try {
+    const result = await Service.updateClinic(req.params.id, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const deleteClinic = async (req, res) => {
   try {
     const result = await Service.deleteClinic(req.params.id);
@@ -55,4 +67,5 @@ module.exports = {
   createClinic,
   getClinicById,
   deleteClinic,
+  updateClinic,
 };

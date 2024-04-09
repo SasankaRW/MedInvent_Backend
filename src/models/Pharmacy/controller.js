@@ -38,6 +38,18 @@ const getPharmacyById = async (req, res) => {
   }
 };
 
+const updatePharmacy = async (req, res) => {
+  try {
+    const result = await Service.updatePharmacy(req.params.id, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const deletePharmacy = async (req, res) => {
   try {
     const result = await Service.deletePharmacy(req.params.id);
@@ -55,4 +67,5 @@ module.exports = {
   createPharmacy,
   getPharmacyById,
   deletePharmacy,
+  updatePharmacy,
 };

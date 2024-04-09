@@ -38,6 +38,18 @@ const getDoctorById = async (req, res) => {
   }
 };
 
+const updateDoctor = async (req, res) => {
+  try {
+    const result = await Service.updateDoctor(req.params.id, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const deleteDoctor = async (req, res) => {
   try {
     const result = await Service.deleteDoctor(req.params.id);
@@ -54,5 +66,6 @@ module.exports = {
   getAllDoctors,
   createDoctor,
   getDoctorById,
+  updateDoctor,
   deleteDoctor,
 };

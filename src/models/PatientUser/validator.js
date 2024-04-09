@@ -18,7 +18,6 @@ const createSchema = Joi.object({
   nic: Joi.string().max(40).required(),
   dob: Joi.date().required(),
   picPath: Joi.string().max(255).required(),
-  createTime: Joi.date().default(Date.now()),
 });
 
 // const updateSchemas = Joi.object({
@@ -48,8 +47,6 @@ const updateSchema = Joi.object({
   nic: Joi.string().optional(),
   dob: Joi.date().optional(),
   picPath: Joi.string().optional(),
-  createdAt: Joi.date().timestamp("unix").default("now"),
-  updatedAt: Joi.date().timestamp("unix").default("now"),
 });
 
 const create = async (req, res, next) => {

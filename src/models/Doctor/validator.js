@@ -15,6 +15,20 @@ const dataSchema = Joi.object({
   note: Joi.string().allow("", null),
 });
 
+const updateDataSchema = Joi.object({
+  fname: Joi.string(),
+  mname: Joi.string(),
+  lname: Joi.string(),
+  email: Joi.string().email(),
+  gender: Joi.string(),
+  nic: Joi.string(),
+  contactNo: Joi.string(),
+  dob: Joi.date(),
+  medical_license_no: Joi.string(),
+  specialization: Joi.string(),
+  note: Joi.string(),
+});
+
 const credentialsSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().required(),
@@ -36,6 +50,16 @@ const create = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    await updateDataSchema.validateAsync(req.body);
+    next();
+  } catch (error) {
+    VALIDATION_ERROR(res, error);
+  }
+};
+
 module.exports = {
   create,
+  update,
 };

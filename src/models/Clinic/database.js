@@ -3,7 +3,7 @@ const ClinicAddress = require("./ClinicAddress");
 const ClinicLocation = require("./ClinicLocation");
 
 const createSingleRecord = async (singleRecord) => {
-  return await Clinic.create(singleRecord, {
+  return await Clinic.create(singleRecord.data, {
     include: ["clinicAddress", "clinicLocation"],
   });
 };
