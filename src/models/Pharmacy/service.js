@@ -3,7 +3,7 @@ const DataBase = require("./database");
 const { to, TE } = require("../../helper");
 
 const getAllPharmacies = async (params) => {
-  const getRecords = DataBase.findByQuery();
+  const getRecords = DataBase.findAll();
 
   const [err, result] = await to(getRecords);
 
@@ -15,7 +15,19 @@ const getAllPharmacies = async (params) => {
 };
 
 const getPharmacyById = async (id) => {
-  const getRecord = DataBase.findOneByQuery(id);
+  const getRecord = DataBase.findOneId(id);
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getPharmacyByName = async (name) => {
+  const getRecord = DataBase.findByQuery(name);
 
   const [err, result] = await to(getRecord);
 
@@ -52,7 +64,7 @@ const updatePharmacy = async (id, updateData) => {
 
   if (!result) TE("Result not found");
 
-  const clinic = await DataBase.findOneByQuery(id);
+  const clinic = await DataBase.findOneById(id);
 
   return clinic;
 };
@@ -72,6 +84,7 @@ const deletePharmacy = async (id) => {
 module.exports = {
   getAllPharmacies,
   getPharmacyById,
+  getPharmacyByName,
   createPharmacy,
   updatePharmacy,
   deletePharmacy,

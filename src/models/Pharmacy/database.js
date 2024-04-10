@@ -1,6 +1,7 @@
 const Pharmacy = require("./Pharmacy");
 const PharmacyAddress = require("./PharmacyAddress");
 const PharmacyLocation = require("./PharmacyLocation");
+const { Op } = require("sequelize");
 
 const createSingleRecord = async (singleRecord) => {
   return await Pharmacy.create(singleRecord, {
@@ -19,7 +20,7 @@ const updateMultipleRecords = async (query, updates) =>
 const updateRecord = async (condition, dataNeedToUpdate) =>
   await Pharmacy.update(dataNeedToUpdate, condition);
 
-const findOneByQuery = async (id) => {
+const findOneById = async (id) => {
   return await Pharmacy.findByPk(id, {
     include: [
       { model: PharmacyAddress, as: "pharmacyAddress" },
@@ -28,8 +29,20 @@ const findOneByQuery = async (id) => {
   });
 };
 
-const findByQuery = async () => {
+const findAll = async () => {
   return await Pharmacy.findAll({
+    include: [
+      { model: PharmacyAddress, as: "pharmacyAddress" },
+      { model: PharmacyLocation, as: "pharmacyLocation" },
+    ],
+  });
+};
+
+const findByQuery = async (query) => {
+  return await Pharmacy.findAll({
+    where: {
+      [Op.or]: [{ name: { [Op.iLike]: `%${query}%` } }],
+    },
     include: [
       { model: PharmacyAddress, as: "pharmacyAddress" },
       { model: PharmacyLocation, as: "pharmacyLocation" },
@@ -40,8 +53,9 @@ const findByQuery = async () => {
 module.exports = {
   Schema: Pharmacy,
   updateRecord: updateRecord,
-  findOneByQuery,
+  findOneById,
   findByQuery,
+  findAll,
   updateMultipleRecords,
   createSingleRecord,
   deleteSingleRecord,

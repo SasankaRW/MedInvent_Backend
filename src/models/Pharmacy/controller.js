@@ -38,6 +38,18 @@ const getPharmacyById = async (req, res) => {
   }
 };
 
+const getPharmacyByName = async (req, res) => {
+  try {
+    const result = await Service.getPharmacyByName(req.params.name);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const updatePharmacy = async (req, res) => {
   try {
     const result = await Service.updatePharmacy(req.params.id, req.body);
@@ -66,6 +78,7 @@ module.exports = {
   getAllPharmacies,
   createPharmacy,
   getPharmacyById,
+  getPharmacyByName,
   deletePharmacy,
   updatePharmacy,
 };
