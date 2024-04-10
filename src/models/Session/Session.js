@@ -58,7 +58,7 @@ Session.init(
 );
 
 Session.hasMany(SessionDates, {
-  foreignKey: "clinic_id",
+  foreignKey: "session_id",
   onDelete: "CASCADE",
 });
 
