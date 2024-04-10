@@ -3,7 +3,7 @@ const DataBase = require("./database");
 const { to, TE } = require("../../helper");
 
 const getAllDoctors = async (params) => {
-  const getRecords = DataBase.findByQuery();
+  const getRecords = DataBase.findAll();
 
   const [err, result] = await to(getRecords);
 
@@ -15,7 +15,19 @@ const getAllDoctors = async (params) => {
 };
 
 const getDoctorById = async (id) => {
-  const getRecord = DataBase.findOneByQuery(id);
+  const getRecord = DataBase.findOneById(id);
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getDoctorByName = async (name) => {
+  const getRecord = DataBase.findByQuery(name);
 
   const [err, result] = await to(getRecord);
 
@@ -50,7 +62,7 @@ const updateDoctor = async (id, updateData) => {
 
   if (!result) TE("Result not found");
 
-  const clinic = await DataBase.findOneByQuery(id);
+  const clinic = await DataBase.findOneById(id);
 
   return clinic;
 };
@@ -70,6 +82,7 @@ const deleteDoctor = async (id) => {
 module.exports = {
   getAllDoctors,
   getDoctorById,
+  getDoctorByName,
   createDoctor,
   updateDoctor,
   deleteDoctor,

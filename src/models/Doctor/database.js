@@ -1,4 +1,5 @@
 const Doctor = require("./Doctor");
+const { Op } = require("sequelize");
 
 const createSingleRecord = async (singleRecord) => {
   return await Doctor.create(singleRecord.data);
@@ -15,19 +16,32 @@ const updateMultipleRecords = async (query, updates) =>
 const updateRecord = async (condition, dataNeedToUpdate) =>
   await Doctor.update(dataNeedToUpdate, condition);
 
-const findOneByQuery = async (id) => {
+const findOneById = async (id) => {
   return await Doctor.findByPk(id);
 };
 
-const findByQuery = async () => {
+const findAll = async () => {
   return await Doctor.findAll();
+};
+
+const findByQuery = async (query) => {
+  return await Doctor.findAll({
+    where: {
+      [Op.or]: [
+        { fname: { [Op.iLike]: `%${query}%` } },
+        { mname: { [Op.iLike]: `%${query}%` } },
+        { lname: { [Op.iLike]: `%${query}%` } },
+      ],
+    },
+  });
 };
 
 module.exports = {
   Schema: Doctor,
   updateRecord: updateRecord,
-  findOneByQuery,
+  findOneById,
   findByQuery,
+  findAll,
   updateMultipleRecords,
   createSingleRecord,
   deleteSingleRecord,
