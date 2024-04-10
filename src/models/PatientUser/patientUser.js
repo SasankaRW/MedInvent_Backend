@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
+const DependMember = require("../DependMember/DependMember");
 
 class PatientUser extends Model {}
 
@@ -9,6 +10,7 @@ PatientUser.init(
       type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false,
+      defaultValue: DataTypes.UUIDV4
     },
     mobileNo: {
       type: DataTypes.INTEGER,
@@ -77,5 +79,11 @@ PatientUser.init(
     timestamps: true,
   }
 );
+
+PatientUser.hasMany(DependMember,{
+  foreignKey:'userID',
+  onDelete:'CASCADE',
+  onUpdate:'CASCADE',
+});
 
 module.exports = PatientUser;

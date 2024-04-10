@@ -6,6 +6,7 @@ const ClinicLocation = require("../models/Clinic/ClinicLocation");
 const Doctor = require("../models/Doctor/Doctor");
 const Visting = require("../models/Doctor/Visting");
 const PatientUser = require("../models/PatientUser/patientUser");
+const DependMember = require("../models/DependMember/DependMember");
 const Pharmacy = require("../models/Pharmacy/Pharmacy");
 const PharmacyAddress = require("../models/Pharmacy/PharmacyAddress");
 const PharmacyLocation = require("../models/Pharmacy/PharmacyLocation");
