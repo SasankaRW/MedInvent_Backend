@@ -1,12 +1,31 @@
 const Pharmacy = require("./Pharmacy");
 const PharmacyAddress = require("./PharmacyAddress");
-const PharmacyLocation = require("./PharmacyLocation");
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
-const createSingleRecord = async (singleRecord) => {
-  return await Pharmacy.create(singleRecord, {
-    include: ["pharmacyAddress", "pharmacyLocation"],
-  });
+const createSingleRecord = async (data) => {
+  return await Pharmacy.create(
+    {
+      name: data.name,
+      contactNo: data.contactNo,
+      openHoursFrom: data.openHoursFrom,
+      openHoursTo: data.openHoursTo,
+      openDays: data.openDays,
+      email: data.email,
+      pharmacyAddress: data.pharmacyAddress,
+      location: Sequelize.fn(
+        "ST_SetSRID",
+        Sequelize.fn(
+          "ST_MakePoint",
+          data.pharmacyLocation.long,
+          data.pharmacyLocation.lat
+        ),
+        4326
+      ),
+    },
+    {
+      include: ["pharmacyAddress"],
+    }
+  );
 };
 
 const deleteSingleRecord = async (id) => {
@@ -22,19 +41,13 @@ const updateRecord = async (condition, dataNeedToUpdate) =>
 
 const findOneById = async (id) => {
   return await Pharmacy.findByPk(id, {
-    include: [
-      { model: PharmacyAddress, as: "pharmacyAddress" },
-      { model: PharmacyLocation, as: "pharmacyLocation" },
-    ],
+    include: [{ model: PharmacyAddress, as: "pharmacyAddress" }],
   });
 };
 
 const findAll = async () => {
   return await Pharmacy.findAll({
-    include: [
-      { model: PharmacyAddress, as: "pharmacyAddress" },
-      { model: PharmacyLocation, as: "pharmacyLocation" },
-    ],
+    include: [{ model: PharmacyAddress, as: "pharmacyAddress" }],
   });
 };
 
@@ -43,11 +56,34 @@ const findByQuery = async (query) => {
     where: {
       [Op.or]: [{ name: { [Op.iLike]: `%${query}%` } }],
     },
+    include: [{ model: PharmacyAddress, as: "pharmacyAddress" }],
+  });
+};
+
+const findByLocation = async (params) => {
+  const pharmacies = await Pharmacy.findAll({
+    where: Sequelize.where(
+      Sequelize.fn(
+        "ST_DWithin",
+        Sequelize.col("location"),
+        Sequelize.fn(
+          "ST_SetSRID",
+          Sequelize.fn("ST_MakePoint", params.long, params.lat),
+          4326
+        ),
+        5000
+      ),
+      true
+    ),
     include: [
-      { model: PharmacyAddress, as: "pharmacyAddress" },
-      { model: PharmacyLocation, as: "pharmacyLocation" },
+      {
+        model: PharmacyAddress,
+        as: "pharmacyAddress",
+      },
     ],
   });
+
+  return pharmacies;
 };
 
 module.exports = {
@@ -56,6 +92,7 @@ module.exports = {
   findOneById,
   findByQuery,
   findAll,
+  findByLocation,
   updateMultipleRecords,
   createSingleRecord,
   deleteSingleRecord,

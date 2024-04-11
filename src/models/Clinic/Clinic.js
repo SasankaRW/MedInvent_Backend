@@ -1,7 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const ClinicAddress = require("./ClinicAddress");
-const ClinicLocation = require("./ClinicLocation");
 const Session = require("../Session/Session");
 
 class Clinic extends Model {}
@@ -55,6 +54,10 @@ Clinic.init(
         isEmail: true,
       },
     },
+    location: {
+      type: DataTypes.GEOMETRY("POINT"),
+      allowNull: false,
+    },
     clinicFees: {
       type: DataTypes.DECIMAL(10, 2),
       defaultValue: null,
@@ -72,12 +75,6 @@ Clinic.hasOne(ClinicAddress, {
   foreignKey: "clinic_id",
   onDelete: "CASCADE",
   as: "clinicAddress",
-});
-
-Clinic.hasOne(ClinicLocation, {
-  foreignKey: "clinic_id",
-  onDelete: "CASCADE",
-  as: "clinicLocation",
 });
 
 Clinic.hasMany(Session, {

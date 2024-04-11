@@ -38,6 +38,30 @@ const getClinicById = async (req, res) => {
   }
 };
 
+const getClinicByName = async (req, res) => {
+  try {
+    const result = await Service.getClinicByName(req.params.name);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const getNearByClinics = async (req, res) => {
+  try {
+    const result = await Service.getNearByClinics(req.query);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const updateClinic = async (req, res) => {
   try {
     const result = await Service.updateClinic(req.params.id, req.body);
@@ -66,6 +90,8 @@ module.exports = {
   getAllClinics,
   createClinic,
   getClinicById,
+  getClinicByName,
+  getNearByClinics,
   deleteClinic,
   updateClinic,
 };

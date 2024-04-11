@@ -15,7 +15,7 @@ const getAllPharmacies = async (params) => {
 };
 
 const getPharmacyById = async (id) => {
-  const getRecord = DataBase.findOneId(id);
+  const getRecord = DataBase.findOneById(id);
 
   const [err, result] = await to(getRecord);
 
@@ -34,6 +34,18 @@ const getPharmacyByName = async (name) => {
   if (err) TE(err);
 
   if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getNearByPharmacies = async (params) => {
+  const getRecords = DataBase.findByLocation(params);
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
 
   return result;
 };
@@ -86,6 +98,7 @@ module.exports = {
   getPharmacyById,
   getPharmacyByName,
   createPharmacy,
+  getNearByPharmacies,
   updatePharmacy,
   deletePharmacy,
 };

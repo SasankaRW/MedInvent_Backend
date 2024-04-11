@@ -1,11 +1,32 @@
 const Clinic = require("./Clinic");
 const ClinicAddress = require("./ClinicAddress");
-const ClinicLocation = require("./ClinicLocation");
+const { Sequelize } = require("sequelize");
 
 const createSingleRecord = async (singleRecord) => {
-  return await Clinic.create(singleRecord.data, {
-    include: ["clinicAddress", "clinicLocation"],
-  });
+  const data = singleRecord.data;
+  return await Clinic.create(
+    {
+      name: data.name,
+      contactNo: data.contactNo,
+      openHoursFrom: data.openHoursFrom,
+      openHoursTo: data.openHoursTo,
+      openDays: data.openDays,
+      email: data.email,
+      clinicAddress: data.clinicAddress,
+      location: Sequelize.fn(
+        "ST_SetSRID",
+        Sequelize.fn(
+          "ST_MakePoint",
+          data.clinicLocation.long,
+          data.clinicLocation.lat
+        ),
+        4326
+      ),
+    },
+    {
+      include: ["clinicAddress"],
+    }
+  );
 };
 
 const deleteSingleRecord = async (id) => {
@@ -21,20 +42,40 @@ const updateRecord = async (condition, dataNeedToUpdate) =>
 
 const findOneByQuery = async (id) => {
   return await Clinic.findByPk(id, {
-    include: [
-      { model: ClinicAddress, as: "clinicAddress" },
-      { model: ClinicLocation, as: "clinicLocation" },
-    ],
+    include: [{ model: ClinicAddress, as: "clinicAddress" }],
   });
 };
 
 const findByQuery = async () => {
   return await Clinic.findAll({
+    include: [{ model: ClinicAddress, as: "clinicAddress" }],
+  });
+};
+
+const findByLocation = async (params) => {
+  const clinics = await Clinic.findAll({
+    where: Sequelize.where(
+      Sequelize.fn(
+        "ST_DWithin",
+        Sequelize.col("location"),
+        Sequelize.fn(
+          "ST_SetSRID",
+          Sequelize.fn("ST_MakePoint", params.long, params.lat),
+          4326
+        ),
+        5000
+      ),
+      true
+    ),
     include: [
-      { model: ClinicAddress, as: "clinicAddress" },
-      { model: ClinicLocation, as: "clinicLocation" },
+      {
+        model: ClinicAddress,
+        as: "clinicAddress",
+      },
     ],
   });
+
+  return clinics;
 };
 
 module.exports = {
@@ -42,6 +83,7 @@ module.exports = {
   updateRecord: updateRecord,
   findOneByQuery,
   findByQuery,
+  findByLocation,
   updateMultipleRecords,
   createSingleRecord,
   deleteSingleRecord,

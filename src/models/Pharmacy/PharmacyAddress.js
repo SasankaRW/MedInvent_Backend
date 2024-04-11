@@ -12,6 +12,9 @@ PharmacyAddress.init(
     lineTwo: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        notEmpty: false,
+      },
     },
     city: {
       type: DataTypes.STRING,

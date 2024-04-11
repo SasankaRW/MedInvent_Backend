@@ -26,6 +26,30 @@ const getClinicById = async (id) => {
   return result;
 };
 
+const getClinicByName = async (name) => {
+  const getRecord = DataBase.findByQuery(name);
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getNearByClinics = async (params) => {
+  const getRecords = DataBase.findByLocation(params);
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
+
 const createClinic = async (data) => {
   const createSingleRecord = DataBase.createSingleRecord(data);
 
@@ -72,6 +96,8 @@ const deleteClinic = async (id) => {
 module.exports = {
   getAllClinics,
   getClinicById,
+  getClinicByName,
+  getNearByClinics,
   createClinic,
   updateClinic,
   deleteClinic,

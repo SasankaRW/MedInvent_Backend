@@ -1,7 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const PharmacyAddress = require("./PharmacyAddress");
-const PharmacyLocation = require("./PharmacyLocation");
 
 class Pharmacy extends Model {}
 
@@ -54,6 +53,10 @@ Pharmacy.init(
         isEmail: true,
       },
     },
+    location: {
+      type: DataTypes.GEOMETRY("POINT"),
+      allowNull: false,
+    },
   },
   {
     sequelize,
@@ -66,12 +69,6 @@ Pharmacy.init(
 Pharmacy.hasOne(PharmacyAddress, {
   foreignKey: "pharmacy_id",
   as: "pharmacyAddress",
-  onDelete: "CASCADE",
-});
-
-Pharmacy.hasOne(PharmacyLocation, {
-  foreignKey: "pharmacy_id",
-  as: "pharmacyLocation",
   onDelete: "CASCADE",
 });
 
