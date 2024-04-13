@@ -33,9 +33,10 @@ const getAllVisitingClinics = async (doctor_id) => {
 };
 
 const getPendingDoctors = async (clinic_id) => {
-  const getRecords = DataBase.findByQuery({
+  const getRecords = DataBase.findDoctorsByQuery({
     clinic_id: clinic_id,
     isReqAccepted: false,
+    reqSentBy: "clinic",
   });
 
   const [err, result] = await to(getRecords);
@@ -48,9 +49,42 @@ const getPendingDoctors = async (clinic_id) => {
 };
 
 const getPendingClinics = async (doctor_id) => {
-  const getRecords = DataBase.findByQuery({
+  const getRecords = DataBase.findClinicsByQuery({
     doctor_id: doctor_id,
-    isReqAccepted: true,
+    isReqAccepted: false,
+    reqSentBy: "doctor",
+  });
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
+
+const getRequestedDoctors = async (clinic_id) => {
+  const getRecords = DataBase.findDoctorsByQuery({
+    clinic_id: clinic_id,
+    isReqAccepted: false,
+    reqSentBy: "doctor",
+  });
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
+
+const getRequestedClinics = async (doctor_id) => {
+  const getRecords = DataBase.findClinicsByQuery({
+    doctor_id: doctor_id,
+    isReqAccepted: false,
+    reqSentBy: "clinic",
   });
 
   const [err, result] = await to(getRecords);
@@ -114,6 +148,8 @@ module.exports = {
   getAllVisitingClinics,
   getPendingDoctors,
   getPendingClinics,
+  getRequestedDoctors,
+  getRequestedClinics,
   createVisiting,
   updateVisiting,
   deleteVisiting,

@@ -25,6 +25,10 @@ Visiting.init(
       allowNull: true,
       defaultValue: null,
     },
+    reqSentBy: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     isReqAccepted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

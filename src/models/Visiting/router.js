@@ -19,6 +19,12 @@ router
 router
   .route("/doctor/get/pendingvisitings/:doctor_id")
   .get(Controller.getPendingClinics);
+router
+  .route("/clinic/get/requests/:clinic_id")
+  .get(Controller.getRequestedDoctors);
+router
+  .route("/doctor/get/requests/:doctor_id")
+  .get(Controller.getRequestedClinics);
 router.route("/update").put(Validator.update, Controller.updateVisiting);
 router.route("/delete").delete(Controller.deleteVisiting);
 

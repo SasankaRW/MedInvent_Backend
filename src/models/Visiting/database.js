@@ -1,6 +1,7 @@
 const Doctor = require("../Doctor/Doctor");
 const Clinic = require("../Clinic/Clinic");
 const Visiting = require("./Visiting");
+const ClinicAddress = require("../Clinic/ClinicAddress");
 
 const createRecord = async (singleRecord) => {
   return await Visiting.create(singleRecord);
@@ -24,7 +25,18 @@ const findDoctorsByQuery = async (query) => {
 const findClinicsByQuery = async (query) => {
   return Visiting.findAll({
     where: query,
-    include: [{ model: Clinic, as: "clinic" }],
+    include: [
+      {
+        model: Clinic,
+        as: "clinic",
+        include: [
+          {
+            model: ClinicAddress,
+            as: "clinicAddress",
+          },
+        ],
+      },
+    ],
   });
 };
 

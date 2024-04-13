@@ -3,6 +3,7 @@ const { VALIDATION_ERROR } = require("../../helper");
 
 const visitingSchema = Joi.object({
   docFee: Joi.number().precision(2).allow(null),
+  reqSentBy: Joi.string().valid("doctor", "clinic").required(),
   isReqAccepted: Joi.boolean().default(false),
   clinic_id: Joi.string().guid({ version: "uuidv4" }).required(),
   doctor_id: Joi.string().guid({ version: "uuidv4" }).required(),

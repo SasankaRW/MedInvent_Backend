@@ -44,6 +44,26 @@ const getPendingClinics = async (req, res) => {
   }
 };
 
+const getRequestedDoctors = async (req, res) => {
+  try {
+    const result = await Service.getRequestedDoctors(req.params.clinic_id);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
+
+const getRequestedClinics = async (req, res) => {
+  try {
+    const result = await Service.getRequestedClinics(req.params.doctor_id);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
+
 const createVisiting = async (req, res) => {
   try {
     const result = await Service.createVisiting(req.body);
@@ -85,6 +105,8 @@ module.exports = {
   getAllVisitingClinics,
   getPendingDoctors,
   getPendingClinics,
+  getRequestedDoctors,
+  getRequestedClinics,
   createVisiting,
   updateVisiting,
   deleteVisiting,
