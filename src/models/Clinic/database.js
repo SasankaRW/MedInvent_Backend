@@ -1,6 +1,6 @@
 const Clinic = require("./Clinic");
 const ClinicAddress = require("./ClinicAddress");
-const { Sequelize } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 const createSingleRecord = async (singleRecord) => {
   const data = singleRecord.data;
@@ -40,14 +40,23 @@ const updateMultipleRecords = async (query, updates) =>
 const updateRecord = async (condition, dataNeedToUpdate) =>
   await Clinic.update(dataNeedToUpdate, condition);
 
-const findOneByQuery = async (id) => {
+const findOneById = async (id) => {
   return await Clinic.findByPk(id, {
     include: [{ model: ClinicAddress, as: "clinicAddress" }],
   });
 };
 
-const findByQuery = async () => {
+const findAll = async () => {
   return await Clinic.findAll({
+    include: [{ model: ClinicAddress, as: "clinicAddress" }],
+  });
+};
+
+const findByQuery = async (query) => {
+  return await Clinic.findAll({
+    where: {
+      [Op.or]: [{ name: { [Op.iLike]: `%${query}%` } }],
+    },
     include: [{ model: ClinicAddress, as: "clinicAddress" }],
   });
 };
@@ -81,8 +90,9 @@ const findByLocation = async (params) => {
 module.exports = {
   Schema: Clinic,
   updateRecord: updateRecord,
-  findOneByQuery,
+  findOneById,
   findByQuery,
+  findAll,
   findByLocation,
   updateMultipleRecords,
   createSingleRecord,

@@ -3,7 +3,7 @@ const DataBase = require("./database");
 const { to, TE } = require("../../helper");
 
 const getAllClinics = async (params) => {
-  const getRecords = DataBase.findByQuery();
+  const getRecords = DataBase.findAll();
 
   const [err, result] = await to(getRecords);
 
@@ -15,7 +15,7 @@ const getAllClinics = async (params) => {
 };
 
 const getClinicById = async (id) => {
-  const getRecord = DataBase.findOneByQuery(id);
+  const getRecord = DataBase.findOneById(id);
 
   const [err, result] = await to(getRecord);
 
@@ -76,7 +76,7 @@ const updateClinic = async (id, updateData) => {
 
   if (!result) TE("Result not found");
 
-  const clinic = await DataBase.findOneByQuery(id);
+  const clinic = await DataBase.findByIdy(id);
 
   return clinic;
 };
