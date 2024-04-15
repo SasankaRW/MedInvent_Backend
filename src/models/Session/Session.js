@@ -2,6 +2,7 @@ const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const Appointment = require("../Appointment/Appointment");
 const SessionDates = require("./SessionDates");
+const Clinic = require("../Clinic/Clinic");
 
 class Session extends Model {}
 
@@ -58,6 +59,11 @@ Session.init(
 );
 
 Session.hasMany(SessionDates, {
+  foreignKey: "session_id",
+  onDelete: "CASCADE",
+});
+
+SessionDates.belongsTo(Session, {
   foreignKey: "session_id",
   onDelete: "CASCADE",
 });

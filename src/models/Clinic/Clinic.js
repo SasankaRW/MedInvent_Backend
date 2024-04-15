@@ -82,4 +82,9 @@ Clinic.hasMany(Session, {
   onDelete: "RESTRICT",
 });
 
+Session.belongsTo(Clinic, {
+  foreignKey: "clinic_id",
+  onDelete: "RESTRICT",
+});
+
 module.exports = Clinic;

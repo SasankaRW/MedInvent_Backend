@@ -1,7 +1,7 @@
 const Service = require("./service");
 
 const { SUCCESS, ERROR } = require("../../helper");
-const { request } = require("../..");
+//const { request } = require("../..");
 
 const { SUC_CODES } = require("./constants").Codes;
 

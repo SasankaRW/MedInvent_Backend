@@ -64,7 +64,7 @@ DependMember.init(
   {
     sequelize,
     modelName: "DependMember",
-    timestamps: true,
+    timestamps: false,
     tableName: "DependMember",
   }
 );
