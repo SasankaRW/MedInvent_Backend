@@ -40,16 +40,13 @@ const getSessionsDetailsByDocID = async (filter) => {
   return result;
 };
 
-const getDependMemberDetailsByID = async (getID,getReqBody) => {
-  const{dID} = getReqBody;
-  const storeDID = dID;
-  const getMemberObject = {
+const getSessionDetailsByID = async (getSessionID) => {
+  const getSessionRowObject = {
     where: {
-      userID:getID,
-      dID:storeDID,
+      session_id:getSessionID,
     }
   }
-  const createSingleRecode = DataBase.findOneByQuery(getMemberObject);
+  const createSingleRecode = DataBase.findOneByQuery(getSessionRowObject);
 
   const [err, result] = await to(createSingleRecode);
 
@@ -73,90 +70,22 @@ const createDependMemberData = async (getID,createData) => {
   return result;
 };
 
-const updateDependMemberDetailsByID = async (getID, getReqBody) => {
+const updateCancelSessionByID = async (getSessionID, getReqBody) => {
 
-  const{dID} = getReqBody;
-  const storeDID = dID;
-
-  const possibleAttributes = ["Fname","Lname","dob","relationship","gender","picPath","nic"];
-  let storeAttribute=null;
-
-  possibleAttributes.forEach((attribute) => {
-    if (getReqBody.hasOwnProperty(attribute)) {
-       
-       switch(attribute)
-       {
-          case "Fname" :
-          {
-            const{Fname}=getReqBody;
-            storeAttribute={
-              Fname:Fname
-            }
-            break;
-          }
-          case "Lname" :
-          {
-            const{Lname}=getReqBody;
-            storeAttribute={
-              Lname:Lname
-            }
-            break;
-          }
-          case "dob" :
-          {
-              const{dob}=getReqBody;
-              storeAttribute={
-                dob:dob
-              }
-              break;
-          }
-          case "relationship" :
-          {   
-              const{relationship}=getReqBody;
-              storeAttribute={
-                relationship:relationship
-              }
-              break;
-          }
-          case "gender" :
-          {
-              const{gender}=getReqBody;
-              storeAttribute={
-                gender:gender
-              }
-              break;
-          }
-          case "picPath" :
-          {
-              const{picPath}=getReqBody;
-              storeAttribute={
-                picPath:picPath
-              }
-              break;
-          }
-          case "nic" :
-          {
-              const{nic}=getReqBody;
-              storeAttribute={
-                nic:nic
-              }
-              break;
-          }
-          default : {
-            storeAttribute={};
-          }
-       }
-    }
-  });
+  const currentDate = new Date();
+  const futureDate = new Date(currentDate.getTime() + 5 * 60 * 60 * 1000);
 
   const updateRecode = DataBase.updateRecode(
     { 
       where: {
-        userID:getID,
-        dID:storeDID
+        session_id:getSessionID,
+        date: { [Op.gte]: currentDate },
+        timeFrom: {
+          [Op.gt]: futureDate
+        }
       }
     },
-     storeAttribute
+    getReqBody
   );
 
   const [err, result] = await to(updateRecode);
@@ -165,15 +94,9 @@ const updateDependMemberDetailsByID = async (getID, getReqBody) => {
 
   if (!result) TE("Result not found");
 
-  const getMemberObject = {
-    where: {
-      userID:getID,
-      dID:storeDID,
-    }
-  }
-  const updatedDependantData = await DataBase.findOneByQuery(getMemberObject);
+  const getRecord = getSessionDetailsByID(getSessionID);
 
-  return updatedDependantData;
+  return getRecord;
 };   
 
 const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
@@ -200,11 +123,11 @@ module.exports = {
 
   getSessionsDetailsByDocID,
 
-  getDependMemberDetailsByID,
+  getSessionDetailsByID,
 
   createDependMemberData,
 
-  updateDependMemberDetailsByID,
+  updateCancelSessionByID,
 
   deleteDependMemberDetailsByID,
 };

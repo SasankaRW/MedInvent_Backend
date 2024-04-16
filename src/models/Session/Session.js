@@ -1,7 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const Appointment = require("../Appointment/Appointment");
-const SessionDates = require("./SessionDates");
 const Clinic = require("../Clinic/Clinic");
 
 class Session extends Model {}
@@ -12,6 +11,20 @@ Session.init(
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
+    },
+    scheduledBy:{
+      type: DataTypes.STRING,
+      allowNull: false,
+       validate: {
+        notEmpty: true,
+      },
+    },
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     timeFrom: {
       type: DataTypes.TIME,
@@ -49,7 +62,21 @@ Session.init(
         notEmpty: true,
       },
     },
+    isArrived:{
+      type: DataTypes.BOOLEAN,
+      defaultValue:false,
+    },
+    isCancelled:{
+      type: DataTypes.BOOLEAN,
+      defaultValue:false,
+    },
+    cancelledBy:{
+      type: DataTypes.UUID,
+      defaultValue:null,
+      allowNull:true,
+    },
   },
+
   {
     sequelize,
     modelName: "Session",
@@ -57,16 +84,6 @@ Session.init(
     tableName: "session",
   }
 );
-
-Session.hasMany(SessionDates, {
-  foreignKey: "session_id",
-  onDelete: "CASCADE",
-});
-
-SessionDates.belongsTo(Session, {
-  foreignKey: "session_id",
-  onDelete: "CASCADE",
-});
 
 Session.hasMany(Appointment, {
   foreignKey: "session_id",

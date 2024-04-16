@@ -6,27 +6,31 @@ const { VALIDATION_ERROR } = require("../../helper");
 
 
 const createSchema = Joi.object({
-  dID: Joi.string().uuid().optional(),
-  Fname: Joi.string().max(50).required(),
-  Lname: Joi.string().max(50).required(),
-  dob: Joi.date().required(),
-  relationship: Joi.string().max(25).required(),
-  gender: Joi.string().valid('Male', 'Female', 'Other').required(),
-  picPath: Joi.string().max(255).required(),
-  nic: Joi.string().max(40).required(),
-  userID:Joi.string().uuid().optional(),
+  session_id: Joi.string().uuid().optional(),
+  doctor_id: Joi.string().uuid().optional(),
+  clinic_id: Joi.string().uuid().optional(),
+  scheduledBy: Joi.string().required(),
+  noOfPatients:Joi.number().integer().required(),
+  activePatient:Joi.number().integer().optional(),
+  isRefundable:Joi.boolean().optional(),
+  isArrived:Joi.boolean().optional(),
+  date:Joi.date().required(),
+  isCancelled:Joi.boolean().optional(),
+  cancelledBy:Joi.string().uuid().optional(),
 });
 
 const updateSchema = Joi.object({
-  dID: Joi.string().uuid().required(),
-  Fname: Joi.string().max(50).optional(),
-  Lname: Joi.string().max(50).optional(),
-  dob: Joi.date().optional(),
-  relationship: Joi.string().max(25).optional(),
-  gender: Joi.string().valid('Male', 'Female', 'Other').optional(),
-  picPath: Joi.string().max(255).optional(),
-  nic: Joi.string().max(40).optional(),
-  userID:Joi.string().uuid().optional(),
+  session_id: Joi.string().uuid().optional(),
+  doctor_id: Joi.string().uuid().optional(),
+  clinic_id: Joi.string().uuid().optional(),
+  scheduledBy: Joi.string().optional(),
+  noOfPatients:Joi.number().integer().optional(),
+  activePatient:Joi.number().integer().optional(),
+  isRefundable:Joi.boolean().optional(),
+  isArrived:Joi.boolean().optional(),
+  date:Joi.date().optional(),
+  isCancelled:Joi.boolean().optional(),
+  cancelledBy:Joi.string().uuid().optional(),
 });
  
 const create = async (req, res, next) => {

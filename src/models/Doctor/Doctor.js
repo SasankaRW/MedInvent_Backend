@@ -93,5 +93,9 @@ Doctor.hasMany(Session, {
   foreignKey: "doctor_id",
   onDelete: "RESTRICT",
 });
+Session.belongsTo(Doctor, {
+  foreignKey: "doctor_id",
+  onDelete: "RESTRICT",
+});
 
 module.exports = Doctor;

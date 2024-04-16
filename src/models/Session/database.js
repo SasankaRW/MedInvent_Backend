@@ -1,6 +1,5 @@
 const { query } = require("express");
 const Session = require("./Session");
-const SessionDates = require("./SessionDates");
 const Clinic = require("../Clinic/Clinic");
 const Doctor = require("../Doctor/Doctor");
 
@@ -29,10 +28,6 @@ const findAllByQuery = async (filter) => {
                     doctor_id:filter
                 },
                 include:[
-                    {
-                        model:SessionDates,
-                        required:true,
-                    },
                     {
                         model:Clinic,
                         required:true,

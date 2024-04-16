@@ -9,7 +9,7 @@ const DependMember = require("../models/DependMember/DependMember");
 const Pharmacy = require("../models/Pharmacy/Pharmacy");
 const PharmacyAddress = require("../models/Pharmacy/PharmacyAddress");
 const Session = require("../models/Session/Session");
-const SessionDates = require("../models/Session/SessionDates");
+const { fail } = require("assert");
 
 module.exports = {
   generateTables: async () => {
