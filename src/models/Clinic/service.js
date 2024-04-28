@@ -76,7 +76,7 @@ const updateClinic = async (id, updateData) => {
 
   if (!result) TE("Result not found");
 
-  const clinic = await DataBase.findByIdy(id);
+  const clinic = await DataBase.findOneById(id);
 
   return clinic;
 };
