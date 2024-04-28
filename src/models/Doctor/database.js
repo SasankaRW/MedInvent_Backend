@@ -21,7 +21,9 @@ const findOneById = async (id) => {
 };
 
 const findAll = async () => {
-  return await Doctor.findAll();
+  return await Doctor.findAll({
+    order: [["createdAt", "DESC"]],
+  });
 };
 
 const findByQuery = async (query) => {

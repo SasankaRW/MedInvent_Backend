@@ -47,6 +47,7 @@ const findOneById = async (id) => {
 
 const findAll = async () => {
   return await Pharmacy.findAll({
+    order: [["createdAt", "DESC"]],
     include: [{ model: PharmacyAddress, as: "pharmacyAddress" }],
   });
 };
