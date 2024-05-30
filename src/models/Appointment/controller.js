@@ -6,7 +6,7 @@ const { SUC_CODES } = require("./constants").Codes;
 
 const getUpcomingAppointments = async (req, res) => {
   try {
-    const result = await Service.gettUpcomingAppointmentss(req.query);
+    const result = await Service.getUpcomingAppointments(req.query);
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (err) {
     console.log(err);
@@ -16,7 +16,7 @@ const getUpcomingAppointments = async (req, res) => {
 
 const getPastAppointments = async (req, res) => {
     try {
-      const result = await Service.getPastAppointmentss(req.query);
+      const result = await Service.getPastAppointments(req.query);
       SUCCESS(res, SUC_CODES, result, req.span);
     } catch (err) {
       console.log(err);
