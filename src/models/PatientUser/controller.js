@@ -28,6 +28,18 @@ const getPatientUserDetailsByID = async (req, res) => {
   }
 };
 
+const getPatientUserDetailsByNic = async (req, res) => {
+  try {
+    const result = await Service.getPatientUserDetailsByNic(req.params);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const createPatientUserData = async (req, res) => {
   try {
     const result = await Service.createPatientUserData(req.body);
@@ -69,6 +81,8 @@ const deletePatientUserDetailsByID = async (req, res) => {
 
 module.exports = {
   getPatientUserDetailsByID,
+
+  getPatientUserDetailsByNic,
 
   getAllPatientUsersDetails,
 
