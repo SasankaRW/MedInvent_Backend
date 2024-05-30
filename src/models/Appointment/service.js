@@ -2,7 +2,7 @@ const DataBase = require("./database");
 
 const { to, TE } = require("../../helper");
 
-const getUpcomingAppointment = async (params) => {
+const getUpcomingAppointments = async (params) => {
   const getRecords = DataBase.findByQuery();
 
   const [err, result] = await to(getRecords);
@@ -14,7 +14,7 @@ const getUpcomingAppointment = async (params) => {
   return result;
 };
 
-const getPastAppointment = async (params) => {
+const getPastAppointments = async (params) => {
     const getRecords = DataBase.findByQuery();
   
     const [err, result] = await to(getRecords);
