@@ -11,6 +11,7 @@ const PharmacyAddress = require("../models/Pharmacy/PharmacyAddress");
 const Session = require("../models/Session/Session");
 const Prescription = require("../models/Prescription/Prescription");
 const PresMedicine = require("../models/Prescription/PresMedicine");
+const Medicine = require("../models/Medicine/Medicine");
 
 const { fail } = require("assert");
 
