@@ -1,6 +1,6 @@
 const express = require("express");
 
-// const { AppointmentRoutes } = require("./models/Appointment");
+const { AppointmentRoutes } = require("./models/Appointment");
 const { VisitingRoutes } = require("./models/Visiting");
 const { PatientUserRoutes } = require("./models/PatientUser");
 const { ClinicRoutes } = require("./models/Clinic");
@@ -13,7 +13,7 @@ const { MedicineRoutes } = require("./models/Medicine");
 
 const router = express.Router();
 
-// router.use("/Appointment", AppointmentRoutes);
+router.use("/Appointment", AppointmentRoutes);
 router.use("/visiting", VisitingRoutes);
 router.use("/PatientUser", PatientUserRoutes);
 router.use("/clinic", ClinicRoutes);

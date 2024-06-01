@@ -16,39 +16,35 @@ const createPrescription = async (req, res) => {
   }
 };
 
-// const getAllDoctors = async (req, res) => {
-//   try {
-//     const result = await Service.getAllDoctors(req.query);
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (err) {
-//     console.log(err);
-//     ERROR(res, err, res.span);
-//   }
-// };
+const getAllPrescriptions = async (req, res) => {
+  try {
+    const result = await Service.getAllPrescriptions(req.query);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
 
-// const getDoctorById = async (req, res) => {
-//   try {
-//     const result = await Service.getDoctorById(req.params.id);
+const getDoctorPrescriptions = async (req, res) => {
+  try {
+    const result = await Service.getDoctorPrescriptions(req.query);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
-
-//     ERROR(res, error, res.span);
-//   }
-// };
-
-// const getDoctorByName = async (req, res) => {
-//   try {
-//     const result = await Service.getDoctorByName(req.params.name);
-
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
-
-//     ERROR(res, error, res.span);
-//   }
-// };
+const getUserPrescriptions = async (req, res) => {
+  try {
+    const result = await Service.getUserPrescriptions(req.query);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
 
 // const updateDoctor = async (req, res) => {
 //   try {
@@ -76,4 +72,7 @@ const createPrescription = async (req, res) => {
 
 module.exports = {
   createPrescription,
+  getAllPrescriptions,
+  getDoctorPrescriptions,
+  getUserPrescriptions,
 };

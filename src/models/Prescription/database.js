@@ -43,6 +43,23 @@ async function createPrescription(prescriptionData, medicineData) {
     throw error;
   }
 }
+
+const findAll = async () => {
+  return await Prescription.findAll({
+    order: [["createdAt", "DESC"]],
+    include: [{ model: PresMedicine, as: "presMedicine" }],
+  });
+};
+
+const findByQuery = async (query) => {
+  return await Prescription.findAll({
+    where: {
+      createdBy: query,
+    },
+    include: [{ model: PresMedicine, as: "presMedicine" }],
+  });
+};
+
 // const deleteSingleRecord = async (id) => {
 //   const result = await Doctor.destroy({ where: { doctor_id: id } });
 //   return result;
@@ -58,25 +75,9 @@ async function createPrescription(prescriptionData, medicineData) {
 //   return await Doctor.findByPk(id);
 // };
 
-// const findAll = async () => {
-//   return await Doctor.findAll({
-//     order: [["createdAt", "DESC"]],
-//   });
-// };
-
-// const findByQuery = async (query) => {
-//   return await Doctor.findAll({
-//     where: {
-//       [Op.or]: [
-//         { fname: { [Op.iLike]: `%${query}%` } },
-//         { mname: { [Op.iLike]: `%${query}%` } },
-//         { lname: { [Op.iLike]: `%${query}%` } },
-//       ],
-//     },
-//   });
-// };
-
 module.exports = {
   Schema: Prescription,
   createPrescription,
+  findAll,
+  findByQuery,
 };
