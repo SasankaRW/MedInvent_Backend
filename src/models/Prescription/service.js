@@ -17,17 +17,41 @@ const createPrescription = async (data) => {
   return result;
 };
 
-// const getAllDoctors = async (params) => {
-//   const getRecords = DataBase.findAll();
+const getAllPrescriptions = async (params) => {
+  const getRecords = DataBase.findAll();
 
-//   const [err, result] = await to(getRecords);
+  const [err, result] = await to(getRecords);
 
-//   if (err) TE(err);
+  if (err) TE(err);
 
-//   if (!result) TE("Results not found");
+  if (!result) TE("Results not found");
 
-//   return result;
-// };
+  return result;
+};
+
+const getDoctorPrescriptions = async (params) => {
+  const getRecords = DataBase.findByQuery("doctor");
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
+
+const getUserPrescriptions = async (params) => {
+  const getRecords = DataBase.findByQuery("user");
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
 
 // const getDoctorById = async (id) => {
 //   const getRecord = DataBase.findOneById(id);
@@ -84,4 +108,7 @@ const createPrescription = async (data) => {
 
 module.exports = {
   createPrescription,
+  getAllPrescriptions,
+  getDoctorPrescriptions,
+  getUserPrescriptions,
 };
