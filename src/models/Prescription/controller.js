@@ -18,7 +18,7 @@ const createPrescription = async (req, res) => {
 
 const getAllPrescriptions = async (req, res) => {
   try {
-    const result = await Service.getAllPrescriptions(req.query);
+    const result = await Service.getAllPrescriptions(req.params.userid);
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (err) {
     console.log(err);
@@ -28,7 +28,7 @@ const getAllPrescriptions = async (req, res) => {
 
 const getDoctorPrescriptions = async (req, res) => {
   try {
-    const result = await Service.getDoctorPrescriptions(req.query);
+    const result = await Service.getDoctorPrescriptions(req.params.userid);
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (err) {
     console.log(err);
@@ -38,7 +38,7 @@ const getDoctorPrescriptions = async (req, res) => {
 
 const getUserPrescriptions = async (req, res) => {
   try {
-    const result = await Service.getUserPrescriptions(req.query);
+    const result = await Service.getUserPrescriptions(req.params.userid);
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (err) {
     console.log(err);

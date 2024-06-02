@@ -17,8 +17,8 @@ const createPrescription = async (data) => {
   return result;
 };
 
-const getAllPrescriptions = async (params) => {
-  const getRecords = DataBase.findAll();
+const getAllPrescriptions = async (userid) => {
+  const getRecords = DataBase.findAll(userid);
 
   const [err, result] = await to(getRecords);
 
@@ -29,8 +29,8 @@ const getAllPrescriptions = async (params) => {
   return result;
 };
 
-const getDoctorPrescriptions = async (params) => {
-  const getRecords = DataBase.findByQuery("doctor");
+const getDoctorPrescriptions = async (userid) => {
+  const getRecords = DataBase.findByQuery("doctor", userid);
 
   const [err, result] = await to(getRecords);
 
@@ -41,8 +41,8 @@ const getDoctorPrescriptions = async (params) => {
   return result;
 };
 
-const getUserPrescriptions = async (params) => {
-  const getRecords = DataBase.findByQuery("user");
+const getUserPrescriptions = async (userid) => {
+  const getRecords = DataBase.findByQuery("user", userid);
 
   const [err, result] = await to(getRecords);
 

@@ -1,6 +1,7 @@
 const Prescription = require("./Prescription");
 const PresMedicine = require("./PresMedicine");
 const sequelize = require("../../../config/database");
+const { Op } = require("sequelize");
 
 async function createPrescription(prescriptionData, medicineData) {
   const { presName, createdBy, doctorName, userID } = prescriptionData;
@@ -44,18 +45,22 @@ async function createPrescription(prescriptionData, medicineData) {
   }
 }
 
-const findAll = async () => {
+const findAll = async (userid) => {
   return await Prescription.findAll({
+    where: {
+      userID: userid,
+    },
     order: [["createdAt", "DESC"]],
     include: [{ model: PresMedicine, as: "presMedicine" }],
   });
 };
 
-const findByQuery = async (query) => {
+const findByQuery = async (query, userid) => {
   return await Prescription.findAll({
     where: {
-      createdBy: query,
+      [Op.and]: [{ createdBy: query }, { userid: userid }],
     },
+    order: [["createdAt", "DESC"]],
     include: [{ model: PresMedicine, as: "presMedicine" }],
   });
 };
