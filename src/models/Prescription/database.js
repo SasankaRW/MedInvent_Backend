@@ -73,16 +73,27 @@ const findByQuery = async (query, userid) => {
 // const updateMultipleRecords = async (query, updates) =>
 //   await Doctor.update(updates, query);
 
-// const updateRecord = async (condition, dataNeedToUpdate) =>
-//   await Doctor.update(dataNeedToUpdate, condition);
+const updateRecord = async (presId, data) => {
+  await PresMedicine.update(
+    { reminders: data.reminders },
+    {
+      where: {
+        prescription_id: presId,
+        medicine_id: data.medicineId,
+      },
+    }
+  );
+};
 
-// const findOneById = async (id) => {
-//   return await Doctor.findByPk(id);
-// };
+const findOneById = async (id) => {
+  return await Doctor.findByPk(id);
+};
 
 module.exports = {
   Schema: Prescription,
   createPrescription,
   findAll,
   findByQuery,
+  findOneById,
+  updateRecord,
 };

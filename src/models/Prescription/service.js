@@ -53,6 +53,14 @@ const getUserPrescriptions = async (userid) => {
   return result;
 };
 
+const updatePrescription = async (presId, data) => {
+  const updateRecord = DataBase.updateRecord(presId, data);
+
+  const [err, result] = await to(updateRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+};
+
 // const getDoctorById = async (id) => {
 //   const getRecord = DataBase.findOneById(id);
 
@@ -77,23 +85,6 @@ const getUserPrescriptions = async (userid) => {
 //   return result;
 // };
 
-// const updateDoctor = async (id, updateData) => {
-//   const updateRecord = DataBase.updateRecord(
-//     { where: { doctor_id: id } },
-//     updateData
-//   );
-
-//   const [err, result] = await to(updateRecord);
-
-//   if (err) TE(err.errors[0] ? err.errors[0].message : err);
-
-//   if (!result) TE("Result not found");
-
-//   const clinic = await DataBase.findOneById(id);
-
-//   return clinic;
-// };
-
 // const deleteDoctor = async (id) => {
 //   const deleteRecord = DataBase.deleteSingleRecord(id);
 
@@ -111,4 +102,5 @@ module.exports = {
   getAllPrescriptions,
   getDoctorPrescriptions,
   getUserPrescriptions,
+  updatePrescription,
 };

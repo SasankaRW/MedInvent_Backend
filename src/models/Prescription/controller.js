@@ -46,17 +46,17 @@ const getUserPrescriptions = async (req, res) => {
   }
 };
 
-// const updateDoctor = async (req, res) => {
-//   try {
-//     const result = await Service.updateDoctor(req.params.id, req.body);
+const updatePrescription = async (req, res) => {
+  try {
+    const result = await Service.updatePrescription(req.params.presid, req.body);
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-//     ERROR(res, error, res.span);
-//   }
-// };
+    ERROR(res, error, res.span);
+  }
+};
 
 // const deleteDoctor = async (req, res) => {
 //   try {
@@ -75,4 +75,5 @@ module.exports = {
   getAllPrescriptions,
   getDoctorPrescriptions,
   getUserPrescriptions,
+  updatePrescription,
 };

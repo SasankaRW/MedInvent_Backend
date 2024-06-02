@@ -40,6 +40,11 @@ const prescriptionSchema = Joi.object({
   presMedicine: Joi.array().items(presMedicineSchema).required(),
 });
 
+const updateSchema = Joi.object({
+  medicineId: Joi.string().guid({ version: "uuidv4" }).required(),
+  reminders: Joi.array().items(reminderSchema).required(),
+});
+
 const create = async (req, res, next) => {
   try {
     await prescriptionSchema.validateAsync(req.body.data);
@@ -49,6 +54,16 @@ const create = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  try {
+    await updateSchema.validateAsync(req.body.data);
+    next();
+  } catch (error) {
+    VALIDATION_ERROR(res, error);
+  }
+};
+
 module.exports = {
   create,
+  update,
 };
