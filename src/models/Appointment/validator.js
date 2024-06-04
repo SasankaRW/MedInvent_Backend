@@ -5,12 +5,12 @@ const { VALIDATION_ERROR } = require("../../helper");
 
 
 const createSchema = Joi.object({
-  appointment_id: Joi.string().uuid().required(),
+  //appointment_id: Joi.string().uuid().required(),
   appointmentNo: Joi.number().integer().required(),
   patientTitle: Joi.string().max(10).allow(null,''),
   patientName: Joi.string().max(50).allow(null, ''),
   contactNo: Joi.string().max(25).allow(null, ''),
-  email: Joi.string().max(10).allow(null, ''),
+  email: Joi.string().max(50).allow(null, ''),
   area: Joi.string().max(30).allow(null, ''),
   nic: Joi.string().max(50).required() 
  

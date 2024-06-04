@@ -1,21 +1,11 @@
 const { Op } = require("sequelize");
 const Appointment = require("./Appointment");
-const Clinic = require("../Clinic/Clinic");
+const Session = require("../Session/Session");
 
 const createSingleRecord = async (singleRecord) => {
-  const data = singleRecord.data;
-  return await Appointment.create({
-    appointmentNo: data.no,
-    patientTitle: data.patientTitle,
-    patientName: data.patientName,
-    contactNo: data.contactNo,
-    email: data.email,
-    area: data.area,
-    nic: data.nic,
-    date: data.date,
-    clinicId: data.clinicId,
-  });
+  return await Appointment.create(singleRecord);
 };
+
 
 const deleteSingleRecord = async (id) => {
   return await Appointment.destroy({ where: { appointment_id: id } });
@@ -31,14 +21,14 @@ const updateRecord = async (condition, dataNeedToUpdate) => {
 
 const findOneById = async (id) => {
   return await Appointment.findByPk(id, {
-    include: [{ model: Clinic, as: "clinic" }],
+    include: [{ model: Session, as: "session" }],
   });
 };
 
 const findAll = async () => {
   return await Appointment.findAll({
     order: [["createdAt", "DESC"]],
-    include: [{ model: Clinic, as: "clinic" }],
+    include: [{ model: Session, as: "session" }],
   });
 };
 
@@ -53,7 +43,7 @@ const findByQuery = async (query) => {
         { nic: { [Op.iLike]: `%${query}%` } },
       ],
     },
-    include: [{ model: Clinic, as: "clinic" }],
+    include: [{ model: Session, as: "session" }],
   });
 };
 
@@ -66,7 +56,7 @@ const getUpcomingAppointments = async () => {
       },
     },
     order: [["date", "ASC"]],
-    include: [{ model: Clinic, as: "clinic" }],
+    include: [{ model: Session, as: "session" }],
   });
 };
 
@@ -79,7 +69,7 @@ const getPastAppointments = async () => {
       },
     },
     order: [["date", "DESC"]],
-    include: [{ model: Clinic, as: "clinic" }],
+    include: [{ model: Session, as: "session" }],
   });
 };
 

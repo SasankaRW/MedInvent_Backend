@@ -9,7 +9,6 @@ const Op = Sequelize.Op;
 const { to, TE } = require("../../helper");
 
 const getAllPatientUsersDetails = async (params) => {
-
   Object.assign(params);
 
   const getRecodes = DataBase.findByQuery();
@@ -33,6 +32,20 @@ const getPatientUserDetailsByID = async (filter) => {
   if (err) TE(err);
 
   if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getPatientUserDetailsByNic = async (filter) => {
+  const getRecode = DataBase.findOneByQuery({
+    where: filter,
+  });
+
+  const [err, result] = await to(getRecode);
+
+  if (err) TE(err);
+
+  if (!result) return { success: false, message: "Patient not found" };
 
   return result;
 };
@@ -61,7 +74,7 @@ const updatePatientUserDetailsByID = async (filter, updateData) => {
   const patientData = await DataBase.findOneByQuery({ where: filter });
 
   return patientData;
-};   
+};
 
 const deletePatientUserDetailsByID = async (data) => {
   const deleteRecode = DataBase.deleteSingleRecode(data);
@@ -79,6 +92,8 @@ module.exports = {
   getAllPatientUsersDetails,
 
   getPatientUserDetailsByID,
+
+  getPatientUserDetailsByNic,
 
   createPatientUserData,
 

@@ -1,6 +1,6 @@
 const express = require("express");
 
-const Controller = require("./controller"); 
+const Controller = require("./controller");
 
 const Validator = require("./validator");
 
@@ -13,6 +13,10 @@ router
 router
   .route("/get/PatientUser/details/:userID")
   .get(Controller.getPatientUserDetailsByID);
+
+router
+  .route("/get/PatientUser/details/nic/:nic")
+  .get(Controller.getPatientUserDetailsByNic);
 
 router
   .route("/get/PatientUsers/details")
