@@ -2,6 +2,8 @@ const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const Appointment = require("../Appointment/Appointment");
 const Clinic = require("../Clinic/Clinic");
+// const Doctor = require("../Doctor/Doctor");
+
 
 class Session extends Model {}
 
@@ -75,6 +77,11 @@ Session.init(
       defaultValue:null,
       allowNull:true,
     },
+    doctor_id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+    }
    
   },
 
@@ -90,5 +97,7 @@ Session.hasMany(Appointment, {
   foreignKey: "session_id",
   onDelete: "RESTRICT",
 });
+
+
 
 module.exports = Session;
