@@ -12,6 +12,19 @@ const { to, TE } = require("../../helper");
 //const SessionDates=require("../")
 //const Clinic = require("../Clinic");
 
+  //Create sessions
+  const createSessionData = async (data) => {
+    const createSingleRecode = DataBase.createSingleRecode(data);
+  
+    const [err, result] = await to(createSingleRecode);
+  
+    if (err) TE(err.errors[0] ? err.errors[0].message : err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+  };
+
 const getAllPatientUsersDetails = async (params) => {
 
   Object.assign(params);
@@ -119,6 +132,8 @@ const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
 };
 
 module.exports = {
+  createSessionData ,
+  
   getAllPatientUsersDetails,
 
   getSessionsDetailsByDocID,

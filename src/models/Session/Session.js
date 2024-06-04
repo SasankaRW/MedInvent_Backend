@@ -75,6 +75,7 @@ Session.init(
       defaultValue:null,
       allowNull:true,
     },
+   
   },
 
   {

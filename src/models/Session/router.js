@@ -6,10 +6,14 @@ const Validator = require("./vaidator");
  
 const router = express.Router();
 
-//add new session
-//router.route("/add/new/DependMember/:userID").post(Validator.create,Controller.createDependMemberData);
 
-//get session detals relevant to a specific session ID
+//Create Session Data
+router
+    .route("add/new/session")
+    .post(Validator.create, Controller.createSessionData);
+
+
+//get session details relevant to a specific session ID
 router.route("/get/Session/details/:session_id").get(Controller.getSessionDetailsByID);
 
 //get all session details relevant to specific doctor for session calendar

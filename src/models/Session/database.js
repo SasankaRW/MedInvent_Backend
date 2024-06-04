@@ -4,8 +4,8 @@ const Clinic = require("../Clinic/Clinic");
 const Doctor = require("../Doctor/Doctor");
 
 
-const createSingleRecode = async (DependcCreateObject) => {
-  return await Session.create(DependcCreateObject);
+const createSingleRecode = async (singleRecode) => {
+  return await Session.create(singleRecode);
 };
 
 const deleteSingleRecode = async (deleteDataObject) => {

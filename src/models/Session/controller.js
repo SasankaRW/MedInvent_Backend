@@ -1,22 +1,28 @@
 const Service = require("./service");
 
 const { SUCCESS, ERROR } = require("../../helper");
-//const { request } = require("../..");
-
+//const { request } = require("../.."); 
+  
 const { SUC_CODES } = require("./constants").Codes;
 
-// const getAllPatientUsersDetails = async (req, res) => {
-//   try {
-//     const result = await Service.getAllPatientUsersDetails(req.query);
+//Create Sessions Doctor
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+const createSessionData = async (req, res) => {
+  try {
+    
+    const result = await Service.createSessionData(req.body);
 
-//     ERROR(res, error, res.span);
-//   }
-// };
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
+    ERROR(res, error, res.span);
+  }
+};
+
+
+//Filter Session Details
+//By DoctorID
 const getSessionsDetailsByDocID = async (req, res) => {
   try {
     const result = await Service.getSessionsDetailsByDocID(req.params.doctor_id);
@@ -29,6 +35,20 @@ const getSessionsDetailsByDocID = async (req, res) => {
   }
 }; 
 
+//By Date
+const getSessionDetailsByDate = async (req, res) => {
+  try {
+    const result = await Service.getSessionDetailsByDate(req.params.date);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//By SessionID
 const getSessionDetailsByID = async (req,res)=> {
   try {
     const result = await Service.getSessionDetailsByID(req.params.session_id);
@@ -80,15 +100,17 @@ const updateCancelSessionByID = async (req, res) => {
 // };
 
 module.exports = {
+  createSessionData,
+
   getSessionsDetailsByDocID,
+
+  getSessionDetailsByDate,
 
   getSessionDetailsByID,
 
-  //getAllPatientUsersDetails,
 
-  //createDependMemberData,
 
   updateCancelSessionByID,
 
-  //deleteDependMemberDetailsByID,
+
 };
