@@ -20,6 +20,20 @@ const createSessionData = async (req, res) => {
   }
 };
 
+  //Delete Sessions
+  const deleteSessionDetailsByID = async (req, res) => {
+    try {
+      const result = await Service.deleteSessionDetailsByID(req.params.session_id);
+  
+      SUCCESS(res, SUC_CODES, result, req.span);
+    } catch (error) {
+      console.log(error);
+  
+      ERROR(res, error, res.span);
+    }
+  };
+  
+
 
 //Filter Session Details
 //By DoctorID
@@ -62,18 +76,7 @@ const getSessionDetailsByID = async (req,res)=> {
   }
 }
 
-// const createDependMemberData = async (req, res) => {
-//   try {
-//     const result = await Service.createDependMemberData(req.params.userID,req.body);
-
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
-
-//     ERROR(res, error, res.span);
-//   }
-// };
-
+ //Update Sessions
 const updateCancelSessionByID = async (req, res) => {
   try {
     const result = await Service.updateCancelSessionByID(req.params.session_id, req.body);
@@ -87,20 +90,11 @@ const updateCancelSessionByID = async (req, res) => {
 };
 
 
-// const deleteDependMemberDetailsByID = async (req, res) => {
-//   try {
-//     const result = await Service.deleteDependMemberDetailsByID(req.params.userID,req.body);
-
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
-
-//     ERROR(res, error, res.span);
-//   }
-// };
 
 module.exports = {
   createSessionData,
+
+  deleteSessionDetailsByID,
 
   getSessionsDetailsByDocID,
 
@@ -108,7 +102,7 @@ module.exports = {
 
   getSessionDetailsByID,
 
-
+  
 
   updateCancelSessionByID,
 

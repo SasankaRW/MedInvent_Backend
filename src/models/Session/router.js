@@ -12,7 +12,11 @@ router
     .route("/add/new/session")
     .post(Validator.create, Controller.createSessionData);
 
-
+//Delete Session Data
+router
+    .route("/del/session/:session_id")
+    .delete(Controller.deleteSessionDetailsByID);
+    
 //get session details relevant to a specific session ID
 router 
     .route("/get/Session/details/:session_id")

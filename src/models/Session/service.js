@@ -131,8 +131,22 @@ const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
   return result;
 };
 
+const deleteSessionDetailsByID = async (session_id) => {
+  const deleteRecode = DataBase.deleteSingleRecode(session_id);
+
+  const [err, result] = await to(deleteRecode);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
 module.exports = {
   createSessionData ,
+
+  deleteSessionDetailsByID,
   
   getAllPatientUsersDetails,
 

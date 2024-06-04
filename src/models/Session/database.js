@@ -8,8 +8,8 @@ const createSingleRecode = async (singleRecode) => {
   return await Session.create(singleRecode);
 };
 
-const deleteSingleRecode = async (deleteDataObject) => {
-  const result = await Session.destroy(deleteDataObject);
+const deleteSingleRecode = async (session_id) => {
+  const result = await Session.destroy({ where: { session_id: session_id } });
   return result;
 };
 
