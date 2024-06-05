@@ -4,7 +4,6 @@ const Appointment = require("../Appointment/Appointment");
 const Clinic = require("../Clinic/Clinic");
 // const Doctor = require("../Doctor/Doctor");
 
-
 class Session extends Model {}
 
 Session.init(
@@ -14,12 +13,13 @@ Session.init(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    scheduledBy:{
+    scheduledById: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    scheduledByType: {
       type: DataTypes.STRING,
       allowNull: false,
-       validate: {
-        notEmpty: true,
-      },
     },
     date: {
       type: DataTypes.DATEONLY,
@@ -64,27 +64,25 @@ Session.init(
         notEmpty: true,
       },
     },
-    isArrived:{
+    isArrived: {
       type: DataTypes.BOOLEAN,
-      defaultValue:false,
+      defaultValue: false,
     },
-    isCancelled:{
+    isCancelled: {
       type: DataTypes.BOOLEAN,
-      defaultValue:false,
+      defaultValue: false,
     },
-    cancelledBy:{
+    cancelledById: {
       type: DataTypes.UUID,
-      defaultValue:null,
-      allowNull:true,
+      allowNull: true,
+      defaultValue: null,
     },
-    doctor_id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4,
-    }
-   
+    cancelledByType: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
-
   {
     sequelize,
     modelName: "Session",
@@ -97,7 +95,5 @@ Session.hasMany(Appointment, {
   foreignKey: "session_id",
   onDelete: "RESTRICT",
 });
-
-
 
 module.exports = Session;

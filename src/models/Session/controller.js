@@ -1,16 +1,12 @@
 const Service = require("./service");
 
 const { SUCCESS, ERROR } = require("../../helper");
-//const { request } = require("../.."); 
-  
+
 const { SUC_CODES } = require("./constants").Codes;
 
-//Create Sessions Doctor
-
-const createSessionData = async (req, res) => {
+const createSession = async (req, res) => {
   try {
-    
-    const result = await Service.createSessionData(req.body);
+    const result = await Service.createSession(req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -20,39 +16,9 @@ const createSessionData = async (req, res) => {
   }
 };
 
-  //Delete Sessions
-  const deleteSessionDetailsByID = async (req, res) => {
-    try {
-      const result = await Service.deleteSessionDetailsByID(req.params.session_id);
-  
-      SUCCESS(res, SUC_CODES, result, req.span);
-    } catch (error) {
-      console.log(error);
-  
-      ERROR(res, error, res.span);
-    }
-  };
-  
-
-
-//Filter Session Details
-//By DoctorID
-const getSessionsDetailsByDocID = async (req, res) => {
+const getSessionById = async (req, res) => {
   try {
-    const result = await Service.getSessionsDetailsByDocID(req.params.doctor_id);
-
-    SUCCESS(res, SUC_CODES, result, req.span);
-  } catch (error) {
-    console.log(error);
-
-    ERROR(res, error, res.span);
-  }
-}; 
-
-//By Date
-const getSessionDetailsByDate = async (req, res) => {
-  try {
-    const result = await Service.getSessionDetailsByDate(req.params.date);
+    const result = await Service.getSessionById(req.params.session_id);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -62,24 +28,11 @@ const getSessionDetailsByDate = async (req, res) => {
   }
 };
 
-//By SessionID
-const getSessionDetailsByID = async (req,res)=> {
+const getUpcomingSessionsByDocID = async (req, res) => {
   try {
-    const result = await Service.getSessionDetailsByID(req.params.session_id);
-
-    SUCCESS(res, SUC_CODES, result, req.span);
-  }
-  catch (error) {
-    console.log(error);
-
-    ERROR(res, error, res.span);
-  }
-}
-
- //Update Sessions
-const updateCancelSessionByID = async (req, res) => {
-  try {
-    const result = await Service.updateCancelSessionByID(req.params.session_id, req.body);
+    const result = await Service.getUpcomingSessionsByDocID(
+      req.params.doctor_id
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -89,22 +42,77 @@ const updateCancelSessionByID = async (req, res) => {
   }
 };
 
+const getPastSessionsByDocID = async (req, res) => {
+  try {
+    const result = await Service.getPastSessionsByDocID(req.params.doctor_id);
 
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const getUpcomingSessionsByClinicID = async (req, res) => {
+  try {
+    const result = await Service.getUpcomingSessionsByClinicID(
+      req.params.clinic_id
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const getPastSessionsByClinicID = async (req, res) => {
+  try {
+    const result = await Service.getPastSessionsByClinicID(
+      req.params.clinic_id
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const updateSession = async (req, res) => {
+  try {
+    const result = await Service.updateSession(req.params.session_id, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const deleteSession = async (req, res) => {
+  try {
+    const result = await Service.deleteSession(req.params.session_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
 
 module.exports = {
-  createSessionData,
-
-  deleteSessionDetailsByID,
-
-  getSessionsDetailsByDocID,
-
-  getSessionDetailsByDate,
-
-  getSessionDetailsByID,
-
-  
-
-  updateCancelSessionByID,
-
-
+  createSession,
+  getSessionById,
+  getUpcomingSessionsByDocID,
+  getPastSessionsByDocID,
+  getPastSessionsByClinicID,
+  getUpcomingSessionsByClinicID,
+  deleteSession,
+  updateSession,
 };

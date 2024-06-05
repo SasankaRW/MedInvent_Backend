@@ -80,11 +80,13 @@ Clinic.hasOne(ClinicAddress, {
 Clinic.hasMany(Session, {
   foreignKey: "clinic_id",
   onDelete: "RESTRICT",
+  as: "sessions",
 });
 
 Session.belongsTo(Clinic, {
   foreignKey: "clinic_id",
   onDelete: "RESTRICT",
+  as: "clinic",
 });
 
 module.exports = Clinic;

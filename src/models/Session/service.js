@@ -2,66 +2,14 @@ const Constants = require("./constants");
 
 const DataBase = require("./database");
 
-const Sequelize = require("sequelize");
-
-const Op = Sequelize.Op;
+const { Op } = require("sequelize");
 
 const { to, TE } = require("../../helper");
-//const Doctor = require("../Doctor");
-//const Session = require("../Session");
-//const SessionDates=require("../")
-//const Clinic = require("../Clinic");
 
-  //Create sessions
-  const createSessionData = async (data) => {
-    const createSingleRecode = DataBase.createSingleRecode(data);
-  
-    const [err, result] = await to(createSingleRecode);
-  
-    if (err) TE(err.errors[0] ? err.errors[0].message : err);
-  
-    if (!result) TE("Result not found");
-  
-    return result;
-  };
+const createSession = async (data) => {
+  const createRecords = DataBase.createRecords(data);
 
-const getAllPatientUsersDetails = async (params) => {
-
-  Object.assign(params);
-
-  const getRecodes = DataBase.findByQuery();
-
-  const [err, result] = await to(getRecodes);
-
-  if (err) TE(err);
-
-  if (!result) TE("Result not found");
-
-  return result;
-};
-
-const getSessionsDetailsByDocID = async (filter) => {
-
-  const getRecode = DataBase.findAllByQuery(filter);
-
-  const [err, result] = await to(getRecode);
-
-  if (err) TE(err);
-
-  if (!result) TE("Result not found");
-
-  return result;
-};
-
-const getSessionDetailsByID = async (getSessionID) => {
-  const getSessionRowObject = {
-    where: {
-      session_id:getSessionID,
-    }
-  }
-  const createSingleRecode = DataBase.findOneByQuery(getSessionRowObject);
-
-  const [err, result] = await to(createSingleRecode);
+  const [err, result] = await to(createRecords);
 
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
@@ -70,59 +18,29 @@ const getSessionDetailsByID = async (getSessionID) => {
   return result;
 };
 
-const createDependMemberData = async (getID,createData) => {
-  const DependcCreateObject ={...createData,userID: getID};
-  const createSingleRecode = DataBase.createSingleRecode(DependcCreateObject);
+const getSessionById = async (id) => {
+  const getRecord = DataBase.findOneById(id);
 
-  const [err, result] = await to(createSingleRecode);
+  const [err, result] = await to(getRecord);
 
-  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+  if (err) TE(err);
 
   if (!result) TE("Result not found");
 
   return result;
 };
 
-const updateCancelSessionByID = async (getSessionID, getReqBody) => {
+const getUpcomingSessionsByDocID = async (docId) => {
+  const today = new Date();
 
-  const currentDate = new Date();
-  const futureDate = new Date(currentDate.getTime() + 5 * 60 * 60 * 1000);
-
-  const updateRecode = DataBase.updateRecode(
-    { 
-      where: {
-        session_id:getSessionID,
-        date: { [Op.gte]: currentDate },
-        timeFrom: {
-          [Op.gt]: futureDate
-        }
-      }
+  const getRecord = DataBase.findAllByQuery({
+    doctor_id: docId,
+    date: {
+      [Op.gt]: today,
     },
-    getReqBody
-  );
+  });
 
-  const [err, result] = await to(updateRecode);
-
-  if (err) TE(err.errors[0] ? err.errors[0].message : err);
-
-  if (!result) TE("Result not found");
-
-  const getRecord = getSessionDetailsByID(getSessionID);
-
-  return getRecord;
-};   
-
-const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
-  const{dID} = getReqBody;
-  const deleteDataObject ={
-    where:{
-      userID:getID,
-      dID:dID
-    }
-  }
-  const deleteRecode = DataBase.deleteSingleRecode(deleteDataObject);
-
-  const [err, result] = await to(deleteRecode);
+  const [err, result] = await to(getRecord);
 
   if (err) TE(err);
 
@@ -131,8 +49,79 @@ const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
   return result;
 };
 
-const deleteSessionDetailsByID = async (session_id) => {
-  const deleteRecode = DataBase.deleteSingleRecode(session_id);
+const getPastSessionsByDocID = async (docId) => {
+  const today = new Date();
+
+  const getRecord = DataBase.findAllByQuery({
+    doctor_id: docId,
+    date: {
+      [Op.lt]: today,
+    },
+  });
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getUpcomingSessionsByClinicID = async (clinicId) => {
+  const today = new Date();
+
+  const getRecord = DataBase.findAllByQuery({
+    clinic_id: clinicId,
+    date: {
+      [Op.gt]: today,
+    },
+  });
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getPastSessionsByClinicID = async (clinicId) => {
+  const today = new Date();
+
+  const getRecord = DataBase.findAllByQuery({
+    clinic_id: clinicId,
+    date: {
+      [Op.lt]: today,
+    },
+  });
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const updateSession = async (session_id, updateData) => {
+  const updateRecord = DataBase.updateRecord(session_id, updateData);
+
+  const [err, result] = await to(updateRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  if (!result) TE("Result not found");
+
+  const session = await DataBase.findOneById(session_id);
+
+  return session;
+};
+
+const deleteSession = async (session_id) => {
+  const deleteRecode = DataBase.deleteSingleRecord(session_id);
 
   const [err, result] = await to(deleteRecode);
 
@@ -144,19 +133,12 @@ const deleteSessionDetailsByID = async (session_id) => {
 };
 
 module.exports = {
-  createSessionData ,
-
-  deleteSessionDetailsByID,
-  
-  getAllPatientUsersDetails,
-
-  getSessionsDetailsByDocID,
-
-  getSessionDetailsByID,
-
-  createDependMemberData,
-
-  updateCancelSessionByID,
-
-  deleteDependMemberDetailsByID,
+  createSession,
+  getSessionById,
+  getUpcomingSessionsByDocID,
+  getPastSessionsByDocID,
+  getUpcomingSessionsByClinicID,
+  getPastSessionsByClinicID,
+  deleteSession,
+  updateSession,
 };

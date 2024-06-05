@@ -3,39 +3,26 @@ const express = require("express");
 const Controller = require("./controller");
 
 const Validator = require("./vaidator");
- 
+
 const router = express.Router();
 
-
-//Create Session Data
+router.route("/newsession").post(Validator.create, Controller.createSession);
+router.route("/delete/:session_id").delete(Controller.deleteSession);
+router.route("/get/:session_id").get(Controller.getSessionById);
 router
-    .route("/add/new/session")
-    .post(Validator.create, Controller.createSessionData);
-
-//Delete Session Data
+  .route("/get/clinic/upcoming/:clinic_id")
+  .get(Controller.getUpcomingSessionsByClinicID);
 router
-    .route("/del/session/:session_id")
-    .delete(Controller.deleteSessionDetailsByID);
-    
-//get session details relevant to a specific session ID
-router 
-    .route("/get/Session/details/:session_id")
-    .get(Controller.getSessionDetailsByID);
-
-//get all session details relevant to specific doctor for session calendar
+  .route("/get/clinic/past/:clinic_id")
+  .get(Controller.getPastSessionsByClinicID);
 router
-    .route("/get/All/Sessions/details/:doctor_id")
-    .get(Controller.getSessionsDetailsByDocID);
-
-//get all dependant details in dependant table(not used in frontend)
-//router.route("/get/DependMembers/details").get(Controller.getAllDependMembersDetails);
-
-// Session cancel by doctor or clinic using session calendar or upcoming session page
+  .route("/get/doctor/upcoming/:doctor_id")
+  .get(Controller.getUpcomingSessionsByDocID);
 router
-    .route("/update/Cancel/Session/:session_id")
-    .put(Validator.update,Controller.updateCancelSessionByID);
-
-//delete a specific depend member row ,who is a child of a specific PatientUser
-//router.route("/delete/DependMember/:userID").delete(Controller.deleteDependMemberDetailsByID);
+  .route("/get/doctor/past/:doctor_id")
+  .get(Controller.getPastSessionsByDocID);
+router
+  .route("/update/:session_id")
+  .put(Validator.update, Controller.updateSession);
 
 module.exports = router;

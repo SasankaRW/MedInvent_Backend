@@ -13,12 +13,9 @@ const Prescription = require("../models/Prescription/Prescription");
 const PresMedicine = require("../models/Prescription/PresMedicine");
 const Medicine = require("../models/Medicine/Medicine");
 
-const { fail } = require("assert");
-
 module.exports = {
   generateTables: async () => {
     try {
-      // Define the models you want to sync here
       await sequelize.sync({ alter: false, force: false });
       console.log("Tables synced successfully.");
     } catch (error) {
@@ -27,4 +24,3 @@ module.exports = {
   },
 };
 
-//, models: [PatientUser]

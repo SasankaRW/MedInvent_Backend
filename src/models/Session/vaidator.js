@@ -1,40 +1,41 @@
-
 const Joi = require("joi");
 const { VALIDATION_ERROR } = require("../../helper");
-//const Constants = require("../metadata/constants");
-//const locations = Constants.locations; 
-
 
 const createSchema = Joi.object({
-  session_id: Joi.string().uuid().optional(),
-  doctor_id: Joi.string().uuid().optional(),
-  clinic_id: Joi.string().uuid().optional(),
-  scheduledBy: Joi.string().required(),
-  timeFrom: Joi.string().regex(/^(?:2[0-3]|[01][0-9]):[0-5][0-9](?::[0-5][0-9])?$/).required(),
-  timeTo: Joi.string().regex(/^(?:2[0-3]|[01][0-9]):[0-5][0-9](?::[0-5][0-9])?$/).required(),
-  noOfPatients:Joi.number().integer().required(),
-  activePatients:Joi.number().integer().optional(),
-  isRefundable:Joi.boolean().optional(),
-  isArrived:Joi.boolean().optional(),
-  date:Joi.date().required(),
-  isCancelled:Joi.boolean().optional(),
-  cancelledBy:Joi.string().uuid().optional(),
+  doctor_id: Joi.string().guid({ version: "uuidv4" }).required(),
+  clinic_id: Joi.string().guid({ version: "uuidv4" }).required(),
+  scheduledById: Joi.string().guid({ version: "uuidv4" }).required(),
+  scheduledByType: Joi.string().valid("doctor", "clinic").required(),
+  dates: Joi.array().items(Joi.date()).required(),
+  timeFrom: Joi.string()
+    .pattern(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/)
+    .required(),
+  timeTo: Joi.string()
+    .pattern(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/)
+    .required(),
+  noOfPatients: Joi.number().integer().required(),
+  activePatients: Joi.number().integer().optional(),
+  isRefundable: Joi.boolean().optional(),
 });
 
 const updateSchema = Joi.object({
-  session_id: Joi.string().uuid().optional(),
-  doctor_id: Joi.string().uuid().optional(),
-  clinic_id: Joi.string().uuid().optional(),
-  scheduledBy: Joi.string().optional(),
-  noOfPatients:Joi.number().integer().optional(),
-  activePatients:Joi.number().integer().optional(),
-  isRefundable:Joi.boolean().optional(),
-  isArrived:Joi.boolean().optional(),
-  date:Joi.date().optional(),
-  isCancelled:Joi.boolean().optional(),
-  cancelledBy:Joi.string().uuid().optional(),
-});
- 
+  noOfPatients: Joi.number().integer().optional(),
+  isArrived: Joi.boolean().optional(),
+  timeFrom: Joi.string()
+    .pattern(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/)
+    .optional(),
+  timeTo: Joi.string()
+    .pattern(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/)
+    .optional(),
+  isCancelled: Joi.boolean().optional(),
+  cancelledBy: Joi.string()
+    .uuid()
+    .when("isCancelled", { is: true, then: Joi.required() }),
+  cancelledByType: Joi.string()
+    .valid("doctor", "clinic")
+    .when("isCancelled", { is: true, then: Joi.required() }),
+}).with("cancelledBy", "cancelledByType");
+
 const create = async (req, res, next) => {
   try {
     await createSchema.validateAsync(req.body);
