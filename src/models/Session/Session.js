@@ -1,8 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const Appointment = require("../Appointment/Appointment");
-const Clinic = require("../Clinic/Clinic");
-// const Doctor = require("../Doctor/Doctor");
 
 class Session extends Model {}
 
@@ -94,6 +92,12 @@ Session.init(
 Session.hasMany(Appointment, {
   foreignKey: "session_id",
   onDelete: "RESTRICT",
+  as: "appointments",
+});
+
+Appointment.belongsTo(Session, {
+  foreignKey: "session_id",
+  as: "session",
 });
 
 module.exports = Session;

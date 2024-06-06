@@ -4,9 +4,21 @@ const { SUCCESS, ERROR } = require("../../helper");
 
 const { SUC_CODES } = require("./constants").Codes;
 
-const getUpcomingAppointments = async (req, res) => {
+const createAppointment = async (req, res) => {
   try {
-    const result = await Service.getUpcomingAppointments(req.query);
+    const result = await Service.createAppointment(req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const getUserUpcomingAppointments = async (req, res) => {
+  try {
+    const result = await Service.getUserUpcomingAppointments(req.params.userId);
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (err) {
     console.log(err);
@@ -14,59 +26,68 @@ const getUpcomingAppointments = async (req, res) => {
   }
 };
 
-const getPastAppointments = async (req, res) => {
-    try {
-      const result = await Service.getPastAppointments(req.query);
-      SUCCESS(res, SUC_CODES, result, req.span);
-    } catch (err) {
-      console.log(err);
-      ERROR(res, err, res.span);
-    }
-  };
+const getUserPastAppointments = async (req, res) => {
+  try {
+    const result = await Service.getUserPastAppointments(req.params.userId);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
 
-  const createAppointment = async (req, res) => {
-    try {
-      const result = await Service.createAppointment(req.body);
-  
-      SUCCESS(res, SUC_CODES, result, req.span);
-    } catch (error) {
-      console.log(error);
-  
-      ERROR(res, error, res.span);
-    }
-  };
-  
+const getClinicUpcomingAppointments = async (req, res) => {
+  try {
+    const result = await Service.getClinicUpcomingAppointments(
+      req.params.clinicId
+    );
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
 
-  const getAppointmentcById = async (req, res) => {
-    try {
-      const result = await Service.getAppointmentcById(req.params.id);
-  
-      SUCCESS(res, SUC_CODES, result, req.span);
-    } catch (error) {
-      console.log(error);
-  
-      ERROR(res, error, res.span);
-    }
-  };
+const getClinicPastAppointments = async (req, res) => {
+  try {
+    const result = await Service.getClinicPastAppointments(req.params.clinicId);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
 
-  const cancelAppointment = async (req, res) => {
-    try {
-      const result = await Service.cancelAppointment(req.params.id, req.body);
-  
-      SUCCESS(res, SUC_CODES, result, req.span);
-    } catch (error) {
-      console.log(error);
-  
-      ERROR(res, error, res.span);
-    }
-  };
+const getAppointmentById = async (req, res) => {
+  try {
+    const result = await Service.getAppointmentcById(req.params.appointmentId);
 
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-  module.exports = {
-    getUpcomingAppointments,
-    getPastAppointments,
-    createAppointment,
-    getAppointmentcById,
-    cancelAppointment
-  };
-  
+    ERROR(res, error, res.span);
+  }
+};
+
+const cancelAppointment = async (req, res) => {
+  try {
+    const result = await Service.cancelAppointment(req.params.appointmentId);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+module.exports = {
+  getUserUpcomingAppointments,
+  getUserPastAppointments,
+  getClinicUpcomingAppointments,
+  getClinicPastAppointments,
+  createAppointment,
+  getAppointmentById,
+  cancelAppointment,
+};

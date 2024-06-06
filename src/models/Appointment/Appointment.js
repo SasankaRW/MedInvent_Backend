@@ -1,4 +1,4 @@
-const { DataTypes, Model, STRING } = require("sequelize");
+const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 
 class Appointment extends Model {}
@@ -9,6 +9,11 @@ Appointment.init(
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
     },
     appointmentNo: {
       type: DataTypes.INTEGER,
@@ -41,6 +46,9 @@ Appointment.init(
     email: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        notEmpty: false,
+      },
     },
     area: {
       type: DataTypes.STRING,
@@ -56,6 +64,14 @@ Appointment.init(
         notEmpty: true,
       },
     },
+    isCancelled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   },
   {
     sequelize,
@@ -66,4 +82,4 @@ Appointment.init(
 );
 
 module.exports = Appointment;
-// clinic ? 
+// clinic ?
