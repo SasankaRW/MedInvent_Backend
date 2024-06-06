@@ -54,6 +54,20 @@ Session.init(
         notEmpty: true,
       },
     },
+    docFee: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    clinicFee: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     isRefundable: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

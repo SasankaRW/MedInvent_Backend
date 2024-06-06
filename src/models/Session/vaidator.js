@@ -15,6 +15,8 @@ const createSchema = Joi.object({
     .required(),
   noOfPatients: Joi.number().integer().required(),
   activePatients: Joi.number().integer().optional(),
+  docFee: Joi.number().precision(2).positive().required(),
+  clinicFee: Joi.number().precision(2).positive().required(),
   isRefundable: Joi.boolean().optional(),
 });
 
@@ -27,6 +29,8 @@ const updateSchema = Joi.object({
   timeTo: Joi.string()
     .pattern(/^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/)
     .optional(),
+  docFee: Joi.number().precision(2).positive().optional(),
+  clinicFee: Joi.number().precision(2).positive().optional(),
   isCancelled: Joi.boolean().optional(),
   cancelledBy: Joi.string()
     .uuid()
