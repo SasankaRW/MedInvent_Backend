@@ -20,6 +20,8 @@ router
   .route("/get/clinic/upcoming/:clinicId")
   .get(Controller.getClinicUpcomingAppointments);
 router.route("/get/:appointmentId").get(Controller.getAppointmentById);
-router.route("/update/cancel/:appointmentId").put(Controller.cancelAppointment);
+router
+  .route("/update/cancel/:appointmentId")
+  .put(Validator.update, Controller.cancelAppointment);
 
 module.exports = router;

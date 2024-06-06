@@ -72,7 +72,10 @@ const getAppointmentById = async (req, res) => {
 
 const cancelAppointment = async (req, res) => {
   try {
-    const result = await Service.cancelAppointment(req.params.appointmentId);
+    const result = await Service.cancelAppointment(
+      req.params.appointmentId,
+      req.body
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {

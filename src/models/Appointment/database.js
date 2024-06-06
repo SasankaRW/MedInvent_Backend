@@ -119,7 +119,7 @@ const updateMultipleRecords = async (query, updates) => {
   return await Appointment.update(updates, { where: query });
 };
 
-const updateRecord = async (appointmentId) => {
+const updateRecord = async (appointmentId, data) => {
   const transaction = await sequelize.transaction();
 
   try {
@@ -139,7 +139,7 @@ const updateRecord = async (appointmentId) => {
       throw new Error("Session not found");
     }
 
-    await appointment.update({ isCancelled: true }, { transaction });
+    await appointment.update({ isCancelled: true, ...data }, { transaction });
     await session.decrement("activePatients", { by: 1 }, { transaction });
 
     await transaction.commit();

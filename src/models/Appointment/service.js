@@ -110,8 +110,8 @@ const getAppointmentById = async (id) => {
   return result;
 };
 
-const cancelAppointment = async (appointmentId) => {
-  const updateRecord = DataBase.updateRecord(appointmentId);
+const cancelAppointment = async (appointmentId, data) => {
+  const updateRecord = DataBase.updateRecord(appointmentId, data);
 
   const [err, result] = await to(updateRecord);
 

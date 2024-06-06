@@ -14,9 +14,10 @@ const createSchema = Joi.object({
   session_id: Joi.string().guid({ version: "uuidv4" }).required(),
 });
 
-// const updateSchema = Joi.object({
-//   isCancelled: Joi.boolean().required(),
-// });
+const updateSchema = Joi.object({
+  cancelledByType: Joi.string().valid("user", "clinic").required(),
+  cancelledById: Joi.string().guid({ version: "uuidv4" }).required(),
+});
 
 const create = async (req, res, next) => {
   try {
@@ -27,16 +28,16 @@ const create = async (req, res, next) => {
   }
 };
 
-// const update = async (req, res, next) => {
-//   try {
-//     await updateSchema.validateAsync(req.body);
-//     next();
-//   } catch (error) {
-//     VALIDATION_ERROR(res, error);
-//   }
-// };
+const update = async (req, res, next) => {
+  try {
+    await updateSchema.validateAsync(req.body);
+    next();
+  } catch (error) {
+    VALIDATION_ERROR(res, error);
+  }
+};
 
 module.exports = {
   create,
-  // update,
+  update,
 };

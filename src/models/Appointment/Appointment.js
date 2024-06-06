@@ -72,6 +72,16 @@ Appointment.init(
         notEmpty: true,
       },
     },
+    cancelledByType: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
+    cancelledById: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,
