@@ -33,12 +33,15 @@ const getSessionById = async (id) => {
 const getUpcomingSessionsByDocID = async (docId) => {
   const today = new Date();
 
-  const getRecord = DataBase.findAllByQuery({
-    doctor_id: docId,
-    date: {
-      [Op.gt]: today,
+  const getRecord = DataBase.findAllByQuery(
+    {
+      doctor_id: docId,
+      date: {
+        [Op.gt]: today,
+      },
     },
-  });
+    "ASC"
+  );
 
   const [err, result] = await to(getRecord);
 
@@ -52,12 +55,15 @@ const getUpcomingSessionsByDocID = async (docId) => {
 const getPastSessionsByDocID = async (docId) => {
   const today = new Date();
 
-  const getRecord = DataBase.findAllByQuery({
-    doctor_id: docId,
-    date: {
-      [Op.lt]: today,
+  const getRecord = DataBase.findAllByQuery(
+    {
+      doctor_id: docId,
+      date: {
+        [Op.lt]: today,
+      },
     },
-  });
+    "DESC"
+  );
 
   const [err, result] = await to(getRecord);
 
@@ -71,12 +77,15 @@ const getPastSessionsByDocID = async (docId) => {
 const getUpcomingSessionsByClinicID = async (clinicId) => {
   const today = new Date();
 
-  const getRecord = DataBase.findAllByQuery({
-    clinic_id: clinicId,
-    date: {
-      [Op.gt]: today,
+  const getRecord = DataBase.findAllByQuery(
+    {
+      clinic_id: clinicId,
+      date: {
+        [Op.gt]: today,
+      },
     },
-  });
+    "ASC"
+  );
 
   const [err, result] = await to(getRecord);
 
@@ -90,12 +99,15 @@ const getUpcomingSessionsByClinicID = async (clinicId) => {
 const getPastSessionsByClinicID = async (clinicId) => {
   const today = new Date();
 
-  const getRecord = DataBase.findAllByQuery({
-    clinic_id: clinicId,
-    date: {
-      [Op.lt]: today,
+  const getRecord = DataBase.findAllByQuery(
+    {
+      clinic_id: clinicId,
+      date: {
+        [Op.lt]: today,
+      },
     },
-  });
+    "DESC"
+  );
 
   const [err, result] = await to(getRecord);
 

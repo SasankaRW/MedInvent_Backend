@@ -49,7 +49,7 @@ const deleteSingleRecord = async (session_id) => {
   return result;
 };
 
-const findAllByQuery = async (filter) => {
+const findAllByQuery = async (filter, order) => {
   return await Session.findAll({
     where: filter,
     include: [
@@ -64,6 +64,7 @@ const findAllByQuery = async (filter) => {
         attributes: ["fname", "mname", "lname"],
       },
     ],
+    order: [["date", order]],
   });
 };
 
