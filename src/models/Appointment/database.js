@@ -4,12 +4,26 @@ const Appointment = require("./Appointment");
 const Session = require("../Session/Session");
 const Doctor = require("../Doctor/Doctor");
 const Clinic = require("../Clinic/Clinic");
+const { sendSmsNotification } = require("../../../twilio/twilio");
 
 const createSingleRecord = async (data) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const session = await Session.findByPk(data.session_id);
+    const session = await Session.findByPk(data.session_id, {
+      include: [
+        {
+          model: Clinic,
+          as: "clinic",
+          attributes: ["name"],
+        },
+        {
+          model: Doctor,
+          as: "doctor",
+          attributes: ["fname", "mname", "lname", "specialization"],
+        },
+      ],
+    });
 
     if (!session) {
       throw new Error("Session not found");
@@ -37,6 +51,8 @@ const createSingleRecord = async (data) => {
     await session.increment("activePatients", { by: 1 });
 
     await transaction.commit();
+
+    // await sendSmsCreate(newAppointment.dataValues, session.dataValues);
 
     return newAppointment;
   } catch (error) {
@@ -132,7 +148,18 @@ const updateRecord = async (appointmentId, data) => {
     }
 
     const session = await Session.findByPk(appointment.session_id, {
-      transaction,
+      include: [
+        {
+          model: Clinic,
+          as: "clinic",
+          attributes: ["name"],
+        },
+        {
+          model: Doctor,
+          as: "doctor",
+          attributes: ["fname", "mname", "lname", "specialization"],
+        },
+      ],
     });
 
     if (!session) {
@@ -144,12 +171,119 @@ const updateRecord = async (appointmentId, data) => {
 
     await transaction.commit();
 
-    return await Appointment.findByPk(appointment.appointment_id);
+    // await sendSmsCancel(appointment.dataValues, session.dataValues);
+
+    return appointment;
   } catch (err) {
     await transaction.rollback();
     throw err;
   }
 };
+
+async function sendSmsCreate(appointment, session) {
+  const { patientTitle, patientName, appointmentNo } = appointment;
+
+  const { date, timeFrom, docFee, clinicFee, clinic, doctor } = session;
+
+  const { name } = clinic.dataValues;
+
+  const { fname, mname, lname, specialization } = doctor.dataValues;
+
+  const message = `
+    Your appointment has been successfully created.
+
+  - Patient: ${patientTitle} ${patientName}
+  - Doctor: Dr. ${fname} ${mname} ${lname} (${specialization})
+  - Clinic: ${name}
+  - Date: ${formatDate(date)}
+  - Time: ${convertTimeTo12HourFormat(timeFrom)}
+
+  - Appointment No: ${appointmentNo}
+
+  - Fee: ${(parseFloat(docFee) + parseFloat(clinicFee)).toFixed(2)}`;
+
+  sendSmsNotification(message);
+}
+
+async function sendSmsCancel(appointment, session) {
+  const { patientTitle, patientName } = appointment;
+
+  const { date, timeFrom, clinic, doctor } = session;
+
+  const { name } = clinic.dataValues;
+
+  const { fname, mname, lname, specialization } = doctor.dataValues;
+
+  const message = `
+    Your appointment has been cancelled.
+
+  - Patient: ${patientTitle} ${patientName}
+  - Doctor: Dr. ${fname} ${mname} ${lname} (${specialization})
+  - Clinic: ${name}
+  - Date: ${formatDate(date)}
+  - Time: ${convertTimeTo12HourFormat(timeFrom)}`;
+
+  sendSmsNotification(message);
+}
+
+function convertTimeTo12HourFormat(time) {
+  const [hourString, minute, second] = time.split(":");
+  let hour = parseInt(hourString, 10);
+  const period = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+
+  return `${hour}:${minute} ${period}`;
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+
+  const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const dayOfWeek = weekdays[date.getDay()];
+
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+
+  const dayWithSuffix = (day) => {
+    if (day > 3 && day < 21) return `${day}th`;
+    switch (day % 10) {
+      case 1:
+        return `${day}st`;
+      case 2:
+        return `${day}nd`;
+      case 3:
+        return `${day}rd`;
+      default:
+        return `${day}th`;
+    }
+  };
+
+  return `${dayOfWeek}, ${dayWithSuffix(day)} ${month}`;
+}
 
 module.exports = {
   Schema: Appointment,
