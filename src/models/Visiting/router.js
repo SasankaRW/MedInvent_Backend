@@ -25,6 +25,9 @@ router
 router
   .route("/doctor/get/requests/:doctor_id")
   .get(Controller.getRequestedClinics);
+router
+  .route("/get/allVisitings/byDocName")
+  .get(Controller.getVisitingDoctorsByDocName);
 router.route("/update").put(Validator.update, Controller.updateVisiting);
 router.route("/delete").delete(Controller.deleteVisiting);
 

@@ -82,6 +82,21 @@ const getPastSessionsByClinicID = async (req, res) => {
   }
 };
 
+const getSessionsByDocAndClinicIDs = async (req, res) => {
+  try {
+    const result = await Service.getSessionsByDocAndClinicIDs(
+      req.query.clinic_id,
+      req.query.doctor_id
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const updateSession = async (req, res) => {
   try {
     const result = await Service.updateSession(req.params.session_id, req.body);
@@ -113,6 +128,7 @@ module.exports = {
   getPastSessionsByDocID,
   getPastSessionsByClinicID,
   getUpcomingSessionsByClinicID,
+  getSessionsByDocAndClinicIDs,
   deleteSession,
   updateSession,
 };

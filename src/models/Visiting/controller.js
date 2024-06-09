@@ -24,6 +24,19 @@ const getAllVisitingClinics = async (req, res) => {
   }
 };
 
+const getVisitingDoctorsByDocName = async (req, res) => {
+  try {
+    const result = await Service.getVisitingDoctorsByDocName(
+      req.query.clinic_id,
+      req.query.doc_name
+    );
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
+
 const getPendingDoctors = async (req, res) => {
   try {
     const result = await Service.getPendingDoctors(req.params.clinic_id);
@@ -103,6 +116,7 @@ const deleteVisiting = async (req, res) => {
 module.exports = {
   getAllVisitingDoctors,
   getAllVisitingClinics,
+  getVisitingDoctorsByDocName,
   getPendingDoctors,
   getPendingClinics,
   getRequestedDoctors,

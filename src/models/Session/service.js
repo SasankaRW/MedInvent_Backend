@@ -37,7 +37,7 @@ const getUpcomingSessionsByDocID = async (docId) => {
     {
       doctor_id: docId,
       date: {
-        [Op.gt]: today,
+        [Op.gte]: today,
       },
     },
     "ASC"
@@ -81,7 +81,7 @@ const getUpcomingSessionsByClinicID = async (clinicId) => {
     {
       clinic_id: clinicId,
       date: {
-        [Op.gt]: today,
+        [Op.gte]: today,
       },
     },
     "ASC"
@@ -107,6 +107,29 @@ const getPastSessionsByClinicID = async (clinicId) => {
       },
     },
     "DESC"
+  );
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getSessionsByDocAndClinicIDs = async (clinicId, docId) => {
+  const today = new Date();
+
+  const getRecord = DataBase.findAllByQuery(
+    {
+      clinic_id: clinicId,
+      doctor_id: docId,
+      date: {
+        [Op.gte]: today,
+      },
+    },
+    "ASC"
   );
 
   const [err, result] = await to(getRecord);
@@ -151,6 +174,7 @@ module.exports = {
   getPastSessionsByDocID,
   getUpcomingSessionsByClinicID,
   getPastSessionsByClinicID,
+  getSessionsByDocAndClinicIDs,
   deleteSession,
   updateSession,
 };

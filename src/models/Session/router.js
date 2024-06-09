@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.route("/newsession").post(Validator.create, Controller.createSession);
 router.route("/delete/:session_id").delete(Controller.deleteSession);
-router.route("/get/:session_id").get(Controller.getSessionById);
+router.route("/get/byId/:session_id").get(Controller.getSessionById);
 router
   .route("/get/clinic/upcoming/:clinic_id")
   .get(Controller.getUpcomingSessionsByClinicID);
@@ -21,6 +21,7 @@ router
 router
   .route("/get/doctor/past/:doctor_id")
   .get(Controller.getPastSessionsByDocID);
+router.route("/get/upcoming").get(Controller.getSessionsByDocAndClinicIDs);
 router
   .route("/update/:session_id")
   .put(Validator.update, Controller.updateSession);

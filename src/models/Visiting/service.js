@@ -2,6 +2,10 @@ const DataBase = require("./database");
 
 const { to, TE } = require("../../helper");
 
+const { Op } = require("sequelize");
+
+const sequelize = require("../../../config/database");
+
 const getAllVisitingDoctors = async (clinic_id) => {
   const getRecords = DataBase.findDoctorsByQuery({
     clinic_id: clinic_id,
@@ -21,6 +25,38 @@ const getAllVisitingClinics = async (doctor_id) => {
   const getRecords = DataBase.findClinicsByQuery({
     doctor_id: doctor_id,
     isReqAccepted: true,
+  });
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
+
+const getVisitingDoctorsByDocName = async (clinic_id, doc_name) => {
+  const getRecords = DataBase.findDoctorsByQuery({
+    clinic_id: clinic_id,
+    isReqAccepted: true,
+    [Op.or]: [
+      sequelize.where(
+        sequelize.fn("LOWER", sequelize.col("doctor.fname")),
+        "LIKE",
+        `%${doc_name.toLowerCase()}%`
+      ),
+      sequelize.where(
+        sequelize.fn("LOWER", sequelize.col("doctor.mname")),
+        "LIKE",
+        `%${doc_name.toLowerCase()}%`
+      ),
+      sequelize.where(
+        sequelize.fn("LOWER", sequelize.col("doctor.lname")),
+        "LIKE",
+        `%${doc_name.toLowerCase()}%`
+      ),
+    ],
   });
 
   const [err, result] = await to(getRecords);
@@ -146,6 +182,7 @@ const deleteVisiting = async (query) => {
 module.exports = {
   getAllVisitingDoctors,
   getAllVisitingClinics,
+  getVisitingDoctorsByDocName,
   getPendingDoctors,
   getPendingClinics,
   getRequestedDoctors,
