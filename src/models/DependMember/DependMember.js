@@ -46,7 +46,7 @@ DependMember.init(
     },
     picPath: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
     },
     nic: {
         type: DataTypes.STRING,

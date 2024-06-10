@@ -52,6 +52,20 @@ const getUpcomingSessionsByDocID = async (docId) => {
   return result;
 };
 
+const getSessionsDetailsByClinicID = async (filter) => {
+
+  const getRecode = DataBase.findAllSessionsByClicicID(filter);
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+
 const getPastSessionsByDocID = async (docId) => {
   const today = new Date();
 
@@ -177,4 +191,5 @@ module.exports = {
   getSessionsByDocAndClinicIDs,
   deleteSession,
   updateSession,
+  getSessionsDetailsByClinicID,
 };

@@ -10,10 +10,13 @@ const { DependMemberRoutes } = require("./models/DependMember");
 const { SessionRoutes } = require("./models/Session");
 const { PrescriptionRoutes } = require("./models/Prescription");
 const { MedicineRoutes } = require("./models/Medicine");
+const { NotificationRoutes } =require("./models/PushNotification");
+
+
 
 const router = express.Router();
 
-router.use("/Appointment", AppointmentRoutes);
+//router.use("/Appointment", AppointmentRoutes);
 router.use("/visiting", VisitingRoutes);
 router.use("/PatientUser", PatientUserRoutes);
 router.use("/clinic", ClinicRoutes);
@@ -21,6 +24,8 @@ router.use("/pharmacy", PharmacyRoutes);
 router.use("/doctor", DoctorRoutes);
 router.use("/DependMember", DependMemberRoutes);
 router.use("/Session", SessionRoutes);
+router.use("/Notification",NotificationRoutes);
+
 router.use("/prescription", PrescriptionRoutes);
 router.use("/medicine", MedicineRoutes);
 

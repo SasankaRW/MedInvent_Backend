@@ -1,6 +1,6 @@
 const { query } = require("express");
 const DependMember = require("./DependMember");
-//const PatientUser = require("../PatientUser/patientUser");
+const PatientUser = require("../PatientUser/patientUser");
 
 const createSingleRecode = async (DependcCreateObject) => {
   return await DependMember.create(DependcCreateObject);
@@ -23,8 +23,12 @@ const findByQuery = async (query) => await DependMember.findAll(query);
 
 const findOneByQuery = async(query)=> await DependMember.findOne(query);
 
+const findUserDetailsToLink =async(query)=>await PatientUser.findOne(query);
+
 module.exports = {
   Schema: DependMember,
+
+  Schema:PatientUser,
 
   updateRecode: updateRecode,
 
@@ -39,4 +43,6 @@ module.exports = {
   createSingleRecode,
 
   deleteSingleRecode,
+
+  findUserDetailsToLink,
 };

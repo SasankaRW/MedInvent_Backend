@@ -78,6 +78,19 @@ const deleteDependMemberDetailsByID = async (req, res) => {
   }
 };
 
+const linkUserAsDepndMemberByID = async (req, res) => {
+  try {
+    const result = await Service.linkUserAsDepndMemberByID(req.params.userID,req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+
 module.exports = {
   getDependMembersDetailsByID,
 
@@ -90,4 +103,6 @@ module.exports = {
   updateDependMemberDetailsByID,
 
   deleteDependMemberDetailsByID,
+
+  linkUserAsDepndMemberByID,
 };

@@ -61,6 +61,8 @@ const getDependMemberDetailsByID = async (getID,getReqBody) => {
 
 const createDependMemberData = async (getID,createData) => {
   const DependcCreateObject ={...createData,userID: getID};
+
+  console.log(DependcCreateObject);
   const createSingleRecode = DataBase.createSingleRecode(DependcCreateObject);
 
   const [err, result] = await to(createSingleRecode);
@@ -194,6 +196,51 @@ const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
   return result;
 };
 
+const linkUserAsDepndMemberByID = async (getID,getReqBody) => {
+  const{relationship,nic} = getReqBody;
+
+  const getUserObject = {
+    where: {
+      nic:nic
+    },
+    attributes:['Fname','Lname','dob','gender','picPath']
+  }
+  const getUserdata = DataBase.findUserDetailsToLink(getUserObject);
+
+  const [err, result] = await to(getUserdata);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  const{Fname,Lname,dob,gender,picPath}=result;
+
+  const createDataa = {
+    Fname:Fname,
+    Lname:Lname,
+    dob:formatDate(dob),
+    relationship:relationship,
+    gender:gender,
+    picPath:picPath,
+    nic:nic,
+  }
+  console.log(createDataa);
+  const finalResult = await createDependMemberData(getID,createDataa);
+
+  return finalResult;
+};
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+
 module.exports = {
   getAllPatientUsersDetails,
 
@@ -206,4 +253,6 @@ module.exports = {
   updateDependMemberDetailsByID,
 
   deleteDependMemberDetailsByID,
+
+  linkUserAsDepndMemberByID,
 };

@@ -74,6 +74,57 @@ const updateRecord = async (session_id, dataNeedToUpdate) =>
       session_id: session_id,
     },
   });
+const updateRecode = async (condition, dataNeedToUpdate) =>
+  await Session.update(dataNeedToUpdate, condition);
+
+const findAllByQuerys = async (filter) => {
+    const getSessionsObject = {
+        include: [
+            {
+                model:Session,
+                where:{
+                    doctor_id:filter
+                },
+                include:[
+                    {
+                        model:Clinic,
+                        required:true,
+                    }
+                ]
+            }
+        ]
+      }
+    
+   //after 34 require:true,
+   const result =  await Doctor.findAll(getSessionsObject);
+   return result;
+}
+
+const findAllSessionsByClicicID = async (filter) => {
+  const getSessionsObject = {
+      include: [
+          {
+              model:Session,
+              where:{
+                clinic_id:filter
+              },
+              include:[
+                  {
+                      model:Doctor,
+                      required:true,
+                  }
+              ]
+          }
+      ]
+  }
+  
+ const result =  await Clinic.findAll(getSessionsObject);
+ return result;
+}
+
+const findByQuery = async (query) => await Session.findAll(query);
+
+const findOneByQuery = async(query)=> await Session.findOne(query);
 
 module.exports = {
   Schema: Session,
@@ -82,4 +133,8 @@ module.exports = {
   createRecords,
   updateRecord,
   deleteSingleRecord,
+  findAllSessionsByClicicID,
+  findByQuery,
+  findOneByQuery,
+  findAllByQuerys
 };

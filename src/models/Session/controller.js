@@ -6,7 +6,57 @@ const { SUC_CODES } = require("./constants").Codes;
 
 const createSession = async (req, res) => {
   try {
-    const result = await Service.createSession(req.body);
+   // const result = await Service.createSession(req.body);
+    const result = await Service.getSessionsDetailsByDocID(req.params.doctor_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+}; 
+
+const getSessionsDetailsByClinicID = async (req, res) => {
+  try {
+    const result = await Service.getSessionsDetailsByClinicID(req.params.clinic_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+}; 
+
+const getSessionDetailsByID = async (req,res)=> {
+  try {
+    const result = await Service.getSessionDetailsByID(req.params.session_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  }
+  catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+}
+
+// const createDependMemberData = async (req, res) => {
+//   try {
+//     const result = await Service.createDependMemberData(req.params.userID,req.body);
+
+//     SUCCESS(res, SUC_CODES, result, req.span);
+//   } catch (error) {
+//     console.log(error);
+
+//     ERROR(res, error, res.span);
+//   }
+// };
+
+const updateCancelSessionByID = async (req, res) => {
+  try {
+    const result = await Service.updateCancelSessionByID(req.params.session_id, req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -131,4 +181,8 @@ module.exports = {
   getSessionsByDocAndClinicIDs,
   deleteSession,
   updateSession,
+  // getSessionsDetailsByDocID,
+  getSessionsDetailsByClinicID,
+  getSessionDetailsByID,
+  updateCancelSessionByID,
 };

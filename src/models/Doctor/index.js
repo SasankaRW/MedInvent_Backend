@@ -9,7 +9,7 @@ const Routes = require("./router");
 const Doctor = require("./Doctor");
 
 module.exports = {
-  DoctorConstants: Constants,
+  DoctorConstants: Constants, 
 
   DoctorService: Service,
 
