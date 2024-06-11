@@ -4,6 +4,8 @@ const { PORT } = Config.APPLICATION;
 
 const app = require("./src");
 
+require("./cronJobs/presMedicineCron");
+
 const onListeningLog = `
    server is running on port : ${PORT} !!!`;
 

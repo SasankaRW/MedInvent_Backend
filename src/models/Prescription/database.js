@@ -29,6 +29,7 @@ async function createPrescription(prescriptionData, medicineData) {
           frq,
           mealTiming,
           duration,
+          remainingDays: duration,
           reminders: reminders && reminders.length > 0 ? reminders : null,
           prescription_id: prescription.prescription_id,
         },
@@ -58,7 +59,7 @@ const findAll = async (userid) => {
 const findByQuery = async (query, userid) => {
   return await Prescription.findAll({
     where: {
-      [Op.and]: [{ createdBy: query }, { userid: userid }],
+      [Op.and]: [{ createdBy: query }, { userID: userid }],
     },
     order: [["createdAt", "DESC"]],
     include: [{ model: PresMedicine, as: "presMedicine" }],

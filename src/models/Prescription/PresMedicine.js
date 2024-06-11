@@ -42,6 +42,10 @@ PresMedicine.init(
         notEmpty: true,
       },
     },
+    remainingDays: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
     reminders: {
       type: DataTypes.ARRAY(DataTypes.TIME),
       allowNull: true,
