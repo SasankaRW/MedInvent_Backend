@@ -3,6 +3,8 @@ const Constants = require("./constants");
 const Service = require("./service");
 const Routes = require("./router");
 const OTP = require("./OTP");
+const TokenStore = require("./TokenStore");
+
 
 
 module.exports = {
@@ -11,4 +13,5 @@ module.exports = {
     NotificationConstants: Constants, 
     NotificationService: Service,
     OTP: OTP,
+    TokenStore:TokenStore,
 };

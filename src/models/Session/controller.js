@@ -1,4 +1,4 @@
-const Service = require("./service");
+const Service = require("./service"); 
 
 const { SUCCESS, ERROR } = require("../../helper");
 
@@ -6,8 +6,8 @@ const { SUC_CODES } = require("./constants").Codes;
 
 const createSession = async (req, res) => {
   try {
-   // const result = await Service.createSession(req.body);
-    const result = await Service.getSessionsDetailsByDocID(req.params.doctor_id);
+    const result = await Service.createSession(req.body);
+    //const result = await Service.getSessionsDetailsByDocID(req.params.doctor_id);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -41,18 +41,6 @@ const getSessionDetailsByID = async (req,res)=> {
     ERROR(res, error, res.span);
   }
 }
-
-// const createDependMemberData = async (req, res) => {
-//   try {
-//     const result = await Service.createDependMemberData(req.params.userID,req.body);
-
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
-
-//     ERROR(res, error, res.span);
-//   }
-// };
 
 const updateCancelSessionByID = async (req, res) => {
   try {
@@ -181,7 +169,7 @@ module.exports = {
   getSessionsByDocAndClinicIDs,
   deleteSession,
   updateSession,
-  // getSessionsDetailsByDocID,
+  //getSessionsDetailsByDocID,
   getSessionsDetailsByClinicID,
   getSessionDetailsByID,
   updateCancelSessionByID,

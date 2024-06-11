@@ -12,6 +12,9 @@ const Session = require("../models/Session/Session");
 const Prescription = require("../models/Prescription/Prescription");
 const PresMedicine = require("../models/Prescription/PresMedicine");
 const Medicine = require("../models/Medicine/Medicine");
+const TokenStore = require("../models/PushNotification/TokenStore");
+const OTP = require("../models/PushNotification/OTP");
+
 
 module.exports = {
   generateTables: async () => {
