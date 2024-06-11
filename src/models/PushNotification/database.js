@@ -7,7 +7,7 @@ const createOTPRecordes = async (OTPToupleArray) =>{
   let is_succes =false;
   try{
     transaction=await sequelize.transaction();
-    for(const i=0;i<OTPToupleArray.length;i++)
+    for(let i=0;i<OTPToupleArray.length;i++)
     {
       await OTP.create(OTPToupleArray[i],{transaction});
     }
@@ -21,10 +21,13 @@ const createOTPRecordes = async (OTPToupleArray) =>{
   return is_succes;
 };
 
-const findByQuery = async (query) => await DependMember.findAll(query);
+const findOneByQuery = async (query) =>{
+      const{count} = await OTP.findAndCountAll(query);
+      return count;
+} 
 
 module.exports = {
   Schema: OTP,
-  findByQuery,
+  findOneByQuery,
   createOTPRecordes,
 };

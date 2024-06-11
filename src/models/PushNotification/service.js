@@ -37,7 +37,7 @@ const sendOTPtoLInkUser = async (getBody) => {
     }
   
     let createOTPRecode = await DataBase.createOTPRecordes(OTPToupleArray);
-    let sendNotification;
+    let sendNotificationResults =[];
 
     if(createOTPRecode)
     {
@@ -48,17 +48,18 @@ const sendOTPtoLInkUser = async (getBody) => {
                 sendBy: senderName,
                 senderUUID:senderUUID
             }
-            sendNotification = await sendPushNotification(0,dataObject,FcmTokens[i]);
+            sendNotificationResults .push(sendPushNotification(0, dataObject, FcmTokens[i]));
         }
     }
 
-    const [err, result] = await to(sendNotification);
-  
-    if (err) TE(err.errors[0] ? err.errors[0].message : err);
-  
-    if (!result) TE("");
-    
-    return result;
+    const results = await Promise.all(sendNotificationResults.map(promise => to(promise)));
+
+    results.forEach(([err, result]) => {
+        if (err) TE(err.errors ? err.errors[0].message : err);
+        if (!result) TE("Notification sending failed");
+    });
+
+    return results;
 };
 
 const sendPushNotification = (number,dataObject,fcm_token) => {
@@ -86,10 +87,10 @@ const sendPushNotification = (number,dataObject,fcm_token) => {
         let message = {
             notification: notificationSet[number],
             data: dataObject,
-            token:fcm_token//var
+            token:fcm_token
         };
 
-        admin.messaging().send(message)
+        return admin.messaging().send(message)
             .then((response) => {
                 return{
                     message: "notification sent",
@@ -111,7 +112,34 @@ const sendPushNotification = (number,dataObject,fcm_token) => {
     }
 };
 
+const checkOTP = async (getReqBody) => {
+    const{FcmToken,senderUUID,receiverNic,OTPNumber}=getReqBody;
+    let is_correctOTP=false;
 
+    const findOTPObject = {
+      where: {
+        senderUUID:senderUUID,
+        receiverToken:FcmToken,
+        OTPNumber:OTPNumber,
+        receiverNic:receiverNic
+      },
+      limit:1
+    }
+    const count = await DataBase.findOneByQuery(findOTPObject);
+
+    if(count==1)
+    {
+        is_correctOTP=true;
+    }
+    const [err, result] = await to(is_correctOTP);
+  
+    if (err) TE(err.errors[0] ? err.errors[0].message : err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+};
+  
 const sendPushNotificationTemporary = (req, res, next) => {
     try {
         let message = {
@@ -152,5 +180,6 @@ const sendPushNotificationTemporary = (req, res, next) => {
 module.exports = {
     sendOTPtoLInkUser,
     sendPushNotification,
+    checkOTP,
     sendPushNotificationTemporary
 };
