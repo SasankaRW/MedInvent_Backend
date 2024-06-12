@@ -8,7 +8,7 @@ const createSchema = Joi.object({
   contactNo: Joi.string()
     .pattern(/^07\d{8}$/)
     .required(),
-  email: Joi.string().email().optional(),
+  email: Joi.string().email().optional().allow(null),
   area: Joi.string().required(),
   nic: Joi.string().required(),
   session_id: Joi.string().guid({ version: "uuidv4" }).required(),
