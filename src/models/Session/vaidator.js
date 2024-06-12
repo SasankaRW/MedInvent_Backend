@@ -32,7 +32,7 @@ const updateSchema = Joi.object({
   docFee: Joi.number().precision(2).positive().optional(),
   clinicFee: Joi.number().precision(2).positive().optional(),
   isCancelled: Joi.boolean().optional(),
-  cancelledBy: Joi.string()
+  cancelledById: Joi.string()
     .uuid()
     .when("isCancelled", { is: true, then: Joi.required() }),
   cancelledByType: Joi.string()
