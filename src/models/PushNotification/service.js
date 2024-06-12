@@ -49,6 +49,7 @@ const sendOTPtoLInkUser = async (getBody) => {
                 senderUUID:senderUUID
             }
             sendNotificationResults .push(sendPushNotification(0, dataObject, FcmTokens[i]));
+            console.log(sendNotificationResults[i]);
         }
     }
 
@@ -113,25 +114,63 @@ const sendPushNotification = (number,dataObject,fcm_token) => {
 };
 
 const checkOTP = async (getReqBody) => {
-    const{FcmToken,senderUUID,receiverNic,OTPNumber}=getReqBody;
-    let is_correctOTP=false;
+    try{
+        const{FcmToken,senderUUID,receiverNic,OTPNumber}=getReqBody;
+        let is_correctOTP=false;
 
-    const findOTPObject = {
-      where: {
-        senderUUID:senderUUID,
-        receiverToken:FcmToken,
-        OTPNumber:OTPNumber,
-        receiverNic:receiverNic
-      },
-      limit:1
+        const findOTPObject = {
+        where: {
+            senderUUID:senderUUID,
+            receiverToken:FcmToken,
+            OTPNumber:OTPNumber,
+            receiverNic:receiverNic
+        },
+        limit:1
+        }
+
+        let count = await DataBase.findOneByQuery(findOTPObject);
+        if(count)
+        {
+            is_correctOTP = true;
+        }
+        return is_correctOTP;
     }
-    const count = await DataBase.findOneByQuery(findOTPObject);
-
-    if(count==1)
+    catch(error)
     {
-        is_correctOTP=true;
+        throw error;
     }
-    const [err, result] = await to(is_correctOTP);
+    
+} 
+
+const getTokensToOTP = async (getBody) => {
+    const getUserTokens= DataBase.findAllTokens(getBody);
+  
+    const [err, result] = await to(getUserTokens);
+  
+    if (err) TE(err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+};
+
+const checkAvailability = async (getBody) => {
+    const checkUserAvailable= DataBase.findUser(getBody);
+  
+    const [err, result] = await to(checkUserAvailable);
+  
+    if (err) TE(err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+};
+
+const addTokens = async (createData) => {
+
+    const createSingleRecode = DataBase.createTokenRecode(createData);
+  
+    const [err, result] = await to(createSingleRecode);
   
     if (err) TE(err.errors[0] ? err.errors[0].message : err);
   
@@ -177,9 +216,47 @@ const sendPushNotificationTemporary = (req, res, next) => {
     }
 };
 
+const updateIsActive = async (getBody) => {
+    const{ userID , fcm_token , isActiveToken} = getBody;
+    const updateData = {
+        isActiveToken:isActiveToken
+    }
+
+    const updateRecord = DataBase.updateRecord(
+      { 
+        where: { 
+            userID: userID ,
+            fcm_token:fcm_token,
+        }
+      },
+      updateData
+    );
+  
+    const [err, result] = await to(updateRecord);
+  
+    if (err) TE(err.errors[0] ? err.errors[0].message : err);
+  
+    if (!result) TE("Result not found");
+
+    const findUpdatedObject = {
+        where: { 
+            userID: userID ,
+            fcm_token:fcm_token,
+        }
+    }
+  
+    const updatedData = await DataBase.findUpdatedData(findUpdatedObject);
+  
+    return updatedData;
+};
+  
 module.exports = {
     sendOTPtoLInkUser,
     sendPushNotification,
     checkOTP,
+    getTokensToOTP,
+    checkAvailability,
+    addTokens,
+    updateIsActive,
     sendPushNotificationTemporary
 };

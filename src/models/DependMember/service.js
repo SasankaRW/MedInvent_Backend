@@ -50,7 +50,7 @@ const getDependMemberDetailsByID = async (getID,getReqBody) => {
   }
   const createSingleRecode = DataBase.findOneByQuery(getMemberObject);
 
-  const [err, result] = await to(createSingleRecode);
+  const [err, result] = await to(createSingleRecode); 
 
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
 

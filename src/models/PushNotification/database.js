@@ -1,6 +1,9 @@
 //const { error } = require("console");
 const sequelize = require("../../../config/database");
 const OTP =require("./OTP");
+const TokenStore =require("./TokenStore");
+const PatientUser =require("../PatientUser/patientUser");
+
 
 const createOTPRecordes = async (OTPToupleArray) =>{
   let transaction;
@@ -26,8 +29,44 @@ const findOneByQuery = async (query) =>{
       return count;
 } 
 
+const findAllTokens = async (getBody) => {
+
+  const whereObject = {
+    ...getBody,
+    isActiveToken: true
+  };
+
+  const getTokensObject = {
+    include: {
+      model: TokenStore,
+      where: whereObject
+    },
+    attributes: ['fcm_token']
+  };
+
+  const result = await PatientUser.findAll(getTokensObject);
+  return result;
+};
+
+const findUser = async(query)=> await PatientUser.findOne(query);
+
+const createTokenRecode = async (tokenAddObject) => {
+  return await TokenStore.create(tokenAddObject);
+};
+
+const updateRecord = async (condition, dataNeedToUpdate) =>
+  await TokenStore.update(dataNeedToUpdate, condition);
+
+const findUpdatedData = async(query)=> await TokenStore.findOne(query);
+  
 module.exports = {
   Schema: OTP,
+  Schema: TokenStore,
   findOneByQuery,
   createOTPRecordes,
+  findAllTokens,
+  findUser,
+  createTokenRecode,
+  updateRecord,
+  findUpdatedData,
 };
