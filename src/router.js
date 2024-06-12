@@ -10,9 +10,7 @@ const { DependMemberRoutes } = require("./models/DependMember");
 const { SessionRoutes } = require("./models/Session");
 const { PrescriptionRoutes } = require("./models/Prescription");
 const { MedicineRoutes } = require("./models/Medicine");
-const { NotificationRoutes } =require("./models/PushNotification");
-
-
+const { NotificationRoutes } = require("./models/PushNotification");
 
 const router = express.Router();
 
@@ -24,8 +22,8 @@ router.use("/pharmacy", PharmacyRoutes);
 router.use("/doctor", DoctorRoutes);
 router.use("/DependMember", DependMemberRoutes);
 router.use("/Session", SessionRoutes);
-router.use("/Notification",NotificationRoutes);
-
+router.use("/Notification", NotificationRoutes);
+router.use("/appointment", AppointmentRoutes);
 router.use("/prescription", PrescriptionRoutes);
 router.use("/medicine", MedicineRoutes);
 
