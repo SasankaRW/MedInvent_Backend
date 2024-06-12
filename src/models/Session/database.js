@@ -70,7 +70,7 @@ const findAllByQuery = async (filter, order) => {
 
 const updateRecord = async (session_id, dataNeedToUpdate) =>
   await Session.update(dataNeedToUpdate, {
-    where: {
+    where: { 
       session_id: session_id,
     },
   });

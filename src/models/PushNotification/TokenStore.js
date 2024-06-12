@@ -16,9 +16,9 @@ TokenStore.init(
       allowNull: false,
     },
     isActiveToken: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    }
   },
   {
     sequelize,

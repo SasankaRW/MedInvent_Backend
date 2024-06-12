@@ -24,7 +24,6 @@ const TE = (err, isLog = false) => {
   if (isLog) {
     console.error(err);
   }
-
   throw err;
 };
 
