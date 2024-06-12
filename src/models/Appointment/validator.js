@@ -11,6 +11,7 @@ const createSchema = Joi.object({
   email: Joi.string().email().optional().allow(null),
   area: Joi.string().required(),
   nic: Joi.string().required(),
+  isPaid: Joi.boolean().optional(),
   session_id: Joi.string().guid({ version: "uuidv4" }).required(),
 });
 

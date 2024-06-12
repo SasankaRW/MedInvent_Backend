@@ -23,5 +23,7 @@ router.route("/get/:appointmentId").get(Controller.getAppointmentById);
 router
   .route("/update/cancel/:appointmentId")
   .put(Validator.update, Controller.cancelAppointment);
+router.route("/mark/paid/:appointmentId").get(Controller.markAsPaid);
+router.route("/mark/attended/:appointmentId").get(Controller.markAsAttended);
 
 module.exports = router;

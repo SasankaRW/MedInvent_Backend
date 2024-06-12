@@ -124,6 +124,34 @@ const cancelAppointment = async (appointmentId, data) => {
   return appointment;
 };
 
+const markAsPaid = async (appointmentId) => {
+  const updateRecord = DataBase.markAs(appointmentId, { isPaid: true });
+
+  const [err, result] = await to(updateRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  if (!result) TE("Result not found");
+
+  const appointment = await DataBase.findOneById(appointmentId);
+
+  return appointment;
+};
+
+const markAsAttended = async (appointmentId) => {
+  const updateRecord = DataBase.markAs(appointmentId, { isAttended: true });
+
+  const [err, result] = await to(updateRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  if (!result) TE("Result not found");
+
+  const appointment = await DataBase.findOneById(appointmentId);
+
+  return appointment;
+};
+
 module.exports = {
   getUserUpcomingAppointments,
   getUserPastAppointments,
@@ -132,4 +160,6 @@ module.exports = {
   createAppointment,
   getAppointmentById,
   cancelAppointment,
+  markAsPaid,
+  markAsAttended,
 };

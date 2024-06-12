@@ -82,6 +82,22 @@ Appointment.init(
       allowNull: true,
       defaultValue: null,
     },
+    isPaid: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    isAttended: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   },
   {
     sequelize,

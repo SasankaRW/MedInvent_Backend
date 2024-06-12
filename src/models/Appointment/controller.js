@@ -85,6 +85,30 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
+const markAsPaid = async (req, res) => {
+  try {
+    const result = await Service.markAsPaid(req.params.appointmentId);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const markAsAttended = async (req, res) => {
+  try {
+    const result = await Service.markAsAttended(req.params.appointmentId);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 module.exports = {
   getUserUpcomingAppointments,
   getUserPastAppointments,
@@ -93,4 +117,6 @@ module.exports = {
   createAppointment,
   getAppointmentById,
   cancelAppointment,
+  markAsPaid,
+  markAsAttended,
 };

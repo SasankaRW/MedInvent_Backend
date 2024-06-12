@@ -93,7 +93,7 @@ const findAll = async (appointmentFilter, sessionFilter) => {
         model: Session,
         as: "session",
         where: sessionFilter,
-        attributes: ["date", "timeFrom", "timeTo"],
+        attributes: ["date", "timeFrom", "timeTo", "docFee", "clinicFee"],
         include: [
           {
             model: Doctor,
@@ -179,6 +179,11 @@ const updateRecord = async (appointmentId, data) => {
     throw err;
   }
 };
+
+const markAs = async (appointmentId, mark) =>
+  await Appointment.update(mark, {
+    where: { appointment_id: appointmentId },
+  });
 
 async function sendSmsCreate(appointment, session) {
   const { patientTitle, patientName, appointmentNo } = appointment;
@@ -294,4 +299,5 @@ module.exports = {
   findOneById,
   findAll,
   findByQuery,
+  markAs,
 };
