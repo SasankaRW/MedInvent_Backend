@@ -1,7 +1,8 @@
-const { DataTypes, Model, UUIDV4 } = require("sequelize");
+const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const DependMember = require("../DependMember/DependMember");
 const Prescription = require("../Prescription/Prescription");
+const PatientAddress = require("./PatientAddress");
 
 class PatientUser extends Model {}
 
@@ -19,19 +20,30 @@ PatientUser.init(
     Lname: {
       type: DataTypes.STRING(50),
       allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
     },
     mobileNo: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(12),
       allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: false,
+      },
     },
     email: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(50),
       allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
     },
     nic: {
       type: DataTypes.STRING(40),
       allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: false,
+      },
     },
     gender: {
       type: DataTypes.STRING(10),
@@ -39,28 +51,8 @@ PatientUser.init(
     },
 
     dob: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false,
-    },
-    lineOne: {
-      type: DataTypes.STRING(50),
-      defaultValue: null,
-    },
-    lineTwo: {
-      type: DataTypes.STRING(50),
-      defaultValue: null,
-    },
-    city: {
-      type: DataTypes.STRING(25),
-      defaultValue: null,
-    },
-    postalCode: {
-      type: DataTypes.STRING(10),
-      defaultValue: null,
-    },
-    district: {
-      type: DataTypes.STRING(30),
-      defaultValue: null,
     },
     picPath: {
       type: DataTypes.STRING(255),
@@ -70,9 +62,16 @@ PatientUser.init(
   {
     sequelize,
     modelName: "PatientUser",
+    tableName: "patientUser",
     timestamps: true,
   }
 );
+
+PatientUser.hasOne(PatientAddress, {
+  foreignKey: "userID",
+  onDelete: "CASCADE",
+  as: "patientAddress",
+});
 
 PatientUser.hasMany(DependMember, {
   foreignKey: "userID",

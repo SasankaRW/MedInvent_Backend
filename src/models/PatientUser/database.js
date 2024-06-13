@@ -1,7 +1,10 @@
 const PatientUser = require("./patientUser");
+const PatientAddress = require("./PatientAddress");
 
 const createSingleRecode = async (singleRecode) => {
-  return await PatientUser.create(singleRecode);
+  return await PatientUser.create(singleRecode, {
+    include: ["patientAddress"],
+  });
 };
 
 const deleteSingleRecode = async (data) => {
@@ -15,9 +18,29 @@ const updateMultipleRecodes = async (query, updates) =>
 const updateRecode = async (condition, dataNeedToUpdate) =>
   await PatientUser.update(dataNeedToUpdate, condition);
 
-const findOneByQuery = async (query) => await PatientUser.findOne(query);
+const findOneByQuery = async (query) =>
+  await PatientUser.findOne({
+    ...query,
+    include: [
+      {
+        model: PatientAddress,
+        as: "patientAddress",
+        attributes: ["lineOne", "lineTwo", "city", "district", "postalCode"],
+      },
+    ],
+  });
 
-const findByQuery = async (query) => await PatientUser.findAll(query);
+const findByQuery = async (query) =>
+  await PatientUser.findAll({
+    ...query,
+    include: [
+      {
+        model: PatientAddress,
+        as: "patientAddress",
+        attributes: ["lineOne", "lineTwo", "city", "district", "postalCode"],
+      },
+    ],
+  });
 
 module.exports = {
   Schema: PatientUser,

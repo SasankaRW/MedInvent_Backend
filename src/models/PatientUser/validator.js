@@ -1,50 +1,40 @@
 const Joi = require("joi");
 const { VALIDATION_ERROR } = require("../../helper");
-//const Constants = require("../metadata/constants");
-//const locations = Constants.locations;
 
 const createSchema = Joi.object({
-  mobileNo: Joi.number().integer().required(),
-  lineOne: Joi.string().max(50).allow(null, ""),
-  lineTwo: Joi.string().max(50).allow(null, ""),
-  city: Joi.string().max(25).allow(null, ""),
-  postalCode: Joi.string().max(10).allow(null, ""),
-  district: Joi.string().max(30).allow(null, ""),
   Fname: Joi.string().max(50).required(),
   Lname: Joi.string().max(50).required(),
-  gender: Joi.string().valid("Male", "Female", "Other").required(),
+  mobileNo: Joi.string().max(12).required(),
   email: Joi.string().email().required(),
   nic: Joi.string().max(40).required(),
+  gender: Joi.string().valid("Male", "Female", "Other").required(),
   dob: Joi.date().required(),
-  picPath: Joi.string().allow(null),
+  picPath: Joi.string().optional().allow(null, ""),
+  patientAddress: Joi.object({
+    lineOne: Joi.string().max(50).required(),
+    lineTwo: Joi.string().max(50).optional().allow(null, ""),
+    city: Joi.string().max(25).required(),
+    postalCode: Joi.string().max(10).optional().allow(null, ""),
+    district: Joi.string().required(),
+  }).required(),
 });
 
-// const updateSchemas = Joi.object({
-//   restaurantName: Joi.string().optional(),
-//   contactNumber: Joi.string().optional(),
-//   registrationDate: Joi.date().optional().allow(null),
-//   registrationNo: Joi.string().optional(),
-//   address: Joi.string().optional().allow(null, ""),
-//   phiArea: Joi.string()
-//     .optional()
-//     .valid(...locations),
-//   active: Joi.bool().optional(),
-// });
-
 const updateSchema = Joi.object({
-  mobileNo: Joi.number().integer().optional(),
-  lineOne: Joi.string().optional().allow(null, ""),
-  lineTwo: Joi.string().optional().allow(null, ""),
-  city: Joi.string().optional().allow(null, ""),
-  postalCode: Joi.string().optional().allow(null, ""),
-  district: Joi.string().optional().allow(null, ""),
-  Fname: Joi.string().optional(),
-  Lname: Joi.string().optional(),
-  gender: Joi.string().valid("male", "female", "other").optional(),
+  Fname: Joi.string().max(50).optional(),
+  Lname: Joi.string().max(50).optional(),
+  mobileNo: Joi.string().max(12).optional(),
   email: Joi.string().email().optional(),
-  nic: Joi.string().optional(),
+  nic: Joi.string().max(40).optional(),
+  gender: Joi.string().valid("Male", "Female", "Other").optional(),
   dob: Joi.date().optional(),
-  picPath: Joi.string().allow(null),
+  picPath: Joi.string().optional(),
+  patientAddress: Joi.object({
+    lineOne: Joi.string().max(50).optional(),
+    lineTwo: Joi.string().max(50).optional(),
+    city: Joi.string().max(25).optional(),
+    postalCode: Joi.string().max(10).optional(),
+    district: Joi.string().optional(),
+  }).optional(),
 });
 
 const create = async (req, res, next) => {

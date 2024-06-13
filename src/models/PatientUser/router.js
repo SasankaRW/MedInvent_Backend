@@ -11,11 +11,11 @@ router
   .post(Validator.create, Controller.createPatientUserData);
 
 router
-  .route("/get/PatientUser/details/:userID")
+  .route("/get/PatientUser/details/byUserId/:userID")
   .get(Controller.getPatientUserDetailsByID);
 
 router
-  .route("/get/PatientUser/details/nic/:nic")
+  .route("/get/PatientUser/details/byNic/:nic")
   .get(Controller.getPatientUserDetailsByNic);
 
 router
