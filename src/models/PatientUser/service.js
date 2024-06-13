@@ -51,7 +51,7 @@ const getPatientUserDetailsByNic = async (filter) => {
 };
 
 const createPatientUserData = async (data) => {
-  const createSingleRecode = DataBase.createSingleRecode(data);
+  const createSingleRecode = DataBase.createSingleRecode(data.userDetails);
 
   const [err, result] = await to(createSingleRecode);
 
