@@ -14,6 +14,10 @@ router
   .route("/get/PatientUser/details/byUserId/:userID")
   .get(Controller.getPatientUserDetailsByID);
 
+router.route("/check/emailandmobileno").get(Controller.checkEmailAndMobileNo);
+
+router.route("/check/nic/:nic").get(Controller.checkNic);
+
 router
   .route("/get/PatientUser/details/byNic/:nic")
   .get(Controller.getPatientUserDetailsByNic);

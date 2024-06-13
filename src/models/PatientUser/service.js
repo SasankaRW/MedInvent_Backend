@@ -50,6 +50,38 @@ const getPatientUserDetailsByNic = async (filter) => {
   return result;
 };
 
+const checkEmailAndMobileNo = async (email, mobileNo) => {
+  const getRecode = DataBase.findOneByQuery({
+    where: {
+      [Op.or]: [{ email: email }, { mobileNo: mobileNo }],
+    },
+  });
+
+  const [err, result] = await to(getRecode);
+
+  if (err) TE(err);
+
+  if (!result) return { success: false, message: "Patient not found" };
+
+  return result;
+};
+
+const checkNic = async (nic) => {
+  const getRecode = DataBase.findOneByQuery({
+    where: {
+      nic: nic,
+    },
+  });
+
+  const [err, result] = await to(getRecode);
+
+  if (err) TE(err);
+
+  if (!result) return { success: false, message: "Patient not found" };
+
+  return result;
+};
+
 const createPatientUserData = async (data) => {
   const createSingleRecode = DataBase.createSingleRecode(data.userDetails);
 
@@ -100,4 +132,8 @@ module.exports = {
   updatePatientUserDetailsByID,
 
   deletePatientUserDetailsByID,
+
+  checkEmailAndMobileNo,
+
+  checkNic,
 };

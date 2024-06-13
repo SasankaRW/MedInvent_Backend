@@ -40,6 +40,33 @@ const getPatientUserDetailsByNic = async (req, res) => {
   }
 };
 
+const checkEmailAndMobileNo = async (req, res) => {
+  try {
+    const result = await Service.checkEmailAndMobileNo(
+      req.query.email,
+      req.query.mobileNo
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const checkNic = async (req, res) => {
+  try {
+    const result = await Service.checkNic(req.params.nic);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const createPatientUserData = async (req, res) => {
   try {
     const result = await Service.createPatientUserData(req.body);
@@ -91,4 +118,8 @@ module.exports = {
   updatePatientUserDetailsByID,
 
   deletePatientUserDetailsByID,
+
+  checkEmailAndMobileNo,
+
+  checkNic,
 };
