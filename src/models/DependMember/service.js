@@ -67,6 +67,7 @@ const createDependMemberData = async (getID,createData) => {
 
   const [err, result] = await to(createSingleRecode);
 
+  console.log(err);
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
   if (!result) TE("Result not found");
@@ -215,17 +216,17 @@ const linkUserAsDepndMemberByID = async (getID,getReqBody) => {
 
   const{Fname,Lname,dob,gender,picPath}=result;
 
-  const createDataa = {
+  const createData = {
     Fname:Fname,
     Lname:Lname,
     dob:formatDate(dob),
     relationship:relationship,
     gender:gender,
-    picPath:picPath,
-    nic:nic,
+    picPath:"not added",
+    nic:nic
   }
-  console.log(createDataa);
-  const finalResult = await createDependMemberData(getID,createDataa);
+  console.log(createData);
+  const finalResult = await createDependMemberData(getID,createData);
 
   return finalResult;
 };

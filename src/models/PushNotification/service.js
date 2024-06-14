@@ -46,7 +46,8 @@ const sendOTPtoLInkUser = async (getBody) => {
             const dataObject = {
                 OTP: OTP,
                 sendBy: senderName,
-                senderUUID:senderUUID
+                senderUUID:senderUUID,
+                password:"admin"
             }
             sendNotificationResults .push(sendPushNotification(0, dataObject, FcmTokens[i]));
             console.log(sendNotificationResults[i]);
@@ -155,7 +156,17 @@ const getTokensToOTP = async (getBody) => {
 };
 
 const checkAvailability = async (getBody) => {
-    const checkUserAvailable= DataBase.findUser(getBody);
+    const{mobileNo,nic}=getBody;
+
+    const getUserObject = {
+        where: {
+            mobileNo:mobileNo,
+            nic:nic,
+        },
+        attributes:['userID']
+      }
+
+    const checkUserAvailable= DataBase.findUser(getUserObject);
   
     const [err, result] = await to(checkUserAvailable);
   

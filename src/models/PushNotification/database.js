@@ -39,9 +39,10 @@ const findAllTokens = async (getBody) => {
   const getTokensObject = {
     include: {
       model: TokenStore,
-      where: whereObject
+      where: whereObject,
+      attributes: ['fcm_token']
     },
-    attributes: ['fcm_token']
+    attributes: []
   };
 
   const result = await PatientUser.findAll(getTokensObject);
