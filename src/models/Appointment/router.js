@@ -9,6 +9,7 @@ const router = express.Router();
 router
   .route("/newappointment")
   .post(Validator.create, Controller.createAppointment);
+router.route("/get/user/all/:userId").get(Controller.getAllUserAppointments);
 router.route("/get/user/past/:userId").get(Controller.getUserPastAppointments);
 router
   .route("/get/user/upcoming/:userId")

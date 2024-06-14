@@ -16,6 +16,23 @@ const createAppointment = async (data) => {
   return result;
 };
 
+const getAllUserAppointments = async (userId) => {
+  const getRecords = DataBase.findAll(
+    {
+      user_id: userId,
+    },
+    {}
+  );
+
+  const [err, result] = await to(getRecords);
+
+  if (err) TE(err);
+
+  if (!result) TE("Results not found");
+
+  return result;
+};
+
 const getUserUpcomingAppointments = async (userId) => {
   const getRecords = DataBase.findAll(
     {
@@ -154,6 +171,7 @@ const markAsAttended = async (appointmentId) => {
 
 module.exports = {
   getUserUpcomingAppointments,
+  getAllUserAppointments,
   getUserPastAppointments,
   getClinicUpcomingAppointments,
   getClinicPastAppointments,

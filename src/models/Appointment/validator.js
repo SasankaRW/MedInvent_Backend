@@ -6,7 +6,7 @@ const createSchema = Joi.object({
   patientTitle: Joi.string().required(),
   patientName: Joi.string().required(),
   contactNo: Joi.string()
-    .pattern(/^07\d{8}$/)
+    .pattern(/^\+947\d{8}$/)
     .required(),
   email: Joi.string().email().optional().allow(null),
   area: Joi.string().required(),

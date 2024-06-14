@@ -16,6 +16,16 @@ const createAppointment = async (req, res) => {
   }
 };
 
+const getAllUserAppointments = async (req, res) => {
+  try {
+    const result = await Service.getAllUserAppointments(req.params.userId);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
+
 const getUserUpcomingAppointments = async (req, res) => {
   try {
     const result = await Service.getUserUpcomingAppointments(req.params.userId);
@@ -111,6 +121,7 @@ const markAsAttended = async (req, res) => {
 
 module.exports = {
   getUserUpcomingAppointments,
+  getAllUserAppointments,
   getUserPastAppointments,
   getClinicUpcomingAppointments,
   getClinicPastAppointments,

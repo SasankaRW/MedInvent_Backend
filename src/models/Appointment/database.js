@@ -72,7 +72,7 @@ const findOneById = async (id) => {
           {
             model: Doctor,
             as: "doctor",
-            attributes: ["fname", "mname", "lname"],
+            attributes: ["fname", "mname", "lname", "specialization"],
           },
           {
             model: Clinic,
@@ -98,7 +98,7 @@ const findAll = async (appointmentFilter, sessionFilter) => {
           {
             model: Doctor,
             as: "doctor",
-            attributes: ["fname", "mname", "lname"],
+            attributes: ["fname", "mname", "lname", "specialization"],
           },
           {
             model: Clinic,
