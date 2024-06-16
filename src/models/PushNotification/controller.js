@@ -1,6 +1,7 @@
 const Service = require("./service");
 const { SUC_CODES } = require("./constants").Codes;
 const { SUCCESS, ERROR } = require("../../helper");
+const NotificationFunctions =require('./notificationfunction');
 
 
 const sendOTPtoLInkUser = async (req, res) => {
@@ -29,7 +30,7 @@ const checkOTP = async (req, res) => {
 
 const sendPushNotificationTemporary = async (req,res,next) => {
     try {
-      const result = await Service.sendPushNotificationTemporary(req,res,next);
+      const result = await NotificationFunctions.sendPushNotificationTemporary(req,res,next);
     } catch (error) {
       console.log(error);
     }

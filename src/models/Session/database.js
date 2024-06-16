@@ -2,6 +2,9 @@ const sequelize = require("../../../config/database");
 const Session = require("./Session");
 const Clinic = require("../Clinic/Clinic");
 const Doctor = require("../Doctor/Doctor");
+const Appointment =require("../Appointment/Appointment");
+const TokenStore=require("../PushNotification/TokenStore");
+const CancelSession=require("../Session/CancelSession");
 
 const createRecords = async (data) => {
   const { dates, ...sessionData } = data;
@@ -74,10 +77,13 @@ const updateRecord = async (session_id, dataNeedToUpdate) =>
       session_id: session_id,
     },
   });
-const updateRecode = async (condition, dataNeedToUpdate) =>
-  await Session.update(dataNeedToUpdate, condition);
 
-const findAllByQuerys = async (filter) => {
+const findByQuery = async (query) => await Session.findAll(query);
+
+const findOneByQuery = async(query)=> await Session.findOne(query);
+  
+// newly added below onwards
+const findAllSessionsByDoctorID = async (filter) => {
     const getSessionsObject = {
         include: [
             {
@@ -93,7 +99,7 @@ const findAllByQuerys = async (filter) => {
                 ]
             }
         ]
-      }
+    }
     
    //after 34 require:true,
    const result =  await Doctor.findAll(getSessionsObject);
@@ -122,9 +128,71 @@ const findAllSessionsByClicicID = async (filter) => {
  return result;
 }
 
-const findByQuery = async (query) => await Session.findAll(query);
+const updateisCancelled = async (condition, dataNeedToUpdate) =>
+{
+  const [updated] = await Session.update( dataNeedToUpdate,condition);
+  return updated;
+}
 
-const findOneByQuery = async(query)=> await Session.findOne(query);
+const getPatientsdetails = async (query) => await Appointment.findAll(query);
+
+const findAllTokens = async (getBody) => {
+
+  const whereObject = {
+    ...getBody,
+    isActiveToken: true
+  };
+
+  const getTokensObject = {
+    include:{
+      model: TokenStore,
+      where: whereObject,
+      attributes: ['fcm_token']
+    },
+    attributes: []
+  };
+
+  const result = await PatientUser.findAll(getTokensObject);
+  return result;
+};
+
+const findOneByIdForNotifications = async (id) => {
+  return await Session.findByPk(id, {
+    include: [
+      {
+        model: Clinic,
+        as: "clinic",
+        attributes: ["name"],
+      },
+      {
+        model: Doctor,
+        as: "doctor",
+        attributes: ["fname", "mname", "lname"],
+      },
+    ],
+    attributes:["date"]
+  });
+};
+
+const createCancelSession = async (CancelSessionToupleArray) =>{
+  let transaction;
+  let is_succes =false;
+  try{
+    transaction=await sequelize.transaction();
+    for(let i=0;i<CancelSessionToupleArray.length;i++)
+    {
+      await CancelSession.create(CancelSessionToupleArray[i],{transaction});
+    }
+    await transaction.commit();
+  }catch(error)
+  {
+    if(transaction)await transaction.rollback();
+    throw error;
+  }
+  is_succes=true;
+  return is_succes;
+};
+
 
 module.exports = {
   Schema: Session,
@@ -136,5 +204,10 @@ module.exports = {
   findAllSessionsByClicicID,
   findByQuery,
   findOneByQuery,
-  findAllByQuerys
+  findAllSessionsByDoctorID,
+  updateisCancelled,
+  getPatientsdetails,
+  findAllTokens,
+  findOneByIdForNotifications,
+  createCancelSession
 };

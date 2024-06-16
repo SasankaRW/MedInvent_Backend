@@ -27,12 +27,12 @@ router
   .put(Validator.update, Controller.updateSession);
 
 //get all session details relevant to specific doctor for doctor's session calendar
-//router.route("/get/All/Sessions/details/:doctor_id").get(Controller.getSessionsDetailsByDocID);
+router.route("/get/All/Sessions/details/:doctor_id").get(Controller.getSessionsDetailsByDocID);
 
 //get all session details relevant to specific clinic for clinic's session calendar
-//router.route("/get/All/Sessions/details/by/:clinic_id").get(Controller.getSessionsDetailsByClinicID);
+router.route("/get/All/Sessions/details/by/:clinic_id").get(Controller.getSessionsDetailsByClinicID);
 
 // Session cancel by doctor or clinic using session calendar or upcoming session page
-//router.route("/update/Cancel/Session/:session_id").put(Validator.update,Controller.updateCancelSessionByID);
+router.route("/update/Cancel/Session/:session_id").put(Validator.update,Controller.updateCancelSessionByID);
 
 module.exports = router;

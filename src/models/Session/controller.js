@@ -17,18 +17,8 @@ const createSession = async (req, res) => {
   }
 }; 
 
-const getSessionsDetailsByClinicID = async (req, res) => {
-  try {
-    const result = await Service.getSessionsDetailsByClinicID(req.params.clinic_id);
 
-    SUCCESS(res, SUC_CODES, result, req.span);
-  } catch (error) {
-    console.log(error);
-
-    ERROR(res, error, res.span);
-  }
-}; 
-
+//no
 const getSessionDetailsByID = async (req,res)=> {
   try {
     const result = await Service.getSessionDetailsByID(req.params.session_id);
@@ -41,18 +31,6 @@ const getSessionDetailsByID = async (req,res)=> {
     ERROR(res, error, res.span);
   }
 }
-
-const updateCancelSessionByID = async (req, res) => {
-  try {
-    const result = await Service.updateCancelSessionByID(req.params.session_id, req.body);
-
-    SUCCESS(res, SUC_CODES, result, req.span);
-  } catch (error) {
-    console.log(error);
-
-    ERROR(res, error, res.span);
-  }
-};
 
 const getSessionById = async (req, res) => {
   try {
@@ -159,6 +137,47 @@ const deleteSession = async (req, res) => {
   }
 };
 
+//now
+const getSessionsDetailsByDocID = async (req,res)=> {
+  try {
+    const result = await Service.getSessionsDetailsByDocID(req.params.doctor_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  }
+  catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+}
+
+//now
+const getSessionsDetailsByClinicID = async (req, res) => {
+  try {
+    const result = await Service.getSessionsDetailsByClinicID(req.params.clinic_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+}; 
+
+//now
+const updateCancelSessionByID = async (req, res) => {
+  try {
+    const result = await Service.updateCancelSessionByID(req.params.session_id, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+
 module.exports = {
   createSession,
   getSessionById,
@@ -169,7 +188,7 @@ module.exports = {
   getSessionsByDocAndClinicIDs,
   deleteSession,
   updateSession,
-  //getSessionsDetailsByDocID,
+  getSessionsDetailsByDocID,
   getSessionsDetailsByClinicID,
   getSessionDetailsByID,
   updateCancelSessionByID,
