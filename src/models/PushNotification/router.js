@@ -25,4 +25,8 @@ router.route("/get/tokens/to/send/OTP").post(Controller.getTokensToOTP);
 //update is_activeToken(can use for all) =>(3)
 router.route("/update/isActive").put(Controller.updateIsActive);
 
+//get all otp relevant to specific user
+router.route("/get/All/OTP").post(Controller.getAllOTP);
+
+
 module.exports = router;

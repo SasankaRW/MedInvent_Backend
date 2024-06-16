@@ -56,7 +56,7 @@ const createDependMemberData = async (req, res) => {
 
 const updateDependMemberDetailsByID = async (req, res) => {
   try {
-    const result = await Service.updateDependMemberDetailsByID(req.params.userID, req.body);
+    const result = await Service.updateDependMemberDetailsByID(req.params.userID,req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -68,7 +68,7 @@ const updateDependMemberDetailsByID = async (req, res) => {
 
 const deleteDependMemberDetailsByID = async (req, res) => {
   try {
-    const result = await Service.deleteDependMemberDetailsByID(req.params.userID,req.body);
+    const result = await Service.deleteDependMemberDetailsByID(req.params.dID);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {

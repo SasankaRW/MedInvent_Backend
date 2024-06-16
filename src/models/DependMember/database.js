@@ -11,8 +11,8 @@ const deleteSingleRecode = async (deleteDataObject) => {
   return result;
 };
 
-const updateMultipleRecodes = async (query, updates) =>
-  await DependMember.update(updates, query);
+// const updateMultipleRecodes = async (query, updates) =>
+//   await DependMember.update(updates, query);
 
 const updateRecode = async (condition, dataNeedToUpdate) =>
   await DependMember.update(dataNeedToUpdate, condition);
@@ -30,7 +30,7 @@ module.exports = {
 
   Schema:PatientUser,
 
-  updateRecode: updateRecode,
+  updateRecode,
 
   findAllByQuery,
 
@@ -38,11 +38,12 @@ module.exports = {
 
   findOneByQuery,
 
-  updateMultipleRecodes: updateMultipleRecodes,
+  //updateMultipleRecodes: updateMultipleRecodes,
 
   createSingleRecode,
 
   deleteSingleRecode,
 
   findUserDetailsToLink,
+
 };

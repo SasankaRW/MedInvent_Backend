@@ -23,7 +23,7 @@ router.route("/get/DependMember/details/:userID").get(Controller.getDependMember
 router.route("/update/DependMember/:userID").put(Validator.update,Controller.updateDependMemberDetailsByID);
 
 //delete a specific depend member row ,who is a child of a specific PatientUser
-router.route("/delete/DependMember/:userID").delete(Controller.deleteDependMemberDetailsByID);
+router.route("/delete/DependMember/:dID").delete(Controller.deleteDependMemberDetailsByID);
 
 //link user
 router.route("/add/new/linked/DependMember/:userID").post(Controller.linkUserAsDepndMemberByID);

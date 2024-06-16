@@ -60,7 +60,19 @@ const getDependMemberDetailsByID = async (getID,getReqBody) => {
 };
 
 const createDependMemberData = async (getID,createData) => {
-  const DependcCreateObject ={...createData,userID: getID};
+  const{Fname,Lname,dob,relationship,gender,picPath,nic}=createData;
+
+  const DependcCreateObject = {
+    Fname:Fname,
+    Lname:Lname,
+    dob:dob,
+    relationship:relationship,
+    gender:gender,
+    picPath:picPath,
+    nic:nic,
+    userID: getID
+  }
+ // const DependcCreateObject ={...createData,userID: getID};
 
   console.log(DependcCreateObject);
   const createSingleRecode = DataBase.createSingleRecode(DependcCreateObject);
@@ -75,115 +87,50 @@ const createDependMemberData = async (getID,createData) => {
   return result;
 };
 
-const updateDependMemberDetailsByID = async (getID, getReqBody) => {
+const updateDependMemberDetailsByID = async (getID,getBody) => {
+  const{dID ,Fname,Lname,dob,relationship,gender,picPath,nic} = getBody;
+  const updateData = {
+    Fname:Fname,
+    Lname:Lname,
+    dob:dob,
+    relationship:relationship,
+    gender:gender,
+    picPath:picPath,
+    nic:nic
+  }
 
-  const{dID} = getReqBody;
-  const storeDID = dID;
-
-  const possibleAttributes = ["Fname","Lname","dob","relationship","gender","picPath","nic"];
-  let storeAttribute=null;
-
-  possibleAttributes.forEach((attribute) => {
-    if (getReqBody.hasOwnProperty(attribute)) {
-       
-       switch(attribute)
-       {
-          case "Fname" :
-          {
-            const{Fname}=getReqBody;
-            storeAttribute={
-              Fname:Fname
-            }
-            break;
-          }
-          case "Lname" :
-          {
-            const{Lname}=getReqBody;
-            storeAttribute={
-              Lname:Lname
-            }
-            break;
-          }
-          case "dob" :
-          {
-              const{dob}=getReqBody;
-              storeAttribute={
-                dob:dob
-              }
-              break;
-          }
-          case "relationship" :
-          {   
-              const{relationship}=getReqBody;
-              storeAttribute={
-                relationship:relationship
-              }
-              break;
-          }
-          case "gender" :
-          {
-              const{gender}=getReqBody;
-              storeAttribute={
-                gender:gender
-              }
-              break;
-          }
-          case "picPath" :
-          {
-              const{picPath}=getReqBody;
-              storeAttribute={
-                picPath:picPath
-              }
-              break;
-          }
-          case "nic" :
-          {
-              const{nic}=getReqBody;
-              storeAttribute={
-                nic:nic
-              }
-              break;
-          }
-          default : {
-            storeAttribute={};
-          }
-       }
-    }
-  });
-
-  const updateRecode = DataBase.updateRecode(
+  const updateRecord = DataBase.updateRecode(
     { 
-      where: {
+      where:{ 
         userID:getID,
-        dID:storeDID
+        dID:dID,
       }
     },
-     storeAttribute
+    updateData
   );
 
-  const [err, result] = await to(updateRecode);
+  const [err, result] = await to(updateRecord);
 
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
   if (!result) TE("Result not found");
 
-  const getMemberObject = {
-    where: {
-      userID:getID,
-      dID:storeDID,
-    }
+  const findUpdatedObject = {
+      where: { 
+        userID:getID,
+        dID:dID,
+      }
   }
-  const updatedDependantData = await DataBase.findOneByQuery(getMemberObject);
 
-  return updatedDependantData;
-};   
+  const updatedData = await DataBase.findOneByQuery(findUpdatedObject);
 
-const deleteDependMemberDetailsByID = async (getID,getReqBody) => {
-  const{dID} = getReqBody;
+  return updatedData;
+};
+
+const deleteDependMemberDetailsByID = async (getID) => {
   const deleteDataObject ={
     where:{
-      userID:getID,
-      dID:dID
+      dID:getID
     }
   }
   const deleteRecode = DataBase.deleteSingleRecode(deleteDataObject);

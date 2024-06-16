@@ -23,7 +23,7 @@ const sendOTPtoLInkUser = async (getBody) => {
 
     const numOfTokens = FcmTokens.length;
     const OTPToupleArray =[numOfTokens];
-    const OTP=generateOTP(6);
+    const OTP=generateOTP(4);
 
     for(let i=0;i<numOfTokens;i++)
     {
@@ -46,8 +46,9 @@ const sendOTPtoLInkUser = async (getBody) => {
             const dataObject = {
                 OTP: OTP,
                 sendBy: senderName,
-                senderUUID:senderUUID,
-                password:"admin"
+                //senderUUID:senderUUID,
+                password:"admin",
+                receiverNic:receiverNic
             }
             sendNotificationResults .push(sendPushNotification(0, dataObject, FcmTokens[i]));
             console.log(sendNotificationResults[i]);
@@ -260,6 +261,24 @@ const updateIsActive = async (getBody) => {
   
     return updatedData;
 };
+
+const getAllOTP = async (getBody) => {
+    const{receiverNic ,receiverToken} =getBody;
+    const getRecode = DataBase.findAllOTPs({
+      where:{
+        receiverNic: receiverNic,
+        receiverToken:receiverToken
+      },
+    });
+  
+    const [err, result] = await to(getRecode);
+  
+    if (err) TE(err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+};
   
 module.exports = {
     sendOTPtoLInkUser,
@@ -269,5 +288,6 @@ module.exports = {
     checkAvailability,
     addTokens,
     updateIsActive,
-    sendPushNotificationTemporary
+    sendPushNotificationTemporary,
+    getAllOTP,
 };

@@ -59,6 +59,8 @@ const updateRecord = async (condition, dataNeedToUpdate) =>
   await TokenStore.update(dataNeedToUpdate, condition);
 
 const findUpdatedData = async(query)=> await TokenStore.findOne(query);
+
+const findAllOTPs = async(query)=> await OTP.findAll(query);
   
 module.exports = {
   Schema: OTP,
@@ -70,4 +72,5 @@ module.exports = {
   createTokenRecode,
   updateRecord,
   findUpdatedData,
+  findAllOTPs
 };

@@ -81,6 +81,18 @@ const updateIsActive = async (req, res) => {
   }
 };
 
+const getAllOTP = async (req, res) => {
+  try {
+    const result = await Service.getAllOTP(req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 module.exports = {
     sendOTPtoLInkUser,
     checkOTP,
@@ -89,5 +101,6 @@ module.exports = {
     addTokens,
     updateIsActive,
     sendPushNotificationTemporary,
+    getAllOTP,
 };
   
