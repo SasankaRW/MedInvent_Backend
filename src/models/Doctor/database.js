@@ -1,5 +1,6 @@
 const Doctor = require("./Doctor");
 const { Op } = require("sequelize");
+const sequelize = require("../../../config/database");
 
 const createSingleRecord = async (singleRecord) => {
   return await Doctor.create(singleRecord.data);
@@ -33,6 +34,40 @@ const findByQuery = async (query) => {
         { fname: { [Op.iLike]: `%${query}%` } },
         { mname: { [Op.iLike]: `%${query}%` } },
         { lname: { [Op.iLike]: `%${query}%` } },
+        sequelize.where(
+          sequelize.fn(
+            "concat_ws", 
+            " ", 
+            sequelize.col("fname"),
+            sequelize.col("mname"),
+            sequelize.col("lname")
+          ),
+          {
+            [Op.iLike]: `%${query}%`,
+          }
+        ),
+        sequelize.where(
+          sequelize.fn(
+            "concat_ws",
+            " ",
+            sequelize.col("fname"),
+            sequelize.col("lname")
+          ),
+          {
+            [Op.iLike]: `%${query}%`,
+          }
+        ),
+        sequelize.where(
+          sequelize.fn(
+            "concat_ws",
+            " ",
+            sequelize.col("mname"),
+            sequelize.col("lname")
+          ),
+          {
+            [Op.iLike]: `%${query}%`,
+          }
+        ),
       ],
     },
   });

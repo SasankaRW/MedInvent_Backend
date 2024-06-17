@@ -2,9 +2,10 @@ const sequelize = require("../../../config/database");
 const Session = require("./Session");
 const Clinic = require("../Clinic/Clinic");
 const Doctor = require("../Doctor/Doctor");
-const Appointment =require("../Appointment/Appointment");
-const TokenStore=require("../PushNotification/TokenStore");
-const CancelSession=require("../Session/CancelSession");
+const Appointment = require("../Appointment/Appointment");
+const TokenStore = require("../PushNotification/TokenStore");
+const CancelSession = require("../Session/CancelSession");
+const { Op } = require("sequelize");
 
 const createRecords = async (data) => {
   const { dates, ...sessionData } = data;
@@ -73,83 +74,170 @@ const findAllByQuery = async (filter, order) => {
 
 const updateRecord = async (session_id, dataNeedToUpdate) =>
   await Session.update(dataNeedToUpdate, {
-    where: { 
+    where: {
       session_id: session_id,
     },
   });
 
 const findByQuery = async (query) => await Session.findAll(query);
 
-const findOneByQuery = async(query)=> await Session.findOne(query);
-  
+const findOneByQuery = async (query) => await Session.findOne(query);
+
 // newly added below onwards
 const findAllSessionsByDoctorID = async (filter) => {
-    const getSessionsObject = {
+  const getSessionsObject = {
+    include: [
+      {
+        model: Session,
+        where: {
+          doctor_id: filter,
+        },
         include: [
-            {
-                model:Session,
-                where:{
-                    doctor_id:filter
-                },
-                include:[
-                    {
-                        model:Clinic,
-                        required:true,
-                    }
-                ]
-            }
-        ]
-    }
-    
-   //after 34 require:true,
-   const result =  await Doctor.findAll(getSessionsObject);
-   return result;
-}
+          {
+            model: Clinic,
+            required: true,
+          },
+        ],
+      },
+    ],
+  };
+
+  //after 34 require:true,
+  const result = await Doctor.findAll(getSessionsObject);
+  return result;
+};
 
 const findAllSessionsByClicicID = async (filter) => {
   const getSessionsObject = {
-      include: [
+    include: [
+      {
+        model: Session,
+        where: {
+          clinic_id: filter,
+        },
+        include: [
           {
-              model:Session,
-              where:{
-                clinic_id:filter
-              },
-              include:[
-                  {
-                      model:Doctor,
-                      required:true,
-                  }
-              ]
-          }
-      ]
-  }
-  
- const result =  await Clinic.findAll(getSessionsObject);
- return result;
-}
+            model: Doctor,
+            required: true,
+          },
+        ],
+      },
+    ],
+  };
 
-const updateisCancelled = async (condition, dataNeedToUpdate) =>
-{
-  const [updated] = await Session.update( dataNeedToUpdate,condition);
+  const result = await Clinic.findAll(getSessionsObject);
+  return result;
+};
+
+const findAllBySearch = async (query) => {
+  const sessionWhere = {};
+  if (query.date) {
+    sessionWhere.date = query.date;
+  }
+
+  const doctorWhere = {};
+  if (query.doctor) {
+    doctorWhere[Op.or] = [
+      { fname: { [Op.iLike]: `%${query.doctor}%` } },
+      { mname: { [Op.iLike]: `%${query.doctor}%` } },
+      { lname: { [Op.iLike]: `%${query.doctor}%` } },
+      sequelize.where(
+        sequelize.fn(
+          "concat_ws",
+          " ",
+          sequelize.col("fname"),
+          sequelize.col("mname"),
+          sequelize.col("lname")
+        ),
+        {
+          [Op.iLike]: `%${query.doctor}%`,
+        }
+      ),
+      sequelize.where(
+        sequelize.fn(
+          "concat_ws",
+          " ",
+          sequelize.col("fname"),
+          sequelize.col("lname")
+        ),
+        {
+          [Op.iLike]: `%${query.doctor}%`,
+        }
+      ),
+      sequelize.where(
+        sequelize.fn(
+          "concat_ws",
+          " ",
+          sequelize.col("mname"),
+          sequelize.col("lname")
+        ),
+        {
+          [Op.iLike]: `%${query.doctor}%`,
+        }
+      ),
+    ];
+  }
+  if (query.specialization) {
+    doctorWhere.specialization = { [Op.iLike]: `%${query.specialization}%` };
+  }
+
+  const clinicWhere = {};
+  if (query.clinic) {
+    clinicWhere.name = { [Op.iLike]: `%${query.clinic}%` };
+  }
+
+  const sessions = await Session.findAll({
+    where: sessionWhere,
+    attributes: {
+      exclude: [
+        "createdAt",
+        "updatedAt",
+        "scheduledByType",
+        "scheduledById",
+        "cancelledById",
+        "cancelledByType",
+      ],
+    },
+    include: [
+      {
+        model: Doctor,
+        as: "doctor",
+        where: doctorWhere,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      },
+      {
+        model: Clinic,
+        as: "clinic",
+        where: clinicWhere,
+        attributes: ["name"],
+      },
+    ],
+    order: [["date", "ASC"]],
+  });
+
+  return sessions;
+};
+
+const updateisCancelled = async (condition, dataNeedToUpdate) => {
+  const [updated] = await Session.update(dataNeedToUpdate, condition);
   return updated;
-}
+};
 
 const getPatientsdetails = async (query) => await Appointment.findAll(query);
 
 const findAllTokens = async (getBody) => {
-
   const whereObject = {
     ...getBody,
-    isActiveToken: true
+    isActiveToken: true,
   };
 
   const getTokensObject = {
-    include:{
+    include: {
       model: TokenStore,
       where: whereObject,
-      attributes: ['fcm_token']
+      attributes: ["fcm_token"],
     },
-    attributes: []
+    attributes: [],
   };
 
   const result = await PatientUser.findAll(getTokensObject);
@@ -170,29 +258,26 @@ const findOneByIdForNotifications = async (id) => {
         attributes: ["fname", "mname", "lname"],
       },
     ],
-    attributes:["date"]
+    attributes: ["date"],
   });
 };
 
-const createCancelSession = async (CancelSessionToupleArray) =>{
+const createCancelSession = async (CancelSessionToupleArray) => {
   let transaction;
-  let is_succes =false;
-  try{
-    transaction=await sequelize.transaction();
-    for(let i=0;i<CancelSessionToupleArray.length;i++)
-    {
-      await CancelSession.create(CancelSessionToupleArray[i],{transaction});
+  let is_succes = false;
+  try {
+    transaction = await sequelize.transaction();
+    for (let i = 0; i < CancelSessionToupleArray.length; i++) {
+      await CancelSession.create(CancelSessionToupleArray[i], { transaction });
     }
     await transaction.commit();
-  }catch(error)
-  {
-    if(transaction)await transaction.rollback();
+  } catch (error) {
+    if (transaction) await transaction.rollback();
     throw error;
   }
-  is_succes=true;
+  is_succes = true;
   return is_succes;
 };
-
 
 module.exports = {
   Schema: Session,
@@ -202,6 +287,7 @@ module.exports = {
   updateRecord,
   deleteSingleRecord,
   findAllSessionsByClicicID,
+  findAllBySearch,
   findByQuery,
   findOneByQuery,
   findAllSessionsByDoctorID,
@@ -209,5 +295,5 @@ module.exports = {
   getPatientsdetails,
   findAllTokens,
   findOneByIdForNotifications,
-  createCancelSession
+  createCancelSession,
 };
