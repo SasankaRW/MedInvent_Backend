@@ -197,7 +197,7 @@ const getSessionsDetailsByClinicID = async (filter) => {
 };
 
 const getSessionsDetailsByDocID = async (docId) => {
-  const getRecode = DataBase.findAllSessionsByDoctorID(filter);
+  const getRecode = DataBase.findAllSessionsByDoctorID(docId);
 
   const [err, result] = await to(getRecode);
 
@@ -241,13 +241,15 @@ const updateCancelSessionByID = async (session_id, updateData) => {
 
   if (result == 1) {
     //get userID set
-    const getRecordes = DataBase.findAllByQuery({
-      where: {
-        session_id: session_id,
+    console.log("success first");
+    const getRecordes ={
+      where:{
+        session_id: session_id
       },
-      attributes: ["user_id"],
-    });
-
+      attributes:["user_id"]
+    };
+    
+    //add try from here
     const getDetails = await DataBase.getPatientsdetails(getRecordes);
 
     //get active fcm token set and store in  TokenStorage=[];
@@ -266,6 +268,8 @@ const updateCancelSessionByID = async (session_id, updateData) => {
           }
         }
       }
+    }else{
+      return "no patients";
     }
 
     //date,doc_fname,doc_mid_name,doc_lname,clinic_name
@@ -275,10 +279,10 @@ const updateCancelSessionByID = async (session_id, updateData) => {
     );
 
     //rearrange data for store cancelSession table
-    const { doctor, clinic, date } = getsessionDetails;
-    const doctorFullName = `${doctor.fname} ${doctor.fname} ${doctor.fname}`;
-    const clinicName = clinic.name;
-    const formattedDate = new Date(date).toISOString().split("T")[0];
+    const{doctor,clinic,date}=getsessionDetails;
+    const doctorFullName = `${doctor.fname} ${doctor.mname} ${doctor.lname}`;
+    const clinicName =clinic.name;
+    const formattedDate = new Date(date).toISOString().split('T')[0];
 
     //add cancel session details to  CancelSessionToupleArray=[];
     CancelSessionToupleArray = [];
@@ -294,6 +298,9 @@ const updateCancelSessionByID = async (session_id, updateData) => {
         CancelSessionToupleArray.push(createObeject);
       }
     }
+    else{
+      return "error occoured when getting session details";
+    }
 
     //add cancel session details to cancelSession table in db
     let createCancelSessionTouples = await DataBase.createCancelSession(
@@ -304,19 +311,17 @@ const updateCancelSessionByID = async (session_id, updateData) => {
 
     if (createCancelSessionTouples) {
       //send push notifications to users devices
-      for (let x = 0; x < TokenStorage.length; x++) {
-        const dataObject = {
-          userID: userIDStorage[x],
-        };
-        sendNotificationResults.push(
-          NotificationFunctions.sendPushNotification(
-            2,
-            dataObject,
-            TokenStorage[x]
-          )
-        );
-        console.log(sendNotificationResults[i]);
-      }
+        for(let x=0;x<TokenStorage.length;x++)
+        {
+            const dataObject = {
+               userID:userIDStorage[x]
+            }
+            sendNotificationResults.push(NotificationFunctions.sendPushNotification(2, dataObject, TokenStorage[x]));
+            console.log(sendNotificationResults[x]);
+        }
+    }
+    else{
+      return "createCancelSessionTouples not completed successfully";
     }
 
     const results = await Promise.all(
@@ -329,11 +334,46 @@ const updateCancelSessionByID = async (session_id, updateData) => {
     });
 
     return results;
-  } else {
-    return result;
+
+  }
+  else{
+     return "iscancelled not updated correctly";
   }
   //return session;
 };
+
+const getCancelSessionsDetailsByUserID = async (userID,getBody) => {
+  const{fcm_token}=getBody;
+
+  const getRecord = DataBase.findAllCancelledByQuery(
+    {
+      userID: userID,
+      fcm_token:fcm_token
+    },
+    "ASC"
+  );
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const deleteCancelledSession = async (cancel_id) => {
+  const deleteRecode = DataBase.deleteCancelledRecord(cancel_id);
+
+  const [err, result] = await to(deleteRecode);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
 
 module.exports = {
   createSession,
@@ -349,4 +389,6 @@ module.exports = {
   getSessionsDetailsByClinicID,
   getSessionsDetailsByDocID,
   updateCancelSessionByID,
+  getCancelSessionsDetailsByUserID,
+  deleteCancelledSession,
 };

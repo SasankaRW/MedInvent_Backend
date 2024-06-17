@@ -5,7 +5,9 @@ const Doctor = require("../Doctor/Doctor");
 const Appointment = require("../Appointment/Appointment");
 const TokenStore = require("../PushNotification/TokenStore");
 const CancelSession = require("../Session/CancelSession");
+const PatientUser=require("../PatientUser/patientUser");
 const { Op } = require("sequelize");
+
 
 const createRecords = async (data) => {
   const { dates, ...sessionData } = data;
@@ -89,12 +91,14 @@ const findAllSessionsByDoctorID = async (filter) => {
     include: [
       {
         model: Session,
+        as:'sessions',
         where: {
           doctor_id: filter,
         },
         include: [
           {
             model: Clinic,
+            as:'clinic',
             required: true,
           },
         ],
@@ -112,12 +116,14 @@ const findAllSessionsByClicicID = async (filter) => {
     include: [
       {
         model: Session,
+        as:'sessions',
         where: {
           clinic_id: filter,
         },
         include: [
           {
             model: Doctor,
+            as:'doctor',
             required: true,
           },
         ],
@@ -279,6 +285,18 @@ const createCancelSession = async (CancelSessionToupleArray) => {
   return is_succes;
 };
 
+const findAllCancelledByQuery = async (filter, order) => {
+  return await CancelSession.findAll({
+    where: filter,
+    order: [["date", order]],
+  });
+};
+
+const deleteCancelledRecord = async (cancel_id) => {
+  const result = await CancelSession.destroy({ where: { cancel_id: cancel_id } });
+  return result;
+};
+
 module.exports = {
   Schema: Session,
   findOneById,
@@ -296,4 +314,6 @@ module.exports = {
   findAllTokens,
   findOneByIdForNotifications,
   createCancelSession,
+  findAllCancelledByQuery,
+  deleteCancelledRecord,
 };

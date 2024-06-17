@@ -38,8 +38,12 @@ router
   .get(Controller.getSessionsDetailsByClinicID);
 
 // Session cancel by doctor or clinic using session calendar or upcoming session page
-router
-  .route("/update/Cancel/Session/:session_id")
-  .put(Validator.update, Controller.updateCancelSessionByID);
+router.route("/update/Cancel/Session/:session_id").put(Controller.updateCancelSessionByID);
+
+//get all cancel sessio rows relevant to aspecifc user
+router.route("/get/All/cancel/sessions/:userID").get(Controller.getCancelSessionsDetailsByUserID);
+
+//delete specific cancelled session row from Cancelsession table relevant toa specific user
+router.route("/cancel/delete/:cancel_id").delete(Controller.deleteCancelledSession);
 
 module.exports = router;

@@ -180,10 +180,33 @@ const getSessionsDetailsByClinicID = async (req, res) => {
 //now
 const updateCancelSessionByID = async (req, res) => {
   try {
-    const result = await Service.updateCancelSessionByID(
-      req.params.session_id,
-      req.body
-    );
+    const result = await Service.updateCancelSessionByID(req.params.session_id,req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const getCancelSessionsDetailsByUserID = async (req, res) => {
+  try {
+    const result = await Service.getCancelSessionsDetailsByUserID(req.params.userID, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const deleteCancelledSession = async (req, res) => {
+  try {
+    const result = await Service.deleteCancelledSession(req.params.cancel_id);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -208,4 +231,6 @@ module.exports = {
   getSessionsDetailsByClinicID,
   getSessionDetailsByID,
   updateCancelSessionByID,
+  getCancelSessionsDetailsByUserID,
+  deleteCancelledSession,
 };
