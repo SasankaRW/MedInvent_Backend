@@ -5,9 +5,8 @@ const Doctor = require("../Doctor/Doctor");
 const Appointment = require("../Appointment/Appointment");
 const TokenStore = require("../PushNotification/TokenStore");
 const CancelSession = require("../Session/CancelSession");
-const PatientUser=require("../PatientUser/patientUser");
+const PatientUser = require("../PatientUser/patientUser");
 const { Op } = require("sequelize");
-
 
 const createRecords = async (data) => {
   const { dates, ...sessionData } = data;
@@ -44,7 +43,7 @@ const findOneById = async (id) => {
       {
         model: Doctor,
         as: "doctor",
-        attributes: ["fname", "mname", "lname"],
+        attributes: ["fname", "mname", "lname", "specialization"],
       },
     ],
   });
@@ -67,7 +66,7 @@ const findAllByQuery = async (filter, order) => {
       {
         model: Doctor,
         as: "doctor",
-        attributes: ["fname", "mname", "lname"],
+        attributes: ["fname", "mname", "lname", "specialization"],
       },
     ],
     order: [["date", order]],
@@ -91,14 +90,14 @@ const findAllSessionsByDoctorID = async (filter) => {
     include: [
       {
         model: Session,
-        as:'sessions',
+        as: "sessions",
         where: {
           doctor_id: filter,
         },
         include: [
           {
             model: Clinic,
-            as:'clinic',
+            as: "clinic",
             required: true,
           },
         ],
@@ -116,14 +115,14 @@ const findAllSessionsByClicicID = async (filter) => {
     include: [
       {
         model: Session,
-        as:'sessions',
+        as: "sessions",
         where: {
           clinic_id: filter,
         },
         include: [
           {
             model: Doctor,
-            as:'doctor',
+            as: "doctor",
             required: true,
           },
         ],
@@ -293,7 +292,9 @@ const findAllCancelledByQuery = async (filter, order) => {
 };
 
 const deleteCancelledRecord = async (cancel_id) => {
-  const result = await CancelSession.destroy({ where: { cancel_id: cancel_id } });
+  const result = await CancelSession.destroy({
+    where: { cancel_id: cancel_id },
+  });
   return result;
 };
 
