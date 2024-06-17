@@ -1,6 +1,8 @@
 const Clinic = require("./Clinic");
 const ClinicAddress = require("./ClinicAddress");
 const { Op, Sequelize } = require("sequelize");
+const Session = require("../Session/Session");
+const Doctor = require("../Doctor/Doctor");
 
 const createSingleRecord = async (singleRecord) => {
   const data = singleRecord.data;
@@ -63,6 +65,8 @@ const findByQuery = async (query) => {
 };
 
 const findByLocation = async (params) => {
+  const today = new Date().toISOString().split("T")[0];
+
   const clinics = await Clinic.findAll({
     where: Sequelize.where(
       Sequelize.fn(
@@ -79,8 +83,19 @@ const findByLocation = async (params) => {
     ),
     include: [
       {
-        model: ClinicAddress,
-        as: "clinicAddress",
+        model: Session,
+        as: "sessions",
+        required: true,
+        where: {
+          date: today,
+        },
+        include: [
+          {
+            model: Doctor,
+            as: "doctor",
+            required: true,
+          },
+        ],
       },
     ],
   });
