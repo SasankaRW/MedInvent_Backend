@@ -55,7 +55,7 @@ Clinic.init(
       },
     },
     location: {
-      type: DataTypes.GEOMETRY("POINT"),
+      type: DataTypes.GEOGRAPHY("POINT", 4326),
       allowNull: false,
     },
     clinicFees: {

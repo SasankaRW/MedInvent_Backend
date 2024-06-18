@@ -3,14 +3,15 @@ const DataBase = require("./database");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const { to, TE } = require("../../helper");
-var admin = require("firebase-admin");
-var serviceAccount = require("../../../config/push-notification-key.json");
+//var admin = require("firebase-admin");
+//var serviceAccount = require("../../../config/push-notification-key.json");
 const crypto = require('crypto');
+const NotificationFunctions = require('./notificationfunction');
 
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
 
 // Function to generate a secure OTP
 const generateOTP = (length) => {
@@ -50,7 +51,7 @@ const sendOTPtoLInkUser = async (getBody) => {
                 password:"admin",
                 receiverNic:receiverNic
             }
-            sendNotificationResults .push(sendPushNotification(0, dataObject, FcmTokens[i]));
+            sendNotificationResults .push(NotificationFunctions.sendPushNotification(0, dataObject, FcmTokens[i]));
             console.log(sendNotificationResults[i]);
         }
     }
@@ -65,55 +66,55 @@ const sendOTPtoLInkUser = async (getBody) => {
     return results;
 };
 
-const sendPushNotification = (number,dataObject,fcm_token) => {
+// const sendPushNotification = (number,dataObject,fcm_token) => {
 
-    const notificationSet =[
-        {
-            title:"OTP to Link Your Account",
-            body:"Tap To View OTP"
-        },
-        {
-            title:"Time to get Medicine",
-            body:"Tap TO View Details"
-        },
-        {
-            title:"Session Cancel Reminder",
-            body:"Tap TO View Details"
-        },
-        {
-            title:"Appoinment Reminder",
-            body:"Tap TO View Details"
-        }
-    ]
+//     const notificationSet =[
+//         {
+//             title:"OTP to Link Your Account",
+//             body:"Tap To View OTP"
+//         },
+//         {
+//             title:"Time to get Medicine",
+//             body:"Tap TO View Details"
+//         },
+//         {
+//             title:"Session Cancel Reminder",
+//             body:"Tap TO View Details"
+//         },
+//         {
+//             title:"Appoinment Reminder",
+//             body:"Tap TO View Details"
+//         }
+//     ]
 
-    try {
-        let message = {
-            notification: notificationSet[number],
-            data: dataObject,
-            token:fcm_token
-        };
+//     try {
+//         let message = {
+//             notification: notificationSet[number],
+//             data: dataObject,
+//             token:fcm_token
+//         };
 
-        return admin.messaging().send(message)
-            .then((response) => {
-                return{
-                    message: "notification sent",
-                    response: response
-                };
-            })
-            .catch((err) => {
-                return{
-                    message: err.message,
-                    error: err
-                };
-            });
+//         return admin.messaging().send(message)
+//             .then((response) => {
+//                 return{
+//                     message: "notification sent",
+//                     response: response
+//                 };
+//             })
+//             .catch((err) => {
+//                 return{
+//                     message: err.message,
+//                     error: err
+//                 };
+//             });
 
-    } catch (err) {
-        return{
-            message: err.message,
-            error: err
-        };
-    }
-};
+//     } catch (err) {
+//         return{
+//             message: err.message,
+//             error: err
+//         };
+//     }
+// };
 
 const checkOTP = async (getReqBody) => {
     try{
@@ -191,42 +192,42 @@ const addTokens = async (createData) => {
     return result;
 };
   
-const sendPushNotificationTemporary = (req, res, next) => {
-    try {
-        let message = {
-            notification: {
-                title: "testNotification",
-                body: "notification message"
-            },
-            data: {
-                OTP: "123",
-                sendBy: "isura",
-                password:"admin"
-            },
-            token: req.body.fcm_token
-        };
+// const sendPushNotificationTemporary = (req, res, next) => {
+//     try {
+//         let message = {
+//             notification: {
+//                 title: "testNotification",
+//                 body: "notification message"
+//             },
+//             data: {
+//                 OTP: "123",
+//                 sendBy: "isura",
+//                 password:"admin"
+//             },
+//             token: req.body.fcm_token
+//         };
 
-        admin.messaging().send(message)
-            .then((response) => {
-                return res.status(200).send({
-                    message: "notification sent",
-                    response: response
-                });
-            })
-            .catch((err) => {
-                return res.status(500).send({
-                    message: err.message,
-                    error: err
-                });
-            });
+//         admin.messaging().send(message)
+//             .then((response) => {
+//                 return res.status(200).send({
+//                     message: "notification sent",
+//                     response: response
+//                 });
+//             })
+//             .catch((err) => {
+//                 return res.status(500).send({
+//                     message: err.message,
+//                     error: err
+//                 });
+//             });
 
-    } catch (err) {
-        return res.status(500).send({
-            message: err.message,
-            error: err
-        });
-    }
-};
+//     } catch (err) {
+//         return res.status(500).send({
+//             message: err.message,
+//             error: err
+//         });
+//     }
+// };
 
 const updateIsActive = async (getBody) => {
     const{ userID , fcm_token , isActiveToken} = getBody;
@@ -282,12 +283,12 @@ const getAllOTP = async (getBody) => {
   
 module.exports = {
     sendOTPtoLInkUser,
-    sendPushNotification,
+    //sendPushNotification,
     checkOTP,
     getTokensToOTP,
     checkAvailability,
     addTokens,
     updateIsActive,
-    sendPushNotificationTemporary,
+   // sendPushNotificationTemporary,
     getAllOTP,
 };

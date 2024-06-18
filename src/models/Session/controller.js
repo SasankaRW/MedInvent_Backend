@@ -1,4 +1,4 @@
-const Service = require("./service"); 
+const Service = require("./service");
 
 const { SUCCESS, ERROR } = require("../../helper");
 
@@ -15,36 +15,12 @@ const createSession = async (req, res) => {
 
     ERROR(res, error, res.span);
   }
-}; 
+};
 
-const getSessionsDetailsByClinicID = async (req, res) => {
-  try {
-    const result = await Service.getSessionsDetailsByClinicID(req.params.clinic_id);
-
-    SUCCESS(res, SUC_CODES, result, req.span);
-  } catch (error) {
-    console.log(error);
-
-    ERROR(res, error, res.span);
-  }
-}; 
-
-const getSessionDetailsByID = async (req,res)=> {
+//no
+const getSessionDetailsByID = async (req, res) => {
   try {
     const result = await Service.getSessionDetailsByID(req.params.session_id);
-
-    SUCCESS(res, SUC_CODES, result, req.span);
-  }
-  catch (error) {
-    console.log(error);
-
-    ERROR(res, error, res.span);
-  }
-}
-
-const updateCancelSessionByID = async (req, res) => {
-  try {
-    const result = await Service.updateCancelSessionByID(req.params.session_id, req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -135,6 +111,18 @@ const getSessionsByDocAndClinicIDs = async (req, res) => {
   }
 };
 
+const getSessionsBySearch = async (req, res) => {
+  try {
+    const result = await Service.getSessionsBySearch(req.query);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const updateSession = async (req, res) => {
   try {
     const result = await Service.updateSession(req.params.session_id, req.body);
@@ -159,6 +147,75 @@ const deleteSession = async (req, res) => {
   }
 };
 
+//now
+const getSessionsDetailsByDocID = async (req, res) => {
+  try {
+    const result = await Service.getSessionsDetailsByDocID(
+      req.params.doctor_id
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const getSessionsDetailsByClinicID = async (req, res) => {
+  try {
+    const result = await Service.getSessionsDetailsByClinicID(
+      req.params.clinic_id
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const updateCancelSessionByID = async (req, res) => {
+  try {
+    const result = await Service.updateCancelSessionByID(req.params.session_id,req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const getCancelSessionsDetailsByUserID = async (req, res) => {
+  try {
+    const result = await Service.getCancelSessionsDetailsByUserID(req.params.userID, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const deleteCancelledSession = async (req, res) => {
+  try {
+    const result = await Service.deleteCancelledSession(req.params.cancel_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 module.exports = {
   createSession,
   getSessionById,
@@ -167,10 +224,13 @@ module.exports = {
   getPastSessionsByClinicID,
   getUpcomingSessionsByClinicID,
   getSessionsByDocAndClinicIDs,
+  getSessionsBySearch,
   deleteSession,
   updateSession,
-  //getSessionsDetailsByDocID,
+  getSessionsDetailsByDocID,
   getSessionsDetailsByClinicID,
   getSessionDetailsByID,
   updateCancelSessionByID,
+  getCancelSessionsDetailsByUserID,
+  deleteCancelledSession,
 };

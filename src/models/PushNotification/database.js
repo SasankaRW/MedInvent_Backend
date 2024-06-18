@@ -37,7 +37,7 @@ const findAllTokens = async (getBody) => {
   };
 
   const getTokensObject = {
-    include: {
+    include:{
       model: TokenStore,
       where: whereObject,
       attributes: ['fcm_token']
