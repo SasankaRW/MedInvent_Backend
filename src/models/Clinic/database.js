@@ -65,7 +65,9 @@ const findByQuery = async (query) => {
 };
 
 const findByLocation = async (params) => {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Colombo",
+  });
 
   const clinics = await Clinic.findAll({
     where: Sequelize.where(
