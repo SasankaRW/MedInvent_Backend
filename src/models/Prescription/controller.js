@@ -48,7 +48,10 @@ const getUserPrescriptions = async (req, res) => {
 
 const updatePrescription = async (req, res) => {
   try {
-    const result = await Service.updatePrescription(req.params.presid, req.body);
+    const result = await Service.updatePrescription(
+      req.params.presid,
+      req.body
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -58,17 +61,39 @@ const updatePrescription = async (req, res) => {
   }
 };
 
-// const deleteDoctor = async (req, res) => {
-//   try {
-//     const result = await Service.deleteDoctor(req.params.id);
+const addDailyMedications = async (req, res) => {
+  try {
+    const result = await Service.addDailyMedications(req.body);
 
-//     SUCCESS(res, SUC_CODES, result, req.span);
-//   } catch (error) {
-//     console.log(error);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
 
-//     ERROR(res, error, res.span);
-//   }
-// };
+    ERROR(res, error, res.span);
+  }
+};
+
+const getDailyMedications = async (req, res) => {
+  try {
+    const result = await Service.getDailyMedications(req.params.userid);
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (err) {
+    console.log(err);
+    ERROR(res, err, res.span);
+  }
+};
+
+const markAsTaken = async (req, res) => {
+  try {
+    const result = await Service.markAsTaken(req.params.medicationId);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
 
 module.exports = {
   createPrescription,
@@ -76,4 +101,8 @@ module.exports = {
   getDoctorPrescriptions,
   getUserPrescriptions,
   updatePrescription,
+
+  addDailyMedications,
+  getDailyMedications,
+  markAsTaken,
 };

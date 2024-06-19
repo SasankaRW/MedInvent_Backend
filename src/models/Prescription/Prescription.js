@@ -44,6 +44,7 @@ Prescription.init(
 Prescription.hasMany(PresMedicine, {
   foreignKey: "prescription_id",
   as: "presMedicine",
+  onDelete: "CASCADE",
 });
 PresMedicine.belongsTo(Prescription, { foreignKey: "prescription_id" });
 
