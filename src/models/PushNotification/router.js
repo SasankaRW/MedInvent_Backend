@@ -28,5 +28,8 @@ router.route("/update/isActive").put(Controller.updateIsActive);
 //get all otp relevant to specific user
 router.route("/get/All/OTP").post(Controller.getAllOTP);
 
+//delete specific OTP row from OTP table relevant to specific user
+router.route("/Receive/delete/:OTP_id").delete(Controller.deleteReceivedOTP);
+
 
 module.exports = router;

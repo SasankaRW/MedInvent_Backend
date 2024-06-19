@@ -61,6 +61,11 @@ const updateRecord = async (condition, dataNeedToUpdate) =>
 const findUpdatedData = async(query)=> await TokenStore.findOne(query);
 
 const findAllOTPs = async(query)=> await OTP.findAll(query);
+
+const deleteReceivedOTPRecord = async (OTP_id) => {
+  const result = await OTP.destroy({ where: { OTP_id: OTP_id } });
+  return result;
+};
   
 module.exports = {
   Schema: OTP,
@@ -72,5 +77,6 @@ module.exports = {
   createTokenRecode,
   updateRecord,
   findUpdatedData,
-  findAllOTPs
+  findAllOTPs,
+  deleteReceivedOTPRecord
 };

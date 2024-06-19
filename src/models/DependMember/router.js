@@ -26,6 +26,6 @@ router.route("/update/DependMember/:userID").put(Validator.update,Controller.upd
 router.route("/delete/DependMember/:dID").delete(Controller.deleteDependMemberDetailsByID);
 
 //link user
-router.route("/add/new/linked/DependMember/:userID").post(Controller.linkUserAsDepndMemberByID);
+router.route("/add/new/linked/DependMember").post(Controller.linkUserAsDepndMemberByID);
 
 module.exports = router;

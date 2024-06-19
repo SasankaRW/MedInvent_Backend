@@ -244,7 +244,8 @@ const updateCancelSessionByID = async (session_id, updateData) => {
     console.log("success first");
     const getRecordes ={
       where:{
-        session_id: session_id
+        session_id: session_id,
+        user_id: { [Op.not]: null }
       },
       attributes:["user_id"]
     };
@@ -342,15 +343,15 @@ const updateCancelSessionByID = async (session_id, updateData) => {
   //return session;
 };
 
-const getCancelSessionsDetailsByUserID = async (userID,getBody) => {
-  const{fcm_token}=getBody;
+const getCancelSessionsDetailsByUserID = async (userID) => {
+  //const{fcm_token}=getBody;
+  //fcm_token:fcm_token
 
   const getRecord = DataBase.findAllCancelledByQuery(
     {
       userID: userID,
-      fcm_token:fcm_token
     },
-    "ASC"
+    "DESC"
   );
 
   const [err, result] = await to(getRecord);
@@ -374,6 +375,146 @@ const deleteCancelledSession = async (cancel_id) => {
   return result;
 };
 
+const updateDocArrival = async (session_id, updateData) => {
+  dataNeedToUpdate = updateData;
+
+  const condition = {
+    where: {
+      session_id: session_id,
+    },
+  };
+
+  const updateRecord = DataBase.updateisArrived(condition, dataNeedToUpdate);
+
+  const [err, result] = await to(updateRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  if (!result) TE("Result not found");
+
+  let getDataTostore;
+  if(result==1)
+  {
+    getDataTostore= await DataBase.getUserDocCliniTokendata(session_id);
+    const user_id_array = getDataTostore[0].appointments;
+
+     //get active fcm token set and store in  TokenStorage=[];
+     let TokenStorage = [];
+     let userIDStorage = [];
+     if (user_id_array.length > 0) {
+       for (let i = 0; i < user_id_array.length; i++) {
+         let sendUID = {
+           userID: user_id_array[i].user_id,
+         };
+         let getUserTokens = await DataBase.findAllTokens(sendUID);
+         if (getUserTokens.length == 1) {
+           for (let j = 0; j < getUserTokens[0].TokenStores.length; j++) {
+             TokenStorage.push(getUserTokens[0].TokenStores[j].fcm_token);
+             userIDStorage.push(user_id_array[i].user_id);
+           }
+         }
+         else{
+           return "no active tokens";
+         }
+       }
+     }else{
+       return "no patients";
+     }
+
+     //rearrange data for store cancelSession table
+    const clinicName =getDataTostore[0].clinic.name;
+    const doctorFullName = `${getDataTostore[0].doctor.fname} ${getDataTostore[0].doctor.mname} ${getDataTostore[0].doctor.lname}`;
+    const date =getDataTostore[0].date;
+    const formattedDate = new Date(date).toISOString().split('T')[0];
+    const sess_id =getDataTostore[0].session_id;
+
+     //add cancel session details to  CancelSessionToupleArray=[];
+     DoctorArrivalToupleArray = [];
+     if (userIDStorage.length>=1) {
+       for (let x = 0; x < TokenStorage.length; x++) {
+         let createObeject = {
+           userID: userIDStorage[x],
+           doctorFullName: doctorFullName,
+           clinicName: clinicName,
+           fcm_token: TokenStorage[x],
+           date: formattedDate,
+           session_id:sess_id
+         };
+         DoctorArrivalToupleArray.push(createObeject);
+       }
+     }
+     else{
+       return "no user tokens and Ids";
+     }
+
+     //add cancel session details to cancelSession table in db
+    let createCancelSessionTouples = await DataBase.createDoctorArriveRows(
+      DoctorArrivalToupleArray
+    );
+
+    let sendNotificationResults = [];
+
+    if (createCancelSessionTouples) {
+      //send push notifications to users devices
+        for(let x=0;x<TokenStorage.length;x++)
+        {
+            const dataObject = {
+               userID:userIDStorage[x]
+            }
+            sendNotificationResults.push(NotificationFunctions.sendPushNotification(3, dataObject, TokenStorage[x]));
+            console.log(sendNotificationResults[x]);
+        }
+    }
+    else{
+      return "createDoctorArriveRows not completed successfully";
+    }
+
+    const results = await Promise.all(
+      sendNotificationResults.map((promise) => to(promise))
+    );
+
+    results.forEach(([err, result]) => {
+      if (err) TE(err.errors ? err.errors[0].message : err);
+      if (!result) TE("Notification sending failed");
+    });
+
+    return results;
+
+  }
+  else{
+    return "error Occcoured when updating isArrived";
+  }
+};
+
+const getDoctorArriveDetailsByUserID = async (userID) => {
+  
+  const getRecord = DataBase.findAllArriveMessagesByQuery(
+    {
+      userID: userID,
+    },
+    "DESC"
+  );
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const deleteDoctorArriveRow = async (arrive_id) => {
+  const deleteRecode = DataBase.deleteArriveRecord(arrive_id);
+
+  const [err, result] = await to(deleteRecode);
+
+  if (err) TE(err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
 
 module.exports = {
   createSession,
@@ -391,4 +532,7 @@ module.exports = {
   updateCancelSessionByID,
   getCancelSessionsDetailsByUserID,
   deleteCancelledSession,
+  updateDocArrival,
+  getDoctorArriveDetailsByUserID,
+  deleteDoctorArriveRow,
 };
