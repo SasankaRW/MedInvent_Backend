@@ -67,6 +67,21 @@ const checkNic = async (req, res) => {
   }
 };
 
+const checkEmailAndNic = async (req, res) => {
+  try {
+    const result = await Service.checkEmailAndNic(
+      req.query.email,
+      req.query.nic
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const createPatientUserData = async (req, res) => {
   try {
     const result = await Service.createPatientUserData(req.body);
@@ -107,19 +122,13 @@ const deletePatientUserDetailsByID = async (req, res) => {
 };
 
 module.exports = {
-  getPatientUserDetailsByID,
-
-  getPatientUserDetailsByNic,
-
   getAllPatientUsersDetails,
-
+  getPatientUserDetailsByID,
+  getPatientUserDetailsByNic,
   createPatientUserData,
-
   updatePatientUserDetailsByID,
-
   deletePatientUserDetailsByID,
-
   checkEmailAndMobileNo,
-
+  checkEmailAndNic,
   checkNic,
 };

@@ -18,6 +18,8 @@ router.route("/check/emailandmobileno").get(Controller.checkEmailAndMobileNo);
 
 router.route("/check/nic/:nic").get(Controller.checkNic);
 
+router.route("/check/emailandnic").get(Controller.checkEmailAndNic);
+
 router
   .route("/get/PatientUser/details/byNic/:nic")
   .get(Controller.getPatientUserDetailsByNic);

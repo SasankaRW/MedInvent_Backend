@@ -1,5 +1,3 @@
-const Constants = require("./constants");
-
 const DataBase = require("./database");
 
 const Sequelize = require("sequelize");
@@ -11,9 +9,9 @@ const { to, TE } = require("../../helper");
 const getAllPatientUsersDetails = async (params) => {
   Object.assign(params);
 
-  const getRecodes = DataBase.findByQuery();
+  const getRecords = DataBase.findByQuery();
 
-  const [err, result] = await to(getRecodes);
+  const [err, result] = await to(getRecords);
 
   if (err) TE(err);
 
@@ -23,11 +21,11 @@ const getAllPatientUsersDetails = async (params) => {
 };
 
 const getPatientUserDetailsByID = async (filter) => {
-  const getRecode = DataBase.findOneByQuery({
+  const getRecord = DataBase.findOneByQuery({
     where: filter,
   });
 
-  const [err, result] = await to(getRecode);
+  const [err, result] = await to(getRecord);
 
   if (err) TE(err);
 
@@ -37,11 +35,11 @@ const getPatientUserDetailsByID = async (filter) => {
 };
 
 const getPatientUserDetailsByNic = async (filter) => {
-  const getRecode = DataBase.findOneByQuery({
+  const getRecord = DataBase.findOneByQuery({
     where: filter,
   });
 
-  const [err, result] = await to(getRecode);
+  const [err, result] = await to(getRecord);
 
   if (err) TE(err);
 
@@ -51,13 +49,13 @@ const getPatientUserDetailsByNic = async (filter) => {
 };
 
 const checkEmailAndMobileNo = async (email, mobileNo) => {
-  const getRecode = DataBase.findOneByQuery({
+  const getRecord = DataBase.findOneByQuery({
     where: {
       [Op.or]: [{ email: email }, { mobileNo: mobileNo }],
     },
   });
 
-  const [err, result] = await to(getRecode);
+  const [err, result] = await to(getRecord);
 
   if (err) TE(err);
 
@@ -67,13 +65,13 @@ const checkEmailAndMobileNo = async (email, mobileNo) => {
 };
 
 const checkNic = async (nic) => {
-  const getRecode = DataBase.findOneByQuery({
+  const getRecord = DataBase.findOneByQuery({
     where: {
       nic: nic,
     },
   });
 
-  const [err, result] = await to(getRecode);
+  const [err, result] = await to(getRecord);
 
   if (err) TE(err);
 
@@ -82,10 +80,27 @@ const checkNic = async (nic) => {
   return result;
 };
 
-const createPatientUserData = async (data) => {
-  const createSingleRecode = DataBase.createSingleRecode(data.userDetails);
+const checkEmailAndNic = async (email, nic) => {
+  const getRecord = DataBase.findOneByQuery({
+    where: {
+      [Op.and]: [{ email: email }, { nic: nic }],
+    },
+  });
 
-  const [err, result] = await to(createSingleRecode);
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result)
+    return { success: false, message: "Email and NIC does not match" };
+  
+  return result;
+};
+
+const createPatientUserData = async (data) => {
+  const createSingleRecord = DataBase.createSingleRecord(data.userDetails);
+
+  const [err, result] = await to(createSingleRecord);
 
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
@@ -95,9 +110,9 @@ const createPatientUserData = async (data) => {
 };
 
 const updatePatientUserDetailsByID = async (filter, updateData) => {
-  const updateRecode = DataBase.updateRecode({ where: filter }, updateData);
+  const updateRecord = DataBase.updateRecord({ where: filter }, updateData);
 
-  const [err, result] = await to(updateRecode);
+  const [err, result] = await to(updateRecord);
 
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
@@ -109,9 +124,9 @@ const updatePatientUserDetailsByID = async (filter, updateData) => {
 };
 
 const deletePatientUserDetailsByID = async (data) => {
-  const deleteRecode = DataBase.deleteSingleRecode(data);
+  const deleteRecord = DataBase.deleteSingleRecord(data);
 
-  const [err, result] = await to(deleteRecode);
+  const [err, result] = await to(deleteRecord);
 
   if (err) TE(err);
 
@@ -122,18 +137,12 @@ const deletePatientUserDetailsByID = async (data) => {
 
 module.exports = {
   getAllPatientUsersDetails,
-
   getPatientUserDetailsByID,
-
   getPatientUserDetailsByNic,
-
   createPatientUserData,
-
   updatePatientUserDetailsByID,
-
   deletePatientUserDetailsByID,
-
   checkEmailAndMobileNo,
-
+  checkEmailAndNic,
   checkNic,
 };
