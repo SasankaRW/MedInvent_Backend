@@ -13,7 +13,7 @@ const NotificationFunctions = require('./notificationfunction');
 //     credential: admin.credential.cert(serviceAccount)
 // });
 
-// Function to generate a secure OTP
+//Function to generate a secure OTP
 const generateOTP = (length) => {
     const otp = crypto.randomInt(0, Math.pow(10, length) + 1).toString().padStart(length, '0');
     return otp;
@@ -118,13 +118,12 @@ const sendOTPtoLInkUser = async (getBody) => {
 
 const checkOTP = async (getReqBody) => {
     try{
-        const{FcmToken,senderUUID,receiverNic,OTPNumber}=getReqBody;
+        const{senderUUID,receiverNic,OTPNumber}=getReqBody;
         let is_correctOTP=false;
 
         const findOTPObject = {
         where: {
             senderUUID:senderUUID,
-            receiverToken:FcmToken,
             OTPNumber:OTPNumber,
             receiverNic:receiverNic
         },
@@ -272,7 +271,7 @@ const getAllOTP = async (getBody) => {
       },
       order: [["createdAt", 'DESC']],
     });
-  
+
     const [err, result] = await to(getRecode);
   
     if (err) TE(err);
