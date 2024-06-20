@@ -79,6 +79,9 @@ Doctor.init(
     note: {
       type: DataTypes.STRING,
       allowNull: true,
+      validate: {
+        notEmpty: false,
+      },
     },
   },
   {
