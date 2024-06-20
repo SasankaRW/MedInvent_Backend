@@ -18,6 +18,11 @@ Prescription.init(
         notEmpty: true,
       },
     },
+    assignedTo: {
+      type: DataTypes.STRING(36),
+      allowNull: true,
+      defaultValue: null,
+    },
     createdBy: {
       type: DataTypes.ENUM("doctor", "user"),
       allowNull: false,

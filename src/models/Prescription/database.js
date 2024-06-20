@@ -79,6 +79,17 @@ const updateRecord = async (presId, data) => {
   );
 };
 
+const assignPrescription = async (presId, assignedTo) => {
+  return await Prescription.update(
+    { assignedTo: assignedTo },
+    {
+      where: {
+        prescription_id: presId,
+      },
+    }
+  );
+};
+
 const findOneById = async (id) => {
   return await Doctor.findByPk(id);
 };
@@ -137,6 +148,7 @@ module.exports = {
   findByQuery,
   findOneById,
   updateRecord,
+  assignPrescription,
 
   addDailyMedications,
   getDailyMedications,

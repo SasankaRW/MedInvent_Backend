@@ -45,6 +45,12 @@ const updateSchema = Joi.object({
   reminders: Joi.array().items(reminderSchema).required(),
 });
 
+const assignedSchema = Joi.object({
+  assignedTo: Joi.alternatives()
+    .try(Joi.string().valid("user"), Joi.string().guid({ version: ["uuidv4"] }))
+    .required(),
+});
+
 const create = async (req, res, next) => {
   try {
     await prescriptionSchema.validateAsync(req.body.data);
@@ -63,7 +69,17 @@ const update = async (req, res, next) => {
   }
 };
 
+const assign = async (req, res, next) => {
+  try {
+    await assignedSchema.validateAsync(req.body.data);
+    next();
+  } catch (error) {
+    VALIDATION_ERROR(res, error);
+  }
+};
+
 module.exports = {
   create,
   update,
+  assign,
 };

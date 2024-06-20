@@ -22,6 +22,9 @@ router
 router
   .route("/update/:presid")
   .put(Validator.update, Controller.updatePrescription);
+router
+  .route("/assign/:presid")
+  .put(Validator.assign, Controller.assignPrescription);
 
 //daily medication routes
 router.route("/add/dailyMedications").post(Controller.addDailyMedications);

@@ -63,6 +63,16 @@ const updatePrescription = async (presId, data) => {
   return result;
 };
 
+const assignPrescription = async (presId, data) => {
+  const updateRecord = DataBase.assignPrescription(presId, data);
+
+  const [err, result] = await to(updateRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  return result;
+};
+
 const addDailyMedications = async (data) => {
   const addDailyMedications = DataBase.addDailyMedications(data);
 
@@ -105,6 +115,7 @@ module.exports = {
   getDoctorPrescriptions,
   getUserPrescriptions,
   updatePrescription,
+  assignPrescription,
 
   getDailyMedications,
   addDailyMedications,

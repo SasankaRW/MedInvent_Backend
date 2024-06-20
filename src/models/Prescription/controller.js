@@ -61,6 +61,21 @@ const updatePrescription = async (req, res) => {
   }
 };
 
+const assignPrescription = async (req, res) => {
+  try {
+    const result = await Service.assignPrescription(
+      req.params.presid,
+      req.body
+    );
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const addDailyMedications = async (req, res) => {
   try {
     const result = await Service.addDailyMedications(req.body);
@@ -104,6 +119,7 @@ module.exports = {
   getDoctorPrescriptions,
   getUserPrescriptions,
   updatePrescription,
+  assignPrescription,
 
   addDailyMedications,
   getDailyMedications,
