@@ -27,29 +27,24 @@ const getDependMembersDetailsByID = async (req, res) => {
 
     ERROR(res, error, res.span);
   }
-};
+}; 
 
-const getDependMemberDetailsByID = async (req, res) => {
+const getDependMemberDetailsByID = async (req,res)=> {
   try {
-    const result = await Service.getDependMemberDetailsByID(
-      req.params.userID,
-      req.body
-    );
+    const result = await Service.getDependMemberDetailsByID(req.params.userID,req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
-  } catch (error) {
+  }
+  catch (error) {
     console.log(error);
 
     ERROR(res, error, res.span);
   }
-};
+}
 
 const createDependMemberData = async (req, res) => {
   try {
-    const result = await Service.createDependMemberData(
-      req.params.userID,
-      req.body
-    );
+    const result = await Service.createDependMemberData(req.params.userID,req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -61,10 +56,7 @@ const createDependMemberData = async (req, res) => {
 
 const updateDependMemberDetailsByID = async (req, res) => {
   try {
-    const result = await Service.updateDependMemberDetailsByID(
-      req.params.userID,
-      req.body
-    );
+    const result = await Service.updateDependMemberDetailsByID(req.params.userID,req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -97,6 +89,7 @@ const linkUserAsDepndMemberByID = async (req, res) => {
     ERROR(res, error, res.span);
   }
 };
+
 
 module.exports = {
   getDependMembersDetailsByID,
