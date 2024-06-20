@@ -46,9 +46,8 @@ const updateSchema = Joi.object({
 });
 
 const assignedSchema = Joi.object({
-  assignedTo: Joi.alternatives()
-    .try(Joi.string().valid("user"), Joi.string().guid({ version: ["uuidv4"] }))
-    .required(),
+  assignedTo: Joi.string().valid("user", "dependMember").required(),
+  dID: Joi.string().guid({ version: "uuidv4" }).allow(null).optional(),
 });
 
 const create = async (req, res, next) => {

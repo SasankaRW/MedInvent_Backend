@@ -3,6 +3,7 @@ const PresMedicine = require("./PresMedicine");
 const sequelize = require("../../../config/database");
 const { Op } = require("sequelize");
 const MedicationIntake = require("./MedicationIntake");
+const DependMember = require("../DependMember/DependMember");
 
 async function createPrescription(prescriptionData, medicineData) {
   const { presName, createdBy, doctorName, userID } = prescriptionData;
@@ -53,7 +54,14 @@ const findAll = async (userid) => {
       userID: userid,
     },
     order: [["createdAt", "DESC"]],
-    include: [{ model: PresMedicine, as: "presMedicine" }],
+    include: [
+      { model: PresMedicine, as: "presMedicine" },
+      {
+        model: DependMember,
+        as: "dependMember",
+        attributes: ["Fname", "Lname", "relationship"],
+      },
+    ],
   });
 };
 
@@ -79,15 +87,12 @@ const updateRecord = async (presId, data) => {
   );
 };
 
-const assignPrescription = async (presId, assignedTo) => {
-  return await Prescription.update(
-    { assignedTo: assignedTo },
-    {
-      where: {
-        prescription_id: presId,
-      },
-    }
-  );
+const assignPrescription = async (presId, data) => {
+  return await Prescription.update(data, {
+    where: {
+      prescription_id: presId,
+    },
+  });
 };
 
 const findOneById = async (id) => {

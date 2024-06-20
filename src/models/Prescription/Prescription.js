@@ -37,6 +37,11 @@ Prescription.init(
         notEmpty: false,
       },
     },
+    dID: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,
