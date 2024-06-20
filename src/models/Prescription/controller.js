@@ -85,7 +85,10 @@ const getDailyMedications = async (req, res) => {
 
 const markAsTaken = async (req, res) => {
   try {
-    const result = await Service.markAsTaken(req.params.medicationId);
+    const result = await Service.markAsTaken(
+      req.params.medicationId,
+      req.body.currentStatus
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {

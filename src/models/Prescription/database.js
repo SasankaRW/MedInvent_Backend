@@ -112,15 +112,22 @@ const getDailyMedications = async (userId) => {
   });
 };
 
-const markAsTaken = async (medicationId) => {
-  return await MedicationIntake.update(
-    { taken: true },
-    {
-      where: {
-        id: medicationId,
-      },
-    }
-  );
+const markAsTaken = async (medicationId, currentStatus) => {
+  if (currentStatus) {
+    return await MedicationIntake.update(
+      { taken: false },
+      {
+        where: { id: medicationId },
+      }
+    );
+  } else {
+    return await MedicationIntake.update(
+      { taken: true },
+      {
+        where: { id: medicationId },
+      }
+    );
+  }
 };
 
 module.exports = {

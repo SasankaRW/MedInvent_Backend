@@ -87,8 +87,8 @@ const getDailyMedications = async (userid) => {
   return result;
 };
 
-const markAsTaken = async (medicationId) => {
-  const markAsTaken = DataBase.markAsTaken(medicationId);
+const markAsTaken = async (medicationId, currentStatus) => {
+  const markAsTaken = DataBase.markAsTaken(medicationId, currentStatus);
 
   const [err, result] = await to(markAsTaken);
 
