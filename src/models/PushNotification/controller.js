@@ -94,6 +94,18 @@ const getAllOTP = async (req, res) => {
   }
 };
 
+const deleteReceivedOTP = async (req, res) => {
+  try {
+    const result = await Service.deleteReceivedOTP(req.params.OTP_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 module.exports = {
     sendOTPtoLInkUser,
     checkOTP,
@@ -103,5 +115,6 @@ module.exports = {
     updateIsActive,
     sendPushNotificationTemporary,
     getAllOTP,
+    deleteReceivedOTP
 };
   

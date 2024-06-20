@@ -5,6 +5,7 @@ const Doctor = require("../Doctor/Doctor");
 const Appointment = require("../Appointment/Appointment");
 const TokenStore = require("../PushNotification/TokenStore");
 const CancelSession = require("../Session/CancelSession");
+const DoctorArrive = require("../Session/DoctorArrive");
 const PatientUser = require("../PatientUser/patientUser");
 const { Op } = require("sequelize");
 
@@ -298,6 +299,75 @@ const deleteCancelledRecord = async (cancel_id) => {
   return result;
 };
 
+const updateisArrived = async (condition, dataNeedToUpdate) => {
+  const [updated] = await Session.update(dataNeedToUpdate, condition);
+  return updated;
+};
+
+const getUserDocCliniTokendata = async(session_id)=>{
+  const results = await Session.findAll({
+    where:{
+      session_id:session_id
+    },
+    attributes:["date","session_id"],
+    include:[
+      {
+        model:Doctor,
+        as:"doctor",
+        required:true,
+        attributes: ["fname", "mname", "lname"],
+      },
+      {
+        model:Clinic,
+        as:"clinic",
+        required:true,
+        attributes: ["name"],
+      },
+      {
+        model:Appointment,
+        as:"appointments",
+        required: true,
+        attributes: ["user_id"],
+        where:{
+          user_id: { [Op.not]: null }
+        }
+      }
+    ]
+  });
+
+  return results;
+}
+
+const createDoctorArriveRows = async (DoctorArrivalToupleArray) => {
+  let transaction;
+  let is_succes = false;
+  try {
+    transaction = await sequelize.transaction();
+    for (let i = 0; i < DoctorArrivalToupleArray.length; i++) {
+      await DoctorArrive.create(DoctorArrivalToupleArray[i], { transaction });
+    }
+    await transaction.commit();
+  } catch (error) {
+    if (transaction) await transaction.rollback();
+    throw error;
+  }
+  is_succes = true;
+  return is_succes;
+};
+
+const findAllArriveMessagesByQuery = async (filter, order) => {
+  return await DoctorArrive.findAll({
+    where: filter,
+    order: [["date", order]],
+  });
+};
+
+const deleteArriveRecord = async (arrive_id) => {
+  const result = await DoctorArrive.destroy({ where: { arrive_id: arrive_id } });
+  return result;
+};
+
+
 module.exports = {
   Schema: Session,
   findOneById,
@@ -317,4 +387,9 @@ module.exports = {
   createCancelSession,
   findAllCancelledByQuery,
   deleteCancelledRecord,
+  updateisArrived,
+  getUserDocCliniTokendata,
+  createDoctorArriveRows,
+  findAllArriveMessagesByQuery,
+  deleteArriveRecord,
 };

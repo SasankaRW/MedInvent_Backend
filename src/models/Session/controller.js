@@ -193,7 +193,7 @@ const updateCancelSessionByID = async (req, res) => {
 //now
 const getCancelSessionsDetailsByUserID = async (req, res) => {
   try {
-    const result = await Service.getCancelSessionsDetailsByUserID(req.params.userID, req.body);
+    const result = await Service.getCancelSessionsDetailsByUserID(req.params.userID);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -216,6 +216,47 @@ const deleteCancelledSession = async (req, res) => {
   }
 };
 
+//now 
+const updateDocArrival = async (req, res) => {
+  try {
+    const result = await Service.updateDocArrival(req.params.session_id, req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const getDoctorArriveDetailsByUserID = async (req, res) => {
+  try {
+    const result = await Service.getDoctorArriveDetailsByUserID(req.params.userID);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+//now
+const deleteDoctorArriveRow = async (req, res) => {
+  try {
+    const result = await Service.deleteDoctorArriveRow(req.params.arrive_id);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+
+
 module.exports = {
   createSession,
   getSessionById,
@@ -233,4 +274,7 @@ module.exports = {
   updateCancelSessionByID,
   getCancelSessionsDetailsByUserID,
   deleteCancelledSession,
+  updateDocArrival,
+  getDoctorArriveDetailsByUserID,
+  deleteDoctorArriveRow,
 };

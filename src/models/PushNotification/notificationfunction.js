@@ -22,7 +22,7 @@ const sendPushNotification = (number,dataObject,fcm_token) => {
             body:"Tap TO View Details"
         },
         {
-            title:"Appoinment Reminder",
+            title:"Doctor Arrive Reminder",
             body:"Tap TO View Details"
         }
     ]

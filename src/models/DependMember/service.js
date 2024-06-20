@@ -144,12 +144,13 @@ const deleteDependMemberDetailsByID = async (getID) => {
   return result;
 };
 
-const linkUserAsDepndMemberByID = async (getID,getReqBody) => {
-  const{relationship,nic} = getReqBody;
+const linkUserAsDepndMemberByID = async (getReqBody) => {
+  const{relationship,nic,mobileNo,userID} = getReqBody;
 
   const getUserObject = {
     where: {
-      nic:nic
+      nic:nic,
+      mobileNo:mobileNo
     },
     attributes:['Fname','Lname','dob','gender','picPath']
   }
@@ -173,7 +174,7 @@ const linkUserAsDepndMemberByID = async (getID,getReqBody) => {
     nic:nic
   }
   console.log(createData);
-  const finalResult = await createDependMemberData(getID,createData);
+  const finalResult = await createDependMemberData(userID,createData);
 
   return finalResult;
 };

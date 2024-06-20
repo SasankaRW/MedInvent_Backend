@@ -15,7 +15,7 @@ const NotificationFunctions = require('./notificationfunction');
 
 // Function to generate a secure OTP
 const generateOTP = (length) => {
-    const otp = crypto.randomInt(0, Math.pow(10, length)).toString().padStart(length, '0');
+    const otp = crypto.randomInt(0, Math.pow(10, length) + 1).toString().padStart(length, '0');
     return otp;
 };
 
@@ -270,6 +270,7 @@ const getAllOTP = async (getBody) => {
         receiverNic: receiverNic,
         receiverToken:receiverToken
       },
+      order: [["createdAt", 'DESC']],
     });
   
     const [err, result] = await to(getRecode);
@@ -280,6 +281,18 @@ const getAllOTP = async (getBody) => {
   
     return result;
 };
+
+const deleteReceivedOTP = async (OTP_id) => {
+    const deleteRecode = DataBase.deleteReceivedOTPRecord(OTP_id);
+  
+    const [err, result] = await to(deleteRecode);
+  
+    if (err) TE(err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+  };
   
 module.exports = {
     sendOTPtoLInkUser,
@@ -291,4 +304,5 @@ module.exports = {
     updateIsActive,
    // sendPushNotificationTemporary,
     getAllOTP,
+    deleteReceivedOTP,
 };

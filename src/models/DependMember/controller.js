@@ -80,7 +80,7 @@ const deleteDependMemberDetailsByID = async (req, res) => {
 
 const linkUserAsDepndMemberByID = async (req, res) => {
   try {
-    const result = await Service.linkUserAsDepndMemberByID(req.params.userID,req.body);
+    const result = await Service.linkUserAsDepndMemberByID(req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
