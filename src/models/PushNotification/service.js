@@ -15,7 +15,7 @@ const NotificationFunctions = require('./notificationfunction');
 
 //Function to generate a secure OTP
 const generateOTP = (length) => {
-    const otp = crypto.randomInt(0, Math.pow(10, length) + 1).toString().padStart(length, '0');
+    const otp = crypto.randomInt(1000 ,9999).toString().padStart(length, '0');
     return otp;
 };
 
