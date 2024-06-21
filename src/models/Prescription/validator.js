@@ -38,6 +38,8 @@ const prescriptionSchema = Joi.object({
     then: Joi.string().required(),
   }),
   presMedicine: Joi.array().items(presMedicineSchema).required(),
+  assignedTo: Joi.string().valid("user", "dependMember").optional().allow(null),
+  dID: Joi.string().guid({ version: "uuidv4" }).optional().allow(null),
 });
 
 const updateSchema = Joi.object({

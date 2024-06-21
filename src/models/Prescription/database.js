@@ -59,7 +59,7 @@ const findAll = async (userid) => {
       {
         model: DependMember,
         as: "dependMember",
-        attributes: ["Fname", "Lname", "relationship"],
+        attributes: ["dID", "Fname", "Lname", "relationship"],
       },
     ],
   });
