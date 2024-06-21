@@ -118,6 +118,8 @@ const updatePatientUserDetailsByID = async (filter, updateData) => {
 
   if (!result) TE("Result not found");
 
+  await DataBase.updateRecord_address({ where: filter }, updateData);
+
   const patientData = await DataBase.findOneByQuery({ where: filter });
 
   return patientData;

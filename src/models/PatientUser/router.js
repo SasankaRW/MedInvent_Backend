@@ -30,7 +30,7 @@ router
 
 router
   .route("/update/PatientUser/:userID")
-  .put(Validator.update, Controller.updatePatientUserDetailsByID);
+  .put(Controller.updatePatientUserDetailsByID);
 
 router
   .route("/delete/PatientUser/:userID")

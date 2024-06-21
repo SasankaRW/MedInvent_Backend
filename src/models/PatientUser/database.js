@@ -42,6 +42,9 @@ const findByQuery = async (query) =>
     ],
   });
 
+const updateRecord_address = async (condition, dataNeedToUpdate) =>
+  await PatientAddress.update(dataNeedToUpdate, condition);
+
 module.exports = {
   Schema: PatientUser,
   updateRecord: updateRecord,
@@ -50,4 +53,5 @@ module.exports = {
   updateMultipleRecords: updateMultipleRecords,
   createSingleRecord,
   deleteSingleRecord,
+  updateRecord_address
 };
