@@ -1,19 +1,18 @@
 const Service = require("./service");
 const { SUC_CODES } = require("./constants").Codes;
 const { SUCCESS, ERROR } = require("../../helper");
-const NotificationFunctions =require('./notificationfunction');
-
+const NotificationFunctions = require("./notificationfunction");
 
 const sendOTPtoLInkUser = async (req, res) => {
-    try {
-      const result = await Service.sendOTPtoLInkUser(req.body);
-  
-      SUCCESS(res, SUC_CODES, result, req.span);
-    } catch (error) {
-      console.log(error);
-  
-      ERROR(res, error, res.span);
-    }
+  try {
+    const result = await Service.sendOTPtoLInkUser(req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
 };
 
 const checkOTP = async (req, res) => {
@@ -28,35 +27,37 @@ const checkOTP = async (req, res) => {
   }
 };
 
-const sendPushNotificationTemporary = async (req,res,next) => {
-    try {
-      const result = await NotificationFunctions.sendPushNotificationTemporary(req,res,next);
-    } catch (error) {
-      console.log(error);
-    }
+const sendPushNotificationTemporary = async (req, res, next) => {
+  try {
+    const result = await NotificationFunctions.sendPushNotificationTemporary(
+      req,
+      res,
+      next
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const getTokensToOTP =async(req,res)=>{
+const getTokensToOTP = async (req, res) => {
   try {
     const result = await Service.getTokensToOTP(req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
-
     ERROR(res, error, res.span);
   }
-}
+};
 
-const checkAvailability =async(req,res)=>{
+const checkAvailability = async (req, res) => {
   try {
     const result = await Service.checkAvailability(req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
-
     ERROR(res, error, res.span);
   }
-}
+};
 
 const addTokens = async (req, res) => {
   try {
@@ -107,14 +108,13 @@ const deleteReceivedOTP = async (req, res) => {
 };
 
 module.exports = {
-    sendOTPtoLInkUser,
-    checkOTP,
-    getTokensToOTP,
-    checkAvailability,
-    addTokens,
-    updateIsActive,
-    sendPushNotificationTemporary,
-    getAllOTP,
-    deleteReceivedOTP
+  sendOTPtoLInkUser,
+  checkOTP,
+  getTokensToOTP,
+  checkAvailability,
+  addTokens,
+  updateIsActive,
+  sendPushNotificationTemporary,
+  getAllOTP,
+  deleteReceivedOTP,
 };
-  

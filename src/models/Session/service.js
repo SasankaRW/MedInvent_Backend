@@ -1,9 +1,5 @@
-const Constants = require("./constants");
-
 const DataBase = require("./database");
-
 const { Op } = require("sequelize");
-
 const { to, TE } = require("../../helper");
 const { native } = require("pg");
 
@@ -242,14 +238,14 @@ const updateCancelSessionByID = async (session_id, updateData) => {
   if (result == 1) {
     //get userID set
     console.log("success first");
-    const getRecordes ={
-      where:{
+    const getRecordes = {
+      where: {
         session_id: session_id,
-        user_id: { [Op.not]: null }
+        user_id: { [Op.not]: null },
       },
-      attributes:["user_id"]
+      attributes: ["user_id"],
     };
-    
+
     //add try from here
     const getDetails = await DataBase.getPatientsdetails(getRecordes);
 
@@ -269,7 +265,7 @@ const updateCancelSessionByID = async (session_id, updateData) => {
           }
         }
       }
-    }else{
+    } else {
       return "no patients";
     }
 
@@ -280,10 +276,10 @@ const updateCancelSessionByID = async (session_id, updateData) => {
     );
 
     //rearrange data for store cancelSession table
-    const{doctor,clinic,date}=getsessionDetails;
+    const { doctor, clinic, date } = getsessionDetails;
     const doctorFullName = `${doctor.fname} ${doctor.mname} ${doctor.lname}`;
-    const clinicName =clinic.name;
-    const formattedDate = new Date(date).toISOString().split('T')[0];
+    const clinicName = clinic.name;
+    const formattedDate = new Date(date).toISOString().split("T")[0];
 
     //add cancel session details to  CancelSessionToupleArray=[];
     CancelSessionToupleArray = [];
@@ -298,8 +294,7 @@ const updateCancelSessionByID = async (session_id, updateData) => {
         };
         CancelSessionToupleArray.push(createObeject);
       }
-    }
-    else{
+    } else {
       return "error occoured when getting session details";
     }
 
@@ -312,16 +307,20 @@ const updateCancelSessionByID = async (session_id, updateData) => {
 
     if (createCancelSessionTouples) {
       //send push notifications to users devices
-        for(let x=0;x<TokenStorage.length;x++)
-        {
-            const dataObject = {
-               userID:userIDStorage[x]
-            }
-            sendNotificationResults.push(NotificationFunctions.sendPushNotification(2, dataObject, TokenStorage[x]));
-            console.log(sendNotificationResults[x]);
-        }
-    }
-    else{
+      for (let x = 0; x < TokenStorage.length; x++) {
+        const dataObject = {
+          userID: userIDStorage[x],
+        };
+        sendNotificationResults.push(
+          NotificationFunctions.sendPushNotification(
+            2,
+            dataObject,
+            TokenStorage[x]
+          )
+        );
+        console.log(sendNotificationResults[x]);
+      }
+    } else {
       return "createCancelSessionTouples not completed successfully";
     }
 
@@ -335,10 +334,8 @@ const updateCancelSessionByID = async (session_id, updateData) => {
     });
 
     return results;
-
-  }
-  else{
-     return "iscancelled not updated correctly";
+  } else {
+    return "iscancelled not updated correctly";
   }
   //return session;
 };
@@ -393,61 +390,58 @@ const updateDocArrival = async (session_id, updateData) => {
   if (!result) TE("Result not found");
 
   let getDataTostore;
-  if(result==1)
-  {
-    getDataTostore= await DataBase.getUserDocCliniTokendata(session_id);
+  if (result == 1) {
+    getDataTostore = await DataBase.getUserDocCliniTokendata(session_id);
     const user_id_array = getDataTostore[0].appointments;
 
-     //get active fcm token set and store in  TokenStorage=[];
-     let TokenStorage = [];
-     let userIDStorage = [];
-     if (user_id_array.length > 0) {
-       for (let i = 0; i < user_id_array.length; i++) {
-         let sendUID = {
-           userID: user_id_array[i].user_id,
-         };
-         let getUserTokens = await DataBase.findAllTokens(sendUID);
-         if (getUserTokens.length == 1) {
-           for (let j = 0; j < getUserTokens[0].TokenStores.length; j++) {
-             TokenStorage.push(getUserTokens[0].TokenStores[j].fcm_token);
-             userIDStorage.push(user_id_array[i].user_id);
-           }
-         }
-         else{
-           return "no active tokens";
-         }
-       }
-     }else{
-       return "no patients";
-     }
+    //get active fcm token set and store in  TokenStorage=[];
+    let TokenStorage = [];
+    let userIDStorage = [];
+    if (user_id_array.length > 0) {
+      for (let i = 0; i < user_id_array.length; i++) {
+        let sendUID = {
+          userID: user_id_array[i].user_id,
+        };
+        let getUserTokens = await DataBase.findAllTokens(sendUID);
+        if (getUserTokens.length == 1) {
+          for (let j = 0; j < getUserTokens[0].TokenStores.length; j++) {
+            TokenStorage.push(getUserTokens[0].TokenStores[j].fcm_token);
+            userIDStorage.push(user_id_array[i].user_id);
+          }
+        } else {
+          return "no active tokens";
+        }
+      }
+    } else {
+      return "no patients";
+    }
 
-     //rearrange data for store cancelSession table
-    const clinicName =getDataTostore[0].clinic.name;
+    //rearrange data for store cancelSession table
+    const clinicName = getDataTostore[0].clinic.name;
     const doctorFullName = `${getDataTostore[0].doctor.fname} ${getDataTostore[0].doctor.mname} ${getDataTostore[0].doctor.lname}`;
-    const date =getDataTostore[0].date;
-    const formattedDate = new Date(date).toISOString().split('T')[0];
-    const sess_id =getDataTostore[0].session_id;
+    const date = getDataTostore[0].date;
+    const formattedDate = new Date(date).toISOString().split("T")[0];
+    const sess_id = getDataTostore[0].session_id;
 
-     //add cancel session details to  CancelSessionToupleArray=[];
-     DoctorArrivalToupleArray = [];
-     if (userIDStorage.length>=1) {
-       for (let x = 0; x < TokenStorage.length; x++) {
-         let createObeject = {
-           userID: userIDStorage[x],
-           doctorFullName: doctorFullName,
-           clinicName: clinicName,
-           fcm_token: TokenStorage[x],
-           date: formattedDate,
-           session_id:sess_id
-         };
-         DoctorArrivalToupleArray.push(createObeject);
-       }
-     }
-     else{
-       return "no user tokens and Ids";
-     }
+    //add cancel session details to  CancelSessionToupleArray=[];
+    DoctorArrivalToupleArray = [];
+    if (userIDStorage.length >= 1) {
+      for (let x = 0; x < TokenStorage.length; x++) {
+        let createObeject = {
+          userID: userIDStorage[x],
+          doctorFullName: doctorFullName,
+          clinicName: clinicName,
+          fcm_token: TokenStorage[x],
+          date: formattedDate,
+          session_id: sess_id,
+        };
+        DoctorArrivalToupleArray.push(createObeject);
+      }
+    } else {
+      return "no user tokens and Ids";
+    }
 
-     //add cancel session details to cancelSession table in db
+    //add cancel session details to cancelSession table in db
     let createCancelSessionTouples = await DataBase.createDoctorArriveRows(
       DoctorArrivalToupleArray
     );
@@ -456,16 +450,20 @@ const updateDocArrival = async (session_id, updateData) => {
 
     if (createCancelSessionTouples) {
       //send push notifications to users devices
-        for(let x=0;x<TokenStorage.length;x++)
-        {
-            const dataObject = {
-               userID:userIDStorage[x]
-            }
-            sendNotificationResults.push(NotificationFunctions.sendPushNotification(3, dataObject, TokenStorage[x]));
-            console.log(sendNotificationResults[x]);
-        }
-    }
-    else{
+      for (let x = 0; x < TokenStorage.length; x++) {
+        const dataObject = {
+          userID: userIDStorage[x],
+        };
+        sendNotificationResults.push(
+          NotificationFunctions.sendPushNotification(
+            3,
+            dataObject,
+            TokenStorage[x]
+          )
+        );
+        console.log(sendNotificationResults[x]);
+      }
+    } else {
       return "createDoctorArriveRows not completed successfully";
     }
 
@@ -479,15 +477,12 @@ const updateDocArrival = async (session_id, updateData) => {
     });
 
     return results;
-
-  }
-  else{
+  } else {
     return "error Occcoured when updating isArrived";
   }
 };
 
 const getDoctorArriveDetailsByUserID = async (userID) => {
-  
   const getRecord = DataBase.findAllArriveMessagesByQuery(
     {
       userID: userID,

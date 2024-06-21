@@ -36,8 +36,8 @@ const findByQuery = async (query) => {
         { lname: { [Op.iLike]: `%${query}%` } },
         sequelize.where(
           sequelize.fn(
-            "concat_ws", 
-            " ", 
+            "concat_ws",
+            " ",
             sequelize.col("fname"),
             sequelize.col("mname"),
             sequelize.col("lname")

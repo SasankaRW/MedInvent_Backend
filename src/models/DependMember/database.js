@@ -1,4 +1,3 @@
-const { query } = require("express");
 const DependMember = require("./DependMember");
 const PatientUser = require("../PatientUser/patientUser");
 
@@ -11,9 +10,6 @@ const deleteSingleRecode = async (deleteDataObject) => {
   return result;
 };
 
-// const updateMultipleRecodes = async (query, updates) =>
-//   await DependMember.update(updates, query);
-
 const updateRecode = async (condition, dataNeedToUpdate) =>
   await DependMember.update(dataNeedToUpdate, condition);
 
@@ -21,29 +17,18 @@ const findAllByQuery = async (query) => await DependMember.findAll(query);
 
 const findByQuery = async (query) => await DependMember.findAll(query);
 
-const findOneByQuery = async(query)=> await DependMember.findOne(query);
+const findOneByQuery = async (query) => await DependMember.findOne(query);
 
-const findUserDetailsToLink =async(query)=>await PatientUser.findOne(query);
+const findUserDetailsToLink = async (query) => await PatientUser.findOne(query);
 
 module.exports = {
   Schema: DependMember,
-
-  Schema:PatientUser,
-
+  Schema: PatientUser,
   updateRecode,
-
   findAllByQuery,
-
   findByQuery,
-
   findOneByQuery,
-
-  //updateMultipleRecodes: updateMultipleRecodes,
-
   createSingleRecode,
-
   deleteSingleRecode,
-
   findUserDetailsToLink,
-
 };

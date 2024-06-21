@@ -1,5 +1,3 @@
-const { ERROR } = require("./helper");
-
 const { Config } = require("../config");
 
 const { ALLOW_HEADERS, ALLOWED_DOMAINS, ALLOW_METHODS } = Config.ACCESS_HEADERS;
@@ -15,7 +13,6 @@ const accessHeader = (req, res, next) => {
 
   next();
 };
-
 
 const _404 = (req, res) => {
   res.status(404).json({

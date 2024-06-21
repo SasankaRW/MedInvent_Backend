@@ -36,6 +36,4 @@ PatientAddress.init(
   }
 );
 
-
-
 module.exports = PatientAddress;

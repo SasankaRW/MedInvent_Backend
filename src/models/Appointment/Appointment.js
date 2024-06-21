@@ -108,4 +108,3 @@ Appointment.init(
 );
 
 module.exports = Appointment;
-// clinic ?

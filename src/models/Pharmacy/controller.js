@@ -1,7 +1,5 @@
 const Service = require("./service");
-
 const { SUCCESS, ERROR } = require("../../helper");
-
 const { SUC_CODES } = require("./constants").Codes;
 
 const getAllPharmacies = async (req, res) => {

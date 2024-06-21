@@ -33,8 +33,6 @@
     "pg": "^8.11.4",
     "sequelize": "^6.37.2",
     "sequelize-cli": "^6.6.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0",
     "twilio": "^5.1.1",
     "uuid": "^9.0.1"
   }

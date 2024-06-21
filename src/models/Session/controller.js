@@ -1,7 +1,5 @@
 const Service = require("./service");
-
 const { SUCCESS, ERROR } = require("../../helper");
-
 const { SUC_CODES } = require("./constants").Codes;
 
 const createSession = async (req, res) => {
@@ -180,7 +178,10 @@ const getSessionsDetailsByClinicID = async (req, res) => {
 //now
 const updateCancelSessionByID = async (req, res) => {
   try {
-    const result = await Service.updateCancelSessionByID(req.params.session_id,req.body);
+    const result = await Service.updateCancelSessionByID(
+      req.params.session_id,
+      req.body
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -193,7 +194,9 @@ const updateCancelSessionByID = async (req, res) => {
 //now
 const getCancelSessionsDetailsByUserID = async (req, res) => {
   try {
-    const result = await Service.getCancelSessionsDetailsByUserID(req.params.userID);
+    const result = await Service.getCancelSessionsDetailsByUserID(
+      req.params.userID
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -216,10 +219,13 @@ const deleteCancelledSession = async (req, res) => {
   }
 };
 
-//now 
+//now
 const updateDocArrival = async (req, res) => {
   try {
-    const result = await Service.updateDocArrival(req.params.session_id, req.body);
+    const result = await Service.updateDocArrival(
+      req.params.session_id,
+      req.body
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -232,7 +238,9 @@ const updateDocArrival = async (req, res) => {
 //now
 const getDoctorArriveDetailsByUserID = async (req, res) => {
   try {
-    const result = await Service.getDoctorArriveDetailsByUserID(req.params.userID);
+    const result = await Service.getDoctorArriveDetailsByUserID(
+      req.params.userID
+    );
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -254,8 +262,6 @@ const deleteDoctorArriveRow = async (req, res) => {
     ERROR(res, error, res.span);
   }
 };
-
-
 
 module.exports = {
   createSession,

@@ -1,9 +1,6 @@
 const DataBase = require("./database");
-
 const Sequelize = require("sequelize");
-
 const Op = Sequelize.Op;
-
 const { to, TE } = require("../../helper");
 
 const getAllPatientUsersDetails = async (params) => {
@@ -93,7 +90,7 @@ const checkEmailAndNic = async (email, nic) => {
 
   if (!result)
     return { success: false, message: "Email and NIC does not match" };
-  
+
   return result;
 };
 

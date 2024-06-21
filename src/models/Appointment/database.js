@@ -52,6 +52,7 @@ const createSingleRecord = async (data) => {
 
     await transaction.commit();
 
+    //function to send sms notification
     // await sendSmsCreate(newAppointment.dataValues, session.dataValues);
 
     return newAppointment;
@@ -171,6 +172,7 @@ const updateRecord = async (appointmentId, data) => {
 
     await transaction.commit();
 
+    //function to send sms notification
     // await sendSmsCancel(appointment.dataValues, session.dataValues);
 
     return appointment;
@@ -185,6 +187,7 @@ const markAs = async (appointmentId, mark) =>
     where: { appointment_id: appointmentId },
   });
 
+//function definition to send sms notification
 async function sendSmsCreate(appointment, session) {
   const { patientTitle, patientName, appointmentNo } = appointment;
 

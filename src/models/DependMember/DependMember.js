@@ -1,7 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 const Prescription = require("../Prescription/Prescription");
-//const { v4: uuidv4 } = require('uuid');
 
 class DependMember extends Model {}
 
@@ -66,7 +65,7 @@ DependMember.init(
     sequelize,
     modelName: "DependMember",
     timestamps: false,
-    tableName: "DependMember",
+    tableName: "dependMember",
   }
 );
 

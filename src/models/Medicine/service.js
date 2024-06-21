@@ -1,5 +1,4 @@
 const DataBase = require("./database");
-
 const { to, TE } = require("../../helper");
 
 const getMedicineByName = async (name) => {

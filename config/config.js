@@ -79,14 +79,9 @@ const BODYPARSER = {
 
 module.exports = {
   APPLICATION,
-
   BODYPARSER,
-
   ACCESS_HEADERS,
-
   SWAGGER,
-
   ACCESS,
-
   MAIL_SERVER,
 };

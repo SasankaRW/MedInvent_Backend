@@ -1,11 +1,11 @@
 const express = require("express");
-
 const Controller = require("./controller");
-
 const router = express.Router();
 
 //send notification method temporary
-router.route("/send/notification").post(Controller.sendPushNotificationTemporary);
+router
+  .route("/send/notification")
+  .post(Controller.sendPushNotificationTemporary);
 
 //OTP send to link user =>(5)
 router.route("/send/OTP/link/user").post(Controller.sendOTPtoLInkUser);
@@ -30,6 +30,5 @@ router.route("/get/All/OTP").post(Controller.getAllOTP);
 
 //delete specific OTP row from OTP table relevant to specific user
 router.route("/Receive/delete/:OTP_id").delete(Controller.deleteReceivedOTP);
-
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const { Config } = require("./config");
-
 const { PORT } = Config.APPLICATION;
 
 const app = require("./src");

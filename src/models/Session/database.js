@@ -304,39 +304,39 @@ const updateisArrived = async (condition, dataNeedToUpdate) => {
   return updated;
 };
 
-const getUserDocCliniTokendata = async(session_id)=>{
+const getUserDocCliniTokendata = async (session_id) => {
   const results = await Session.findAll({
-    where:{
-      session_id:session_id
+    where: {
+      session_id: session_id,
     },
-    attributes:["date","session_id"],
-    include:[
+    attributes: ["date", "session_id"],
+    include: [
       {
-        model:Doctor,
-        as:"doctor",
-        required:true,
+        model: Doctor,
+        as: "doctor",
+        required: true,
         attributes: ["fname", "mname", "lname"],
       },
       {
-        model:Clinic,
-        as:"clinic",
-        required:true,
+        model: Clinic,
+        as: "clinic",
+        required: true,
         attributes: ["name"],
       },
       {
-        model:Appointment,
-        as:"appointments",
+        model: Appointment,
+        as: "appointments",
         required: true,
         attributes: ["user_id"],
-        where:{
-          user_id: { [Op.not]: null }
-        }
-      }
-    ]
+        where: {
+          user_id: { [Op.not]: null },
+        },
+      },
+    ],
   });
 
   return results;
-}
+};
 
 const createDoctorArriveRows = async (DoctorArrivalToupleArray) => {
   let transaction;
@@ -363,10 +363,11 @@ const findAllArriveMessagesByQuery = async (filter, order) => {
 };
 
 const deleteArriveRecord = async (arrive_id) => {
-  const result = await DoctorArrive.destroy({ where: { arrive_id: arrive_id } });
+  const result = await DoctorArrive.destroy({
+    where: { arrive_id: arrive_id },
+  });
   return result;
 };
-
 
 module.exports = {
   Schema: Session,

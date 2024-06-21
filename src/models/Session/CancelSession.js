@@ -13,18 +13,18 @@ CancelSession.init(
     userID: {
       type: DataTypes.UUID,
       allowNull: false,
-    }, 
+    },
     doctorFullName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     clinicName: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     fcm_token: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     date: {
       type: DataTypes.DATEONLY,

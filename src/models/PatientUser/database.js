@@ -53,5 +53,5 @@ module.exports = {
   updateMultipleRecords: updateMultipleRecords,
   createSingleRecord,
   deleteSingleRecord,
-  updateRecord_address
+  updateRecord_address,
 };

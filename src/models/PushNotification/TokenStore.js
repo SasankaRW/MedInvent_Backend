@@ -18,7 +18,7 @@ TokenStore.init(
     isActiveToken: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-    }
+    },
   },
   {
     sequelize,
@@ -36,6 +36,5 @@ PatientUser.hasMany(TokenStore, {
 TokenStore.belongsTo(PatientUser, {
   foreignKey: "userID",
 });
-
 
 module.exports = TokenStore;

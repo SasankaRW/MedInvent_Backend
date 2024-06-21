@@ -1,7 +1,5 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
-const PatientUser = require("../PatientUser/patientUser");
-const PresMedicine = require("./PresMedicine");
 
 class MedicationIntake extends Model {}
 
