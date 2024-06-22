@@ -38,6 +38,7 @@ app.use("/api", router);
 
 generateTables();
 
+//table creation procedure
 const options = {
   swaggerDefinition: DEFINITION("V1"),
   apis: [
