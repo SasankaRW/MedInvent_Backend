@@ -14,7 +14,9 @@ const PresMedicine = require("../models/Prescription/PresMedicine");
 const Medicine = require("../models/Medicine/Medicine");
 const TokenStore = require("../models/PushNotification/TokenStore");
 const OTP = require("../models/PushNotification/OTP");
-
+const CancelSession = require("../models/Session/CancelSession");
+const DoctorArrive = require("../models/Session/CancelSession");
+const MedicationIntake = require("../models/Prescription/MedicationIntake");
 
 module.exports = {
   generateTables: async () => {
@@ -26,4 +28,3 @@ module.exports = {
     }
   },
 };
-

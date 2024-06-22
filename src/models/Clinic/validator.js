@@ -10,7 +10,7 @@ const dataSchema = Joi.object({
   email: Joi.string().email().required(),
   clinicAddress: Joi.object({
     lineOne: Joi.string().required(),
-    lineTwo: Joi.string().required(),
+    lineTwo: Joi.string().optional().allow("", null),
     city: Joi.string().required(),
     district: Joi.string().required(),
   }).required(),

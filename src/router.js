@@ -14,7 +14,6 @@ const { NotificationRoutes } = require("./models/PushNotification");
 
 const router = express.Router();
 
-//router.use("/Appointment", AppointmentRoutes);
 router.use("/visiting", VisitingRoutes);
 router.use("/PatientUser", PatientUserRoutes);
 router.use("/clinic", ClinicRoutes);

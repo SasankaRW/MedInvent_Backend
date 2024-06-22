@@ -1,10 +1,10 @@
 const { Config } = require("./config");
-
 const { PORT } = Config.APPLICATION;
 
 const app = require("./src");
 
 require("./cronJobs/presMedicineCron");
+require("./cronJobs/dailyMedicationCron");
 
 const onListeningLog = `
    server is running on port : ${PORT} !!!`;

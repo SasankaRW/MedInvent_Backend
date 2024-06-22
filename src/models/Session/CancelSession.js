@@ -1,33 +1,33 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../../../config/database");
 
-class OTP extends Model {}
+class CancelSession extends Model {}
 
-OTP.init(
+CancelSession.init(
   {
-    OTP_id: {
+    cancel_id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    senderUUID: {
+    userID: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    senderName: {
+    doctorFullName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    receiverNic: {
+    clinicName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    receiverToken: {
+    fcm_token: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    OTPNumber: {
-      type: DataTypes.INTEGER,
+    date: {
+      type: DataTypes.DATEONLY,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -36,10 +36,10 @@ OTP.init(
   },
   {
     sequelize,
-    modelName: "OTP",
+    modelName: "CancelSession",
     timestamps: true,
-    tableName: "otp",
+    tableName: "cancelSession",
   }
 );
 
-module.exports = OTP;
+module.exports = CancelSession;

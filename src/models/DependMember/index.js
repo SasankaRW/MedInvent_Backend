@@ -1,21 +1,17 @@
 const Controller = require("./controller");
-
 const Constants = require("./constants");
-
 const Service = require("./service");
-
 const Routes = require("./router");
-
 const DependMember = require("./DependMember");
 
 module.exports = {
-    DependMemberConstants: Constants,
+  DependMemberConstants: Constants,
 
-    DependMemberService: Service,
+  DependMemberService: Service,
 
-    DependMemberController: Controller,
+  DependMemberController: Controller,
 
-    DependMemberRoutes: Routes,
+  DependMemberRoutes: Routes,
 
-    DependMember: DependMember,
+  DependMember: DependMember,
 };

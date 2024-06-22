@@ -1,22 +1,17 @@
 const Controller = require("./controller");
-
 const Constants = require("./constants");
-
 const Service = require("./service");
-
 const Routes = require("./router");
-
 const Session = require("./Session");
 
-
 module.exports = {
-    SessionConstants: Constants,
+  SessionConstants: Constants,
 
-    SessionService: Service,
+  SessionService: Service,
 
-    SessionController: Controller,
+  SessionController: Controller,
 
-    SessionRoutes: Routes,
+  SessionRoutes: Routes,
 
-    Session: Session,
+  Session: Session,
 };

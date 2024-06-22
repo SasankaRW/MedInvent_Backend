@@ -1,5 +1,4 @@
 const DataBase = require("./database");
-
 const { to, TE } = require("../../helper");
 
 const createPrescription = async (data) => {
@@ -59,43 +58,55 @@ const updatePrescription = async (presId, data) => {
   const [err, result] = await to(updateRecord);
 
   if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  return result;
 };
 
-// const getDoctorById = async (id) => {
-//   const getRecord = DataBase.findOneById(id);
+const assignPrescription = async (presId, data) => {
+  const updateRecord = DataBase.assignPrescription(presId, data);
 
-//   const [err, result] = await to(getRecord);
+  const [err, result] = await to(updateRecord);
 
-//   if (err) TE(err);
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
-//   if (!result) TE("Result not found");
+  return result;
+};
 
-//   return result;
-// };
+const addDailyMedications = async (data) => {
+  const addDailyMedications = DataBase.addDailyMedications(data);
 
-// const getDoctorByName = async (name) => {
-//   const getRecord = DataBase.findByQuery(name);
+  const [err, result] = await to(addDailyMedications);
 
-//   const [err, result] = await to(getRecord);
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
 
-//   if (err) TE(err);
+  if (!result) TE("Result not found");
 
-//   if (!result) TE("Result not found");
+  return result;
+};
 
-//   return result;
-// };
+const getDailyMedications = async (userid) => {
+  const getRecords = DataBase.getDailyMedications(userid);
 
-// const deleteDoctor = async (id) => {
-//   const deleteRecord = DataBase.deleteSingleRecord(id);
+  const [err, result] = await to(getRecords);
 
-//   const [err, result] = await to(deleteRecord);
+  if (err) TE(err);
 
-//   if (err) TE(err);
+  if (!result) TE("Results not found");
 
-//   if (!result) TE("Result not found");
+  return result;
+};
 
-//   return result;
-// };
+const markAsTaken = async (medicationId, currentStatus) => {
+  const markAsTaken = DataBase.markAsTaken(medicationId, currentStatus);
+
+  const [err, result] = await to(markAsTaken);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
 
 module.exports = {
   createPrescription,
@@ -103,4 +114,9 @@ module.exports = {
   getDoctorPrescriptions,
   getUserPrescriptions,
   updatePrescription,
+  assignPrescription,
+
+  getDailyMedications,
+  addDailyMedications,
+  markAsTaken,
 };

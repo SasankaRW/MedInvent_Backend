@@ -1,7 +1,6 @@
 const SERVICE_CODE = 4;
 
 const _getCode = ({ mc = 0, hc, code }) => {
-
   const responseCode = new Number(`${SERVICE_CODE}${mc}${hc}${code}`);
 
   return isNaN(responseCode) ? 500 : responseCode;

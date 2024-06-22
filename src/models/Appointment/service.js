@@ -1,7 +1,5 @@
 const DataBase = require("./database");
-
 const { to, TE } = require("../../helper");
-
 const { Op } = require("sequelize");
 
 const createAppointment = async (data) => {

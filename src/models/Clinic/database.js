@@ -1,6 +1,8 @@
 const Clinic = require("./Clinic");
 const ClinicAddress = require("./ClinicAddress");
 const { Op, Sequelize } = require("sequelize");
+const Session = require("../Session/Session");
+const Doctor = require("../Doctor/Doctor");
 
 const createSingleRecord = async (singleRecord) => {
   const data = singleRecord.data;
@@ -63,11 +65,15 @@ const findByQuery = async (query) => {
 };
 
 const findByLocation = async (params) => {
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Colombo",
+  });
+
   const clinics = await Clinic.findAll({
     where: Sequelize.where(
       Sequelize.fn(
         "ST_DWithin",
-        Sequelize.col("location"),
+        Sequelize.col("Clinic.location"),
         Sequelize.fn(
           "ST_SetSRID",
           Sequelize.fn("ST_MakePoint", params.long, params.lat),
@@ -77,10 +83,43 @@ const findByLocation = async (params) => {
       ),
       true
     ),
+    attributes: {
+      exclude: ["createdAt", "updatedAt", "clinicFees"],
+    },
     include: [
       {
-        model: ClinicAddress,
-        as: "clinicAddress",
+        model: Session,
+        as: "sessions",
+        required: true,
+        where: {
+          date: today,
+        },
+        attributes: {
+          exclude: [
+            "createdAt",
+            "updatedAt",
+            "scheduledById",
+            "scheduledByType",
+            "cancelledById",
+            "cancelledByType",
+          ],
+        },
+        include: [
+          {
+            model: Doctor,
+            as: "doctor",
+            required: true,
+            attributes: {
+              exclude: ["createdAt", "updatedAt"],
+            },
+          },
+          {
+            model: Clinic,
+            as: "clinic",
+            attributes: ["name"],
+            required: true,
+          },
+        ],
       },
     ],
   });

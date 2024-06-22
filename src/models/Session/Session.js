@@ -14,7 +14,7 @@ Session.init(
     scheduledById: {
       type: DataTypes.UUID,
       allowNull: false,
-    }, 
+    },
     scheduledByType: {
       type: DataTypes.STRING,
       allowNull: false,

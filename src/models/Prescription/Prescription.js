@@ -18,6 +18,11 @@ Prescription.init(
         notEmpty: true,
       },
     },
+    assignedTo: {
+      type: DataTypes.STRING(36),
+      allowNull: true,
+      defaultValue: null,
+    },
     createdBy: {
       type: DataTypes.ENUM("doctor", "user"),
       allowNull: false,
@@ -32,6 +37,11 @@ Prescription.init(
         notEmpty: false,
       },
     },
+    dID: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,
@@ -44,6 +54,7 @@ Prescription.init(
 Prescription.hasMany(PresMedicine, {
   foreignKey: "prescription_id",
   as: "presMedicine",
+  onDelete: "CASCADE",
 });
 PresMedicine.belongsTo(Prescription, { foreignKey: "prescription_id" });
 

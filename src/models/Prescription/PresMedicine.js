@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../../../config/database");
+const MedicationIntake = require("./MedicationIntake");
 
 class PresMedicine extends Model {}
 
@@ -61,5 +62,11 @@ PresMedicine.init(
     tableName: "presMedicine",
   }
 );
+
+PresMedicine.hasMany(MedicationIntake, {
+  foreignKey: "medicine_id",
+  as: "medicationIntake",
+  onDelete: "CASCADE",
+});
 
 module.exports = PresMedicine;

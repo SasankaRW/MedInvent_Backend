@@ -38,11 +38,18 @@ const prescriptionSchema = Joi.object({
     then: Joi.string().required(),
   }),
   presMedicine: Joi.array().items(presMedicineSchema).required(),
+  assignedTo: Joi.string().valid("user", "dependMember").optional().allow(null),
+  dID: Joi.string().guid({ version: "uuidv4" }).optional().allow(null),
 });
 
 const updateSchema = Joi.object({
   medicineId: Joi.string().guid({ version: "uuidv4" }).required(),
   reminders: Joi.array().items(reminderSchema).required(),
+});
+
+const assignedSchema = Joi.object({
+  assignedTo: Joi.string().valid("user", "dependMember").required(),
+  dID: Joi.string().guid({ version: "uuidv4" }).allow(null).optional(),
 });
 
 const create = async (req, res, next) => {
@@ -63,7 +70,17 @@ const update = async (req, res, next) => {
   }
 };
 
+const assign = async (req, res, next) => {
+  try {
+    await assignedSchema.validateAsync(req.body.data);
+    next();
+  } catch (error) {
+    VALIDATION_ERROR(res, error);
+  }
+};
+
 module.exports = {
   create,
   update,
+  assign,
 };
