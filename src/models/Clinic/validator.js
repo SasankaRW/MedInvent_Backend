@@ -22,6 +22,7 @@ const dataSchema = Joi.object({
 
 const credentialsSchema = Joi.object({
   email: Joi.string().email().required(),
+  mobileNo: Joi.string().required(),
   password: Joi.string().required(),
 }).required();
 
