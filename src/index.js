@@ -6,10 +6,6 @@ const cors = require("cors");
 
 const bodyParser = require("body-parser");
 
-const swaggerJSDoc = require("swagger-jsdoc");
-
-const swaggerUi = require("swagger-ui-express");
-
 const { accessHeader } = require("./init");
 
 const { generateTables } = require("./scripts/middleware");
@@ -37,18 +33,5 @@ app.use(accessHeader);
 app.use("/api", router);
 
 generateTables();
-
-//table creation procedure
-const options = {
-  swaggerDefinition: DEFINITION("V1"),
-  apis: [
-    ...APIS["V1"].map((api) => `./src/modules/${api}/swagger/*.yaml`),
-    "./src/swagger/*.yaml",
-  ],
-};
-
-const swaggerSpec = swaggerJSDoc(options);
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 module.exports = app;
