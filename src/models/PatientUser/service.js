@@ -3,7 +3,19 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 const { to, TE } = require("../../helper");
 
-const getAllPatientUsersDetails = async (params) => {
+const createPatientUser = async (data) => {
+  const createSingleRecord = DataBase.createSingleRecord(data.userDetails);
+
+  const [err, result] = await to(createSingleRecord);
+
+  if (err) TE(err.errors[0] ? err.errors[0].message : err);
+
+  if (!result) TE("Result not found");
+
+  return result;
+};
+
+const getAllPatientUsers = async (params) => {
   Object.assign(params);
 
   const getRecords = DataBase.findByQuery();
@@ -17,7 +29,7 @@ const getAllPatientUsersDetails = async (params) => {
   return result;
 };
 
-const getPatientUserDetailsByID = async (filter) => {
+const getPatientUserByID = async (filter) => {
   const getRecord = DataBase.findOneByQuery({
     where: filter,
   });
@@ -31,7 +43,21 @@ const getPatientUserDetailsByID = async (filter) => {
   return result;
 };
 
-const getPatientUserDetailsByNic = async (filter) => {
+const getPatientUserByNic = async (filter) => {
+  const getRecord = DataBase.findOneByQuery({
+    where: filter,
+  });
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) return { success: false, message: "Patient not found" };
+
+  return result;
+};
+
+const getPatientUserByEmail = async (filter) => {
   const getRecord = DataBase.findOneByQuery({
     where: filter,
   });
@@ -94,19 +120,7 @@ const checkEmailAndNic = async (email, nic) => {
   return result;
 };
 
-const createPatientUserData = async (data) => {
-  const createSingleRecord = DataBase.createSingleRecord(data.userDetails);
-
-  const [err, result] = await to(createSingleRecord);
-
-  if (err) TE(err.errors[0] ? err.errors[0].message : err);
-
-  if (!result) TE("Result not found");
-
-  return result;
-};
-
-const updatePatientUserDetailsByID = async (filter, updateData) => {
+const updatePatientUserByID = async (filter, updateData) => {
   const updateRecord = DataBase.updateRecord({ where: filter }, updateData);
 
   const [err, result] = await to(updateRecord);
@@ -122,7 +136,7 @@ const updatePatientUserDetailsByID = async (filter, updateData) => {
   return patientData;
 };
 
-const deletePatientUserDetailsByID = async (data) => {
+const deletePatientUserByID = async (data) => {
   const deleteRecord = DataBase.deleteSingleRecord(data);
 
   const [err, result] = await to(deleteRecord);
@@ -135,12 +149,13 @@ const deletePatientUserDetailsByID = async (data) => {
 };
 
 module.exports = {
-  getAllPatientUsersDetails,
-  getPatientUserDetailsByID,
-  getPatientUserDetailsByNic,
-  createPatientUserData,
-  updatePatientUserDetailsByID,
-  deletePatientUserDetailsByID,
+  getAllPatientUsers,
+  getPatientUserByID,
+  getPatientUserByNic,
+  getPatientUserByEmail,
+  createPatientUser,
+  updatePatientUserByID,
+  deletePatientUserByID,
   checkEmailAndMobileNo,
   checkEmailAndNic,
   checkNic,

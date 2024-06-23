@@ -2,9 +2,9 @@ const Service = require("./service");
 const { SUCCESS, ERROR } = require("../../helper");
 const { SUC_CODES } = require("./constants").Codes;
 
-const getAllPatientUsersDetails = async (req, res) => {
+const getAllPatientUsers = async (req, res) => {
   try {
-    const result = await Service.getAllPatientUsersDetails(req.query);
+    const result = await Service.getAllPatientUsers(req.query);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -14,9 +14,9 @@ const getAllPatientUsersDetails = async (req, res) => {
   }
 };
 
-const getPatientUserDetailsByID = async (req, res) => {
+const getPatientUserByID = async (req, res) => {
   try {
-    const result = await Service.getPatientUserDetailsByID(req.params);
+    const result = await Service.getPatientUserByID(req.params);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -26,9 +26,21 @@ const getPatientUserDetailsByID = async (req, res) => {
   }
 };
 
-const getPatientUserDetailsByNic = async (req, res) => {
+const getPatientUserByNic = async (req, res) => {
   try {
-    const result = await Service.getPatientUserDetailsByNic(req.params);
+    const result = await Service.getPatientUserByNic(req.params);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
+const getPatientUserByEmail = async (req, res) => {
+  try {
+    const result = await Service.getPatientUserByEmail(req.params);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -80,9 +92,9 @@ const checkEmailAndNic = async (req, res) => {
   }
 };
 
-const createPatientUserData = async (req, res) => {
+const createPatientUser = async (req, res) => {
   try {
-    const result = await Service.createPatientUserData(req.body);
+    const result = await Service.createPatientUser(req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -92,12 +104,9 @@ const createPatientUserData = async (req, res) => {
   }
 };
 
-const updatePatientUserDetailsByID = async (req, res) => {
+const updatePatientUserByID = async (req, res) => {
   try {
-    const result = await Service.updatePatientUserDetailsByID(
-      req.params,
-      req.body
-    );
+    const result = await Service.updatePatientUserByID(req.params, req.body);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -107,9 +116,9 @@ const updatePatientUserDetailsByID = async (req, res) => {
   }
 };
 
-const deletePatientUserDetailsByID = async (req, res) => {
+const deletePatientUserByID = async (req, res) => {
   try {
-    const result = await Service.deletePatientUserDetailsByID(req.params);
+    const result = await Service.deletePatientUserByID(req.params);
 
     SUCCESS(res, SUC_CODES, result, req.span);
   } catch (error) {
@@ -120,12 +129,13 @@ const deletePatientUserDetailsByID = async (req, res) => {
 };
 
 module.exports = {
-  getAllPatientUsersDetails,
-  getPatientUserDetailsByID,
-  getPatientUserDetailsByNic,
-  createPatientUserData,
-  updatePatientUserDetailsByID,
-  deletePatientUserDetailsByID,
+  getAllPatientUsers,
+  getPatientUserByID,
+  getPatientUserByNic,
+  getPatientUserByEmail,
+  createPatientUser,
+  updatePatientUserByID,
+  deletePatientUserByID,
   checkEmailAndMobileNo,
   checkEmailAndNic,
   checkNic,
