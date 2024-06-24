@@ -14,7 +14,7 @@ module.exports = class KeyCloakService{
     keyCloakAdminClient().then((keycloak) => {
       this.keycloak = keycloak
     }).catch((error) => {
-      console.log('Failed to login keycloak:', error.message)
+      console.log(error);
     })
 
     // get environment variables
