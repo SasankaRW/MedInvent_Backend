@@ -1,12 +1,21 @@
-const Keycloak = require("keycloak-connect");
+const { credentials } = require('@grpc/grpc-js');
+const Keycloak = require('keycloak-connect')
 
 const config = {
-  realm: process.env.KEYCLOAK_REALM,
-  "auth-server-url": process.env.KEYCLOAK_URL,
-  "ssl-required": "external",
+  'realm': process.env.KEYCLOAK_REALM,
+  'auth-server-url': process.env.KEYCLOAK_URL,
+  'ssl-required': 'external',
   resource: process.env.KEYCLOAK_CLIENT,
-  "bearer-only": true,
-  "public-client": true,
-};
+  'credentials':{
+    'secret':process.env.KEYCLOAK_CLIENT_SECRET
+  },
+  'bearer-only': true,
+  'public-client': true
+}
 
-module.exports = new Keycloak({}, config);
+const keycloak = new Keycloak({}, config);
+
+
+
+module.exports = keycloak;
+

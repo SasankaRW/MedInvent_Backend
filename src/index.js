@@ -12,6 +12,14 @@ const { generateTables } = require("./scripts/middleware");
 
 app.use(cors());
 
+//KeyCloak
+const KeyCloakService = require('./KeycloakServices/keyCloakService');
+const AuthProvider = new KeyCloakService();
+
+// KeyCloak-connect 
+const keycloak = require('./KeycloakServices/keycloakConnect');
+app.use(keycloak.middleware())
+
 const cookieParser = require("cookie-parser");
 
 const router = require("./router");

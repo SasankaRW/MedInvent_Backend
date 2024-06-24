@@ -8,8 +8,9 @@ module.exports = async function keyCloakAdminClient() {
   };
 
   const kcAdminClient = new KcAdminClient(config);
+  const kcAdminClient = new KcAdminClient(config);
 
-  // login via realm ADMIN account
+  // Login via realm ADMIN account
   const auth = async () => {
     await kcAdminClient.auth({
       username: process.env.KEYCLOAK_ADMIN_USERNAME,
@@ -22,11 +23,13 @@ module.exports = async function keyCloakAdminClient() {
   await auth();
   console.log("Keycloak logged in");
 
-  // re-login every 55 minutes
+  // Re-login every 55 minutes
   setInterval(async () => {
     await auth();
     console.log("Keycloak logged in");
   }, 3300 * 1000);
 
+  return kcAdminClient;
+};
   return kcAdminClient;
 };
