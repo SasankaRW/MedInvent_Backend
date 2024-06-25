@@ -4,7 +4,7 @@ const Op = Sequelize.Op;
 const { to, TE } = require("../../helper");
 
 const createPatientUser = async (data) => {
-  const createSingleRecord = DataBase.createSingleRecord(data.userDetails);
+  const createSingleRecord = DataBase.createSingleRecord(data.data);
 
   const [err, result] = await to(createSingleRecord);
 

@@ -2,7 +2,8 @@ const Joi = require("joi");
 const { VALIDATION_ERROR } = require("../../helper");
 
 const createSchema = Joi.object({
-  userDetails: Joi.object({
+  data: Joi.object({
+    userID: Joi.string().optional(),
     Fname: Joi.string().max(50).required(),
     Lname: Joi.string().max(50).required(),
     mobileNo: Joi.string().max(12).required(),
@@ -23,6 +24,7 @@ const createSchema = Joi.object({
     mobileNo: Joi.string().max(12).required(),
     email: Joi.string().email().required(),
     password: Joi.string().required(),
+    role: Joi.string().valid("patient").required(),
   }),
 });
 
