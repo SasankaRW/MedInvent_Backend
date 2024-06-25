@@ -24,34 +24,34 @@ const sendOTPtoLInkUser = async (getBody) => {
   const OTPToupleArray = [numOfTokens];
   const OTP = generateOTP(4);
 
-  for (let i = 0; i < numOfTokens; i++) {
-    OTPToupleArray[i] = {
-      senderName: senderName,
-      senderUUID: senderUUID,
-      receiverNic: receiverNic,
-      OTPNumber: OTP,
-      receiverToken: FcmTokens[i],
-    };
-  }
-
-  let createOTPRecode = await DataBase.createOTPRecordes(OTPToupleArray);
-  let sendNotificationResults = [];
-
-  if (createOTPRecode) {
-    for (let i = 0; i < numOfTokens; i++) {
-      const dataObject = {
-        OTP: OTP,
-        sendBy: senderName,
-        //senderUUID:senderUUID,
-        password: "admin",
-        receiverNic: receiverNic,
-      };
-      sendNotificationResults.push(
-        NotificationFunctions.sendPushNotification(0, dataObject, FcmTokens[i])
-      );
-      console.log(sendNotificationResults[i]);
+    for(let i=0;i<numOfTokens;i++)
+    {
+        OTPToupleArray[i]={
+            senderName :senderName,
+            senderUUID:senderUUID,
+            receiverNic:receiverNic,
+            OTPNumber:OTP,
+            receiverToken:FcmTokens[i]
+        }
     }
-  }
+   
+    let createOTPRecode = await DataBase.createOTPRecordes(OTPToupleArray);
+    let sendNotificationResults =[];
+
+    if(createOTPRecode)
+    {
+        for(let i=0;i<numOfTokens;i++)
+        {
+            const dataObject = {
+                OTP: OTP,
+                sendBy: senderName,
+                receiverNic:receiverNic,
+                identify:"OTP"
+            }
+            sendNotificationResults .push(NotificationFunctions.sendPushNotification(0, dataObject, FcmTokens[i]));
+            console.log(sendNotificationResults[i]);
+        }
+    }
 
   const results = await Promise.all(
     sendNotificationResults.map((promise) => to(promise))
@@ -276,26 +276,84 @@ const getAllOTP = async (getBody) => {
 };
 
 const deleteReceivedOTP = async (OTP_id) => {
-  const deleteRecode = DataBase.deleteReceivedOTPRecord(OTP_id);
+    const deleteRecode = DataBase.deleteReceivedOTPRecord(OTP_id);
+  
+    const [err, result] = await to(deleteRecode);
+  
+    if (err) TE(err);
+  
+    if (!result) TE("Result not found");
+  
+    return result;
+  };
 
-  const [err, result] = await to(deleteRecode);
-
-  if (err) TE(err);
-
-  if (!result) TE("Result not found");
-
-  return result;
+const checkTokenAvailable = async (getBody) => {
+    const getUserTokens = await DataBase.findOneToken(getBody);
+  
+    if(getUserTokens != null && getUserTokens != undefined){
+        const{ userID , fcm_token} = getBody;
+        const sendBody = {
+            userID:userID,
+            isActiveToken:true,
+            fcm_token:fcm_token
+        }
+        const result_2 = await updateIsActive(sendBody);
+        if(getUserTokens!= null && getUserTokens != undefined)
+        {
+            if(result_2.isActiveToken){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        const result_3 = await DataBase.createTokenRecode(getBody);
+        if(result_3 != null || result_3 != undefined){
+            if(result_3.fcm_token != undefined || result_3.fcm_token != null ){
+                const{ userID , fcm_token} = getBody;
+                const sendBody = {
+                    userID:userID,
+                    isActiveToken:true,
+                    fcm_token:fcm_token
+                }
+                const result_4 = await updateIsActive(sendBody);
+                if(result_4 != undefined || result_4 != null){
+                    if(result_4.isActiveToken ){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
 };
-
+  
 module.exports = {
-  sendOTPtoLInkUser,
-  //sendPushNotification,
-  checkOTP,
-  getTokensToOTP,
-  checkAvailability,
-  addTokens,
-  updateIsActive,
-  // sendPushNotificationTemporary,
-  getAllOTP,
-  deleteReceivedOTP,
+    sendOTPtoLInkUser,
+    //sendPushNotification,
+    checkOTP,
+    getTokensToOTP,
+    checkAvailability,
+    addTokens,
+    updateIsActive,
+   // sendPushNotificationTemporary,
+    getAllOTP,
+    deleteReceivedOTP,
+    checkTokenAvailable,
 };

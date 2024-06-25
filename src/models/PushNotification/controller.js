@@ -107,14 +107,26 @@ const deleteReceivedOTP = async (req, res) => {
   }
 };
 
+const checkTokenAvailable =async(req,res)=>{
+  try {
+    const result = await Service.checkTokenAvailable(req.body);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+
+    ERROR(res, error, res.span);
+  }
+}
+
 module.exports = {
-  sendOTPtoLInkUser,
-  checkOTP,
-  getTokensToOTP,
-  checkAvailability,
-  addTokens,
-  updateIsActive,
-  sendPushNotificationTemporary,
-  getAllOTP,
-  deleteReceivedOTP,
+    sendOTPtoLInkUser,
+    checkOTP,
+    getTokensToOTP,
+    checkAvailability,
+    addTokens,
+    updateIsActive,
+    sendPushNotificationTemporary,
+    getAllOTP,
+    deleteReceivedOTP,
+    checkTokenAvailable,
 };

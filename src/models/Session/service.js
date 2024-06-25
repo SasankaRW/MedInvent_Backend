@@ -245,7 +245,7 @@ const updateCancelSessionByID = async (session_id, updateData) => {
       },
       attributes: ["user_id"],
     };
-
+     
     //add try from here
     const getDetails = await DataBase.getPatientsdetails(getRecordes);
 
@@ -307,20 +307,17 @@ const updateCancelSessionByID = async (session_id, updateData) => {
 
     if (createCancelSessionTouples) {
       //send push notifications to users devices
-      for (let x = 0; x < TokenStorage.length; x++) {
-        const dataObject = {
-          userID: userIDStorage[x],
-        };
-        sendNotificationResults.push(
-          NotificationFunctions.sendPushNotification(
-            2,
-            dataObject,
-            TokenStorage[x]
-          )
-        );
-        console.log(sendNotificationResults[x]);
-      }
-    } else {
+        for(let x=0;x<TokenStorage.length;x++)
+        {
+            const dataObject = {
+               userID:userIDStorage[x],
+                identify:"cancel"
+            }
+            sendNotificationResults.push(NotificationFunctions.sendPushNotification(2, dataObject, TokenStorage[x]));
+            console.log(sendNotificationResults[x]);
+        }
+    }
+    else{
       return "createCancelSessionTouples not completed successfully";
     }
 
@@ -416,32 +413,33 @@ const updateDocArrival = async (session_id, updateData) => {
       return "no patients";
     }
 
-    //rearrange data for store cancelSession table
-    const clinicName = getDataTostore[0].clinic.name;
+     //rearrange data for store DoctorArrive table
+    const clinicName =getDataTostore[0].clinic.name;
     const doctorFullName = `${getDataTostore[0].doctor.fname} ${getDataTostore[0].doctor.mname} ${getDataTostore[0].doctor.lname}`;
     const date = getDataTostore[0].date;
     const formattedDate = new Date(date).toISOString().split("T")[0];
     const sess_id = getDataTostore[0].session_id;
 
-    //add cancel session details to  CancelSessionToupleArray=[];
-    DoctorArrivalToupleArray = [];
-    if (userIDStorage.length >= 1) {
-      for (let x = 0; x < TokenStorage.length; x++) {
-        let createObeject = {
-          userID: userIDStorage[x],
-          doctorFullName: doctorFullName,
-          clinicName: clinicName,
-          fcm_token: TokenStorage[x],
-          date: formattedDate,
-          session_id: sess_id,
-        };
-        DoctorArrivalToupleArray.push(createObeject);
-      }
-    } else {
-      return "no user tokens and Ids";
-    }
+     //add doctor arrive details to  DoctorArrivalToupleArrays=[];
+     DoctorArrivalToupleArray = [];
+     if (userIDStorage.length>=1) {
+       for (let x = 0; x < TokenStorage.length; x++) {
+         let createObeject = {
+           userID: userIDStorage[x],
+           doctorFullName: doctorFullName,
+           clinicName: clinicName,
+           fcm_token: TokenStorage[x],
+           date: formattedDate,
+           session_id:sess_id
+         };
+         DoctorArrivalToupleArray.push(createObeject);
+       }
+     }
+     else{
+       return "no user tokens and Ids";
+     }
 
-    //add cancel session details to cancelSession table in db
+     //add doctor arrive details to DoctorArrive table in db
     let createCancelSessionTouples = await DataBase.createDoctorArriveRows(
       DoctorArrivalToupleArray
     );
@@ -450,20 +448,17 @@ const updateDocArrival = async (session_id, updateData) => {
 
     if (createCancelSessionTouples) {
       //send push notifications to users devices
-      for (let x = 0; x < TokenStorage.length; x++) {
-        const dataObject = {
-          userID: userIDStorage[x],
-        };
-        sendNotificationResults.push(
-          NotificationFunctions.sendPushNotification(
-            3,
-            dataObject,
-            TokenStorage[x]
-          )
-        );
-        console.log(sendNotificationResults[x]);
-      }
-    } else {
+        for(let x=0;x<TokenStorage.length;x++)
+        {
+            const dataObject = {
+               userID:userIDStorage[x],
+               identify:"arrive"
+            }
+            sendNotificationResults.push(NotificationFunctions.sendPushNotification(3, dataObject, TokenStorage[x]));
+            console.log(sendNotificationResults[x]);
+        }
+    }
+    else{
       return "createDoctorArriveRows not completed successfully";
     }
 

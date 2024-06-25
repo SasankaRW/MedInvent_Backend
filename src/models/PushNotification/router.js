@@ -31,4 +31,8 @@ router.route("/get/All/OTP").post(Controller.getAllOTP);
 //delete specific OTP row from OTP table relevant to specific user
 router.route("/Receive/delete/:OTP_id").delete(Controller.deleteReceivedOTP);
 
+//check token already in databse when log in
+router.route("/check/Token/Available").post(Controller.checkTokenAvailable);
+
+
 module.exports = router;

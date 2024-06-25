@@ -328,11 +328,11 @@ const getUserDocCliniTokendata = async (session_id) => {
         as: "appointments",
         required: true,
         attributes: ["user_id"],
-        where: {
-          user_id: { [Op.not]: null },
-        },
-      },
-    ],
+        where:{
+          user_id: { [Op.not]: null } 
+        }
+      }
+    ]
   });
 
   return results;

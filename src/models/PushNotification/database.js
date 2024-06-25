@@ -62,6 +62,13 @@ const deleteReceivedOTPRecord = async (OTP_id) => {
   return result;
 };
 
+const findOneToken = async(getBody)=>{
+  return await TokenStore.findOne({
+    where:getBody
+  })
+};
+
+  
 module.exports = {
   Schema: OTP,
   Schema: TokenStore,
@@ -74,4 +81,5 @@ module.exports = {
   findUpdatedData,
   findAllOTPs,
   deleteReceivedOTPRecord,
+  findOneToken
 };
