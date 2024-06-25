@@ -51,6 +51,11 @@ const ERROR = (res, err, span = null, traceId = "") => {
 
     if (error && error.hc && error.message) {
       response = CUSTOM_CODE[`_${error.hc}`](error);
+    } else if (error.httpCode) {
+      response.httpCode = error.httpCode;
+      response.message = error.message;
+      response.type = error.type || "ERROR";
+      response.code = error.httpCode;
     }
 
     _spanFinished(span, response, error);

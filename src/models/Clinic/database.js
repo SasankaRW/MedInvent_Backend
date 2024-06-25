@@ -8,13 +8,7 @@ const createSingleRecord = async (singleRecord) => {
   const data = singleRecord.data;
   return await Clinic.create(
     {
-      name: data.name,
-      contactNo: data.contactNo,
-      openHoursFrom: data.openHoursFrom,
-      openHoursTo: data.openHoursTo,
-      openDays: data.openDays,
-      email: data.email,
-      clinicAddress: data.clinicAddress,
+      ...data.clinicDetails,
       location: Sequelize.fn(
         "ST_SetSRID",
         Sequelize.fn(

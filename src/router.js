@@ -1,5 +1,6 @@
 const express = require("express");
 
+const { UserRoutes } = require("./models/User");
 const { AppointmentRoutes } = require("./models/Appointment");
 const { VisitingRoutes } = require("./models/Visiting");
 const { PatientUserRoutes } = require("./models/PatientUser");
@@ -14,6 +15,7 @@ const { NotificationRoutes } = require("./models/PushNotification");
 
 const router = express.Router();
 
+router.use("/user", UserRoutes);
 router.use("/visiting", VisitingRoutes);
 router.use("/PatientUser", PatientUserRoutes);
 router.use("/clinic", ClinicRoutes);
