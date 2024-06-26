@@ -108,13 +108,11 @@ const logInUser = async (email, password) => {
 
 const resetPassword = async (id) => {
   try {
-    // Get the admin access token
     const adminAccessToken = await getAdminAccessToken();
 
-    // Send the request to execute the "UPDATE_PASSWORD" action
     const response = await axios.put(
       `${process.env.KEYCLOAK_URL}/admin/realms/${process.env.KEYCLOAK_REALM}/users/${id}/execute-actions-email`,
-      ["UPDATE_PASSWORD"], // Action to be executed
+      ["UPDATE_PASSWORD"],
       {
         headers: {
           Authorization: `Bearer ${adminAccessToken}`,
@@ -123,16 +121,37 @@ const resetPassword = async (id) => {
       }
     );
 
-    // Check if the response status is not 204 (No Content)
     if (response.status !== 204) {
       throw new Error("Error sending reset password email");
     }
   } catch (error) {
-    console.log(error);
-    // Log the error for debugging purposes
     console.error("Error details:", error.response?.data || error.message);
+    const err = new Error(error.response?.data.error || error.message);
+    err.httpCode = error.response?.status || 500;
+    throw err;
+  }
+};
 
-    // Throw a new error with the HTTP status code if available
+const deleteUser = async (id, role, providedAccessToken) => {
+  let accessToken = providedAccessToken;
+
+  if (!accessToken) {
+    accessToken = await getAdminAccessToken();
+  }
+
+  try {
+    const response = await axios.delete(
+      `${process.env.KEYCLOAK_URL}/admin/realms/${process.env.KEYCLOAK_REALM}/users/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return await Database.deleteUser(id, role);
+  } catch (error) {
+    console.error("Error details:", error.response?.data || error.message);
     const err = new Error(error.response?.data.error || error.message);
     err.httpCode = error.response?.status || 500;
     throw err;
@@ -174,4 +193,5 @@ module.exports = {
   createUser,
   logInUser,
   resetPassword,
+  deleteUser,
 };

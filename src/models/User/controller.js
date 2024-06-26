@@ -58,9 +58,24 @@ const updateUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const { id, role, accessToken: providedAccessToken } = req.body;
+
+    const result = await Service.deleteUser(id, role, providedAccessToken);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 module.exports = {
   logInUser,
   createUser,
   resetPassword,
   updateUser,
+  deleteUser,
 };

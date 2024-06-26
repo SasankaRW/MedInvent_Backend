@@ -55,7 +55,22 @@ const getUserByRoleAndId = async (userID, roles) => {
   return user;
 };
 
+const deleteUser = async (id, role) => {
+  console.log(id);
+  console.log(role);
+  let result;
+  if (role === "patient") {
+    result = await PatientUser.destroy({ where: { userID: id } });
+  } else if (role === "doctor") {
+    result = await Doctor.destroy({ where: { doctor_id: id } });
+  } else if (role === "clinic") {
+    result = await Clinic.destroy({ where: { clinic_id: id } });
+  }
+  return result;
+};
+
 module.exports = {
   createUser,
   getUserByRoleAndId,
+  deleteUser,
 };
