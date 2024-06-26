@@ -87,8 +87,10 @@ const logInUser = async (email, password) => {
 
     const userID = decodedToken.sub;
     const roles = decodedToken.resource_access.medinvent.roles;
-
-    const user = await Database.getUserByRoleAndId(userID, roles);
+    let user = {};
+    if (!roles.includes("admin")) {
+      user = await Database.getUserByRoleAndId(userID, roles);
+    }
 
     return { accessToken, user, roles };
   } catch (error) {
