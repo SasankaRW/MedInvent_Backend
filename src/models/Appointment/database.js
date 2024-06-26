@@ -94,7 +94,15 @@ const findAll = async (appointmentFilter, sessionFilter) => {
         model: Session,
         as: "session",
         where: sessionFilter,
-        attributes: ["date", "timeFrom", "timeTo", "docFee", "clinicFee"],
+        attributes: [
+          "date",
+          "timeFrom",
+          "timeTo",
+          "docFee",
+          "clinicFee",
+          "isCancelled",
+          "cancelledByType",
+        ],
         include: [
           {
             model: Doctor,
