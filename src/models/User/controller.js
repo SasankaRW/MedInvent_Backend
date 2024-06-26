@@ -33,17 +33,18 @@ const createUser = async (req, res) => {
   }
 };
 
-const resetPassword = async (req, res) => {
-  try {
-    const result = await Service.resetPassword(req.params);
+// const resetPassword = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     await Service.resetPassword(id);
 
-    SUCCESS(res, SUC_CODES, result, req.span);
-  } catch (error) {
-    console.log(error);
+//     SUCCESS(res, SUC_CODES, { message: "email sent" }, req.span);
+//   } catch (error) {
+//     console.log(error);
 
-    ERROR(res, error, res.span);
-  }
-};
+//     ERROR(res, error, res.span);
+//   }
+// };
 
 const updateUser = async (req, res) => {
   try {
@@ -60,6 +61,6 @@ const updateUser = async (req, res) => {
 module.exports = {
   logInUser,
   createUser,
-  resetPassword,
+  // resetPassword,
   updateUser,
 };

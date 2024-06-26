@@ -7,35 +7,12 @@ const createUser = async (data, credentials, providedAccessToken) => {
   let accessToken = providedAccessToken;
 
   if (!accessToken) {
-    const requestBody = {
-      client_id: process.env.KEYCLOAK_CLIENT,
-      username: process.env.KEYCLOAK_ADMIN_USERNAME,
-      password: process.env.KEYCLOAK_ADMIN_PASSWORD,
-      grant_type: "password",
-      scope: "openid",
-      client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
-    };
-
-    try {
-      const tokenResponse = await axios.post(
-        `${process.env.KEYCLOAK_URL}/realms/gl-medinvent/protocol/openid-connect/token`,
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
-
-      accessToken = tokenResponse.data.access_token;
-    } catch (error) {
-      TE("Failed to obtain access token");
-    }
+    accessToken = await getAdminAccessToken();
   }
 
   try {
     const createUserResponse = await axios.post(
-      `${process.env.KEYCLOAK_URL}/admin/realms/gl-medinvent/users`,
+      `${process.env.KEYCLOAK_URL}/admin/realms/${process.env.KEYCLOAK_REALM}/users`,
       {
         username: credentials.email,
         email: credentials.email,
@@ -127,7 +104,71 @@ const logInUser = async (email, password) => {
   }
 };
 
+// const resetPassword = async (id) => {
+//   try {
+//     // Get the admin access token
+//     const adminAccessToken = await getAdminAccessToken();
+
+//     // Send the request to execute the "UPDATE_PASSWORD" action
+//     const response = await axios.post(
+//       `${process.env.KEYCLOAK_URL}/admin/realms/gl-medinvent/users/efa8a34d-ba3c-4da5-8f69-6d4559ec867e/execute-actions-email`,
+//       ["UPDATE_PASSWORD"], // Action to be executed
+//       {
+//         headers: {
+//           Authorization: `Bearer ${adminAccessToken}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     // Check if the response status is not 204 (No Content)
+//     if (response.status !== 204) {
+//       throw new Error("Error sending reset password email");
+//     }
+//   } catch (error) {
+//     // Log the error for debugging purposes
+//     console.error("Error details:", error.response?.data || error.message);
+
+//     // Throw a new error with the HTTP status code if available
+//     const err = new Error("Error resetting password");
+//     err.httpCode = error.response?.status || 500;
+//     throw err;
+//   }
+// };
+
+const getAdminAccessToken = async () => {
+  let accessToken;
+
+  const requestBody = {
+    client_id: process.env.KEYCLOAK_CLIENT,
+    username: process.env.KEYCLOAK_ADMIN_USERNAME,
+    password: process.env.KEYCLOAK_ADMIN_PASSWORD,
+    grant_type: "password",
+    scope: "openid",
+    client_secret: process.env.KEYCLOAK_CLIENT_SECRET,
+  };
+
+  try {
+    const tokenResponse = await axios.post(
+      `${process.env.KEYCLOAK_URL}/realms/${process.env.KEYCLOAK_REALM}/protocol/openid-connect/token`,
+      requestBody,
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    accessToken = tokenResponse.data.access_token;
+  } catch (error) {
+    TE("Failed to obtain access token");
+  }
+
+  return accessToken;
+};
+
 module.exports = {
   createUser,
   logInUser,
+  // resetPassword,
 };
