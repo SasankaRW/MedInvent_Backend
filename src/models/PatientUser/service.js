@@ -71,6 +71,20 @@ const getPatientUserByEmail = async (filter) => {
   return result;
 };
 
+const getPatientUserByMobileNo = async (filter) => {
+  const getRecord = DataBase.findOneByQuery({
+    where: filter,
+  });
+
+  const [err, result] = await to(getRecord);
+
+  if (err) TE(err);
+
+  if (!result) return { success: false, message: "Patient not found" };
+
+  return result;
+};
+
 const checkEmailAndMobileNo = async (email, mobileNo) => {
   const getRecord = DataBase.findOneByQuery({
     where: {
@@ -153,6 +167,7 @@ module.exports = {
   getPatientUserByID,
   getPatientUserByNic,
   getPatientUserByEmail,
+  getPatientUserByMobileNo,
   createPatientUser,
   updatePatientUserByID,
   deletePatientUserByID,

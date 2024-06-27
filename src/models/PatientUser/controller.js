@@ -50,6 +50,18 @@ const getPatientUserByEmail = async (req, res) => {
   }
 };
 
+const getPatientUserByMobileNo = async (req, res) => {
+  try {
+    const result = await Service.getPatientUserByMobileNo(req.params);
+
+    SUCCESS(res, SUC_CODES, result, req.span);
+  } catch (error) {
+    console.log(error);
+
+    ERROR(res, error, res.span);
+  }
+};
+
 const checkEmailAndMobileNo = async (req, res) => {
   try {
     const result = await Service.checkEmailAndMobileNo(
@@ -133,6 +145,7 @@ module.exports = {
   getPatientUserByID,
   getPatientUserByNic,
   getPatientUserByEmail,
+  getPatientUserByMobileNo,
   createPatientUser,
   updatePatientUserByID,
   deletePatientUserByID,
