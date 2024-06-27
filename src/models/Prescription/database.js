@@ -7,6 +7,9 @@ const DependMember = require("../DependMember/DependMember");
 
 async function createPrescription(prescriptionData, medicineData) {
   const { presName, createdBy, doctorName, userID } = prescriptionData;
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Colombo",
+  });
 
   try {
     const transaction = await sequelize.transaction();
@@ -24,7 +27,7 @@ async function createPrescription(prescriptionData, medicineData) {
     for (const medicine of medicineData) {
       const { name, qty, frq, mealTiming, duration, reminders } = medicine;
 
-      await PresMedicine.create(
+      const result = await PresMedicine.create(
         {
           name,
           qty,
@@ -37,6 +40,20 @@ async function createPrescription(prescriptionData, medicineData) {
         },
         { transaction }
       );
+      const medicine_id = result.dataValues.medicine_id;
+      if (reminders && reminders.length) {
+        for (const reminder of reminders) {
+          await MedicationIntake.create(
+            {
+              medicine_id,
+              date: today,
+              time: reminder,
+              taken: false,
+            },
+            { transaction }
+          );
+        }
+      }
     }
 
     await transaction.commit();
@@ -76,15 +93,45 @@ const findByQuery = async (query, userid) => {
 };
 
 const updateRecord = async (presId, data) => {
-  return await PresMedicine.update(
-    { reminders: data.reminders },
-    {
-      where: {
-        prescription_id: presId,
-        medicine_id: data.medicineId,
-      },
+  const transaction = await sequelize.transaction();
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "Asia/Colombo",
+  });
+  let result;
+
+  try {
+    result = await PresMedicine.update(
+      { reminders: data.reminders },
+      {
+        where: {
+          prescription_id: presId,
+          medicine_id: data.medicineId,
+        },
+        transaction,
+      }
+    );
+
+    if (data.reminders && data.reminders.length > 0) {
+      for (const reminder of data.reminders) {
+        await MedicationIntake.create(
+          {
+            medicine_id: data.medicineId,
+            date: today,
+            time: reminder,
+            taken: false,
+          },
+          { transaction }
+        );
+      }
     }
-  );
+
+    await transaction.commit();
+
+    return result;
+  } catch (error) {
+    if (transaction) await transaction.rollback();
+    throw error;
+  }
 };
 
 const assignPrescription = async (presId, data) => {
