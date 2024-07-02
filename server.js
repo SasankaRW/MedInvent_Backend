@@ -5,6 +5,7 @@ const app = require("./src");
 
 require("./cronJobs/presMedicineCron");
 require("./cronJobs/dailyMedicationCron");
+require("./cronJobs/medicineReminderCorn");
 
 const onListeningLog = `
    server is running on port : ${PORT} !!!`;

@@ -306,7 +306,7 @@ const updateisArrived = async (condition, dataNeedToUpdate) => {
 
 const getUserDocCliniTokendata = async (session_id) => {
   const results = await Session.findAll({
-    where: {
+    where: { 
       session_id: session_id,
     },
     attributes: ["date", "session_id"],

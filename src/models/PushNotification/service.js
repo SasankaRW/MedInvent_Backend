@@ -291,7 +291,7 @@ const checkTokenAvailable = async (getBody) => {
     const getUserTokens = await DataBase.findOneToken(getBody);
   
     if(getUserTokens != null && getUserTokens != undefined){
-        const{ userID , fcm_token} = getBody;
+        const{ userID , fcm_token } = getBody;
         const sendBody = {
             userID:userID,
             isActiveToken:true,

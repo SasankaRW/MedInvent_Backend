@@ -311,7 +311,7 @@ const updateCancelSessionByID = async (session_id, updateData) => {
         {
             const dataObject = {
                userID:userIDStorage[x],
-                identify:"cancel"
+               identify:"cancel"
             }
             sendNotificationResults.push(NotificationFunctions.sendPushNotification(2, dataObject, TokenStorage[x]));
             console.log(sendNotificationResults[x]);
