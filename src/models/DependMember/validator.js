@@ -8,7 +8,7 @@ const createSchema = Joi.object({
   dob: Joi.date().required(),
   relationship: Joi.string().max(25).required(),
   gender: Joi.string().valid("Male", "Female", "Other").required(),
-  picPath: Joi.string().max(255).required(),
+  picPath: Joi.string().max(255).optional(),
   nic: Joi.string().max(40).required(),
   userID: Joi.string().uuid().optional(),
 });

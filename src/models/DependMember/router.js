@@ -18,11 +18,7 @@ router
   .route("/get/DependMember/details/:userID")
   .get(Controller.getDependMemberDetailsByID);
 
-//get all dependant details in dependant table(not used in frontend)
-//router.route("/get/DependMembers/details").get(Controller.getAllDependMembersDetails);
-
 //update details relevant to a specific dependant who is a child of a specific PatientUser
-//have set up to update any of the table field according to received request body
 router
   .route("/update/DependMember/:userID")
   .put(Validator.update, Controller.updateDependMemberDetailsByID);
