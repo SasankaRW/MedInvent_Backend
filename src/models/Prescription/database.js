@@ -6,7 +6,8 @@ const MedicationIntake = require("./MedicationIntake");
 const DependMember = require("../DependMember/DependMember");
 
 async function createPrescription(prescriptionData, medicineData) {
-  const { presName, createdBy, doctorName, userID } = prescriptionData;
+  const { presName, createdBy, doctorName, userID, assignedTo, dID } =
+    prescriptionData;
   const today = new Date().toLocaleDateString("en-CA", {
     timeZone: "Asia/Colombo",
   });
@@ -18,6 +19,8 @@ async function createPrescription(prescriptionData, medicineData) {
       {
         presName,
         createdBy,
+        assignedTo,
+        dID,
         userID,
         doctorName: createdBy === "doctor" ? doctorName : null,
       },
