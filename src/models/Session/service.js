@@ -242,6 +242,7 @@ const updateCancelSessionByID = async (session_id, updateData) => {
       where: {
         session_id: session_id,
         user_id: { [Op.not]: null },
+        isCancelled:false
       },
       attributes: ["user_id"],
     };
