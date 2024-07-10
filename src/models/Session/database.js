@@ -329,7 +329,8 @@ const getUserDocCliniTokendata = async (session_id) => {
         required: true,
         attributes: ["user_id"],
         where:{
-          user_id: { [Op.not]: null } 
+          user_id: { [Op.not]: null } ,
+          isCancelled:false
         }
       }
     ]
